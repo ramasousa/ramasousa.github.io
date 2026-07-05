@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bradesco as a Service — The Platform Beneath Everything</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:    #08080D;
+  --void:   #0C0C14;
+  --deep:   #10101A;
+  --raised: #141420;
+  --border: #1C1C2C;
+  --muted:  #2E2E48;
+  --dim:    #555575;
+  --silver: #8080A0;
+  --pale:   #BBBBD0;
+  --white:  #E8E8F2;
+  --red:    #CC092F;
+  --red2:   rgba(204,9,47,0.15);
+  --red3:   rgba(204,9,47,0.06);
+  --gold:   #D4A017;
+  --teal:   #1EADAA;
+  --violet: #8B5CF6;
+  --blue:   #3B82F6;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── HERO FULL-BLEED ── */
+.hero {
+  position: relative;
+  height: 100vh;
+  min-height: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Animated radial background */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 110%, rgba(204,9,47,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 40% at 20% 0%, rgba(139,92,246,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 10%, rgba(30,173,170,0.06) 0%, transparent 60%);
+}
+
+/* Hex grid SVG overlay */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104'%3E%3Cpath d='M30 2 L58 18 L58 50 L30 66 L2 50 L2 18 Z' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3Cpath d='M30 70 L58 86 L58 118 L30 134 L2 118 L2 86 Z' fill='none' stroke='%23ffffff' stroke-width='0.5'/%3E%3C/svg%3E");
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 32px;
+  max-width: 1000px;
+}
+
+.hero-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 36px;
+  border: 1px solid rgba(204,9,47,0.25);
+  padding: 7px 16px;
+  border-radius: 2px;
+}
+
+.live-dot {
+  width: 5px; height: 5px;
+  background: var(--red);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--red);
+  animation: livepulse 2.4s ease-in-out infinite;
+}
+@keyframes livepulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(0.7)} }
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(48px, 8vw, 96px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+.hero h1 .strike {
+  position: relative;
+  color: var(--silver);
+  display: inline-block;
+}
+.hero h1 .strike::after {
+  content: '';
+  position: absolute;
+  top: 50%; left: -4px; right: -4px;
+  height: 2px;
+  background: var(--red);
+  transform: translateY(-50%);
+}
+.hero h1 .new {
+  color: var(--white);
+  font-style: italic;
+}
+
+.hero-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--silver);
+  margin-bottom: 64px;
+  line-height: 1.7;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 0;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.hstat {
+  padding: 20px 36px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+  flex: 1;
+  max-width: 180px;
+  transition: background 0.3s;
+}
+.hstat:last-child { border-right: none; }
+.hstat:hover { background: var(--raised); }
+
+.hstat-n {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 38px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--white);
+}
+.hstat-n .r { color: var(--red); }
+.hstat-l {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 2;
+}
+.scroll-indicator span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.scroll-track {
+  width: 1px;
+  height: 40px;
+  background: var(--muted);
+  position: relative;
+  overflow: hidden;
+}
+.scroll-fill {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--red);
+  animation: scrollFill 2s ease-in-out infinite;
+}
+@keyframes scrollFill {
+  0%   { top: -100%; }
+  50%  { top: 0; }
+  100% { top: 100%; }
+}
+
+/* ── SECTION WRAPPER ── */
+.section {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 100px 48px;
+  position: relative;
+}
+
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+  margin: 0 48px;
+  max-width: 1064px;
+}
+
+.section-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-tag::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--red);
+  opacity: 0.5;
+}
+
+.section-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4.5vw, 60px);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+.section-headline em { font-style: italic; color: var(--pale); }
+
+.section-lead {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--silver);
+  max-width: 640px;
+  line-height: 1.85;
+  margin-bottom: 60px;
+}
+
+/* ── PARADIGM SHIFT — BEFORE/AFTER ── */
+.paradigm-split {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 0;
+  margin-bottom: 64px;
+  align-items: start;
+}
+
+.paradigm-before, .paradigm-after {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.paradigm-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.para-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.paradigm-before .para-tag { color: var(--dim); }
+.paradigm-after .para-tag  { color: var(--teal); }
+
+.paradigm-before .paradigm-header { background: rgba(255,255,255,0.015); }
+.paradigm-after  .paradigm-header { background: rgba(30,173,170,0.05); border-color: rgba(30,173,170,0.15); }
+.paradigm-after { border-color: rgba(30,173,170,0.2); }
+
+.paradigm-body { padding: 0; }
+
+.para-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.25s;
+}
+.para-row:last-child { border-bottom: none; }
+.para-row:hover { background: rgba(255,255,255,0.02); }
+
+.para-icon {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+.paradigm-before .para-icon { background: rgba(255,255,255,0.06); color: var(--dim); }
+.paradigm-after  .para-icon { background: rgba(30,173,170,0.12); color: var(--teal); }
+
+.para-text {
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--silver);
+}
+.para-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pale);
+  margin-bottom: 2px;
+}
+.paradigm-after .para-title { color: var(--white); }
+
+.paradigm-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 60px;
+}
+.arrow-circle {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--red2);
+  border: 1px solid rgba(204,9,47,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--red);
+}
+
+/* ── ARCHITECTURE LAYERS — INTERACTIVE ── */
+.arch-wrapper {
+  position: relative;
+  margin-bottom: 64px;
+}
+
+.arch-intro {
+  font-size: 13px;
+  color: var(--dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.08em;
+  margin-bottom: 20px;
+}
+
+.arch-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.arch-layer {
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s, transform 0.2s;
+  transform-origin: left;
+}
+.arch-layer:hover { transform: scaleX(1.005); }
+.arch-layer.active { transform: scaleX(1); }
+
+.arch-layer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  transition: background 0.3s;
+}
+.arch-layer:hover .arch-layer-header,
+.arch-layer.active .arch-layer-header { background: rgba(255,255,255,0.03); }
+
+.arch-layer-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.arch-layer-index {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  min-width: 32px;
+}
+
+.arch-layer-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.arch-layer-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+}
+.arch-layer-sub {
+  font-size: 11px;
+  color: var(--dim);
+  margin-top: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+.arch-layer-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.arch-layer-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.05);
+  color: var(--silver);
+  border: 1px solid var(--border);
+}
+
+.arch-chevron {
+  font-size: 12px;
+  color: var(--muted);
+  transition: transform 0.3s;
+}
+.arch-layer.active .arch-chevron { transform: rotate(180deg); }
+
+.arch-layer-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1);
+  border-top: 0px solid var(--border);
+}
+.arch-layer.active .arch-layer-body {
+  max-height: 300px;
+  border-top-width: 1px;
+}
+
+.arch-body-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  margin: 1px;
+}
+
+.arch-body-cell {
+  background: var(--deep);
+  padding: 20px 20px;
+}
+
+.abc-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.abc-value {
+  font-size: 12px;
+  color: var(--silver);
+  line-height: 1.65;
+}
+.abc-value strong { color: var(--white); font-weight: 600; }
+
+/* ── MULTIDIMENSIONAL CHANGE ── */
+.dimensions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 60px;
+}
+
+.dim-card {
+  background: var(--deep);
+  padding: 36px 28px;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: background 0.3s;
+}
+.dim-card:hover { background: var(--raised); }
+
+.dim-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.dim-card.d1::before { background: var(--red); }
+.dim-card.d2::before { background: var(--gold); }
+.dim-card.d3::before { background: var(--teal); }
+.dim-card.d4::before { background: var(--violet); }
+.dim-card.d5::before { background: var(--blue); }
+.dim-card.d6::before { background: linear-gradient(90deg, var(--red), var(--violet)); }
+
+.dim-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.dim-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.dim-body {
+  font-size: 12px;
+  color: var(--silver);
+  line-height: 1.72;
+}
+
+/* ── GRAVITY CHART — visual impact ── */
+.gravity-section {
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 48px;
+  margin-bottom: 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.gravity-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 40px;
+}
+
+.gravity-canvas-wrap { position: relative; }
+#gravityCanvas {
+  width: 100%;
+  height: 400px;
+  display: block;
+}
+
+/* ── PEOPLE SECTION ── */
+.people-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 60px;
+}
+
+.people-card {
+  background: var(--deep);
+  padding: 32px 28px;
+  position: relative;
+}
+
+.pc-accent {
+  position: absolute;
+  top: 0; right: 0;
+  width: 60px; height: 60px;
+  opacity: 0.06;
+  border-radius: 0 0 0 60px;
+}
+.people-card.pc1 .pc-accent { background: var(--gold); }
+.people-card.pc2 .pc-accent { background: var(--violet); }
+.people-card.pc3 .pc-accent { background: var(--teal); }
+
+.pc-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 56px;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.people-card.pc1 .pc-num { color: var(--gold); }
+.people-card.pc2 .pc-num { color: var(--violet); }
+.people-card.pc3 .pc-num { color: var(--teal); }
+
+.pc-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.pc-desc {
+  font-size: 12px;
+  color: var(--silver);
+  line-height: 1.7;
+}
+.pc-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── HORIZONS ── */
+.horizons-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 48px;
+}
+.horiz-card {
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 28px 24px;
+  background: var(--deep);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.horiz-card:hover {
+  border-color: var(--muted);
+  box-shadow: 0 0 24px rgba(0,0,0,0.4);
+}
+.horiz-wave {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+}
+.horiz-card.hw1 .horiz-wave { background: var(--red); }
+.horiz-card.hw2 .horiz-wave { background: var(--gold); }
+.horiz-card.hw3 .horiz-wave { background: var(--teal); }
+.horiz-card.hw4 .horiz-wave { background: var(--violet); }
+
+.horiz-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.horiz-card.hw1 .horiz-tag { color: var(--red); }
+.horiz-card.hw2 .horiz-tag { color: var(--gold); }
+.horiz-card.hw3 .horiz-tag { color: var(--teal); }
+.horiz-card.hw4 .horiz-tag { color: var(--violet); }
+
+.horiz-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 10px;
+  line-height: 1.25;
+}
+.horiz-body {
+  font-size: 12px;
+  color: var(--silver);
+  line-height: 1.72;
+}
+
+/* ── CLOSING MANIFESTO ── */
+.manifesto {
+  background: linear-gradient(135deg, rgba(204,9,47,0.08) 0%, transparent 50%, rgba(139,92,246,0.06) 100%);
+  border: 1px solid rgba(204,9,47,0.2);
+  border-radius: 2px;
+  padding: 64px 72px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.manifesto::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border: 1px solid rgba(255,255,255,0.03);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.manifesto-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 24px;
+}
+
+.manifesto-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(24px, 3vw, 38px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--white);
+  line-height: 1.45;
+  max-width: 760px;
+  margin: 0 auto 32px;
+}
+
+.manifesto-sub {
+  font-size: 12px;
+  color: var(--dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.08em;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 32px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1160px;
+  margin: 0 auto;
+}
+.footer-l {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: var(--silver);
+}
+.footer-l span { color: var(--red); }
+.footer-r {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  line-height: 1.8;
+  text-align: right;
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .section { padding: 60px 24px; }
+  .paradigm-split { grid-template-columns: 1fr; }
+  .paradigm-arrow { display: none; }
+  .arch-body-inner { grid-template-columns: 1fr; }
+  .dimensions-grid { grid-template-columns: 1fr; }
+  .people-strip { grid-template-columns: 1fr; }
+  .horizons-grid { grid-template-columns: 1fr; }
+  .hero-stats { display: none; }
+  .manifesto { padding: 40px 28px; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+  .footer-r { text-align: center; }
+  .arch-layer-chips { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════ HERO ════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-kicker">
+      <div class="live-dot"></div>
+      Bradesco as a Service · Tribo BaaS · Transformation Cycle 2026 — 2027
+    </div>
+
+    <h1>
+      From <span class="strike">a bank</span><br>
+      to a <span class="new">financial substrate.</span>
+    </h1>
+
+    <p class="hero-sub">
+      One inflection point. Three clusters. ~190 people.<br>
+      A transformation cycle that redefines what a bank can be.
+    </p>
+
+    <div class="hero-stats">
+      <div class="hstat">
+        <div class="hstat-n">~190<span class="r">+</span></div>
+        <div class="hstat-l">engineers in<br>Tribo BaaS</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-n">3</div>
+        <div class="hstat-l">strategic<br>clusters</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-n">1</div>
+        <div class="hstat-l">IBM JV<br>in production</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-n">R$<span class="r">1.9</span>T</div>
+        <div class="hstat-l">assets on the<br>platform we govern</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-n">2027</div>
+        <div class="hstat-l">platform at<br>full scale</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-track"><div class="scroll-fill"></div></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- ════ PARADIGM SHIFT ════ -->
+<div class="section-divider"></div>
+<section class="section">
+  <div class="section-tag reveal">01 — Paradigm Shift</div>
+  <h2 class="section-headline reveal">The model that<br><em>no longer fits.</em></h2>
+  <p class="section-lead reveal">
+    The traditional bank model is a product-distribution machine — vertically integrated, internally consumed, architecturally closed. What we are building is its inversion: a composable financial platform that any qualified entity can integrate, extend, and build upon.
+  </p>
+
+  <div class="paradigm-split reveal">
+    <div class="paradigm-before">
+      <div class="paradigm-header">
+        <span class="para-tag">The model being left behind</span>
+      </div>
+      <div class="paradigm-body">
+        <div class="para-row">
+          <div class="para-icon">✕</div>
+          <div>
+            <div class="para-title">Bank as product</div>
+            <div class="para-text">Financial services packaged, distributed, and consumed through proprietary channels. The institution is the product.</div>
+          </div>
+        </div>
+        <div class="para-row">
+          <div class="para-icon">✕</div>
+          <div>
+            <div class="para-title">Monolithic architecture</div>
+            <div class="para-text">Systems built to serve internal journeys. Integration with partners is exceptional, slow, and requires custom bilateral work per relationship.</div>
+          </div>
+        </div>
+        <div class="para-row">
+          <div class="para-icon">✕</div>
+          <div>
+            <div class="para-title">Technology as cost center</div>
+            <div class="para-text">IT delivers on business requirements. The platform supports the product — it is not the product. Revenue does not flow through APIs.</div>
+          </div>
+        </div>
+        <div class="para-row">
+          <div class="para-icon">✕</div>
+          <div>
+            <div class="para-title">Closed financial identity</div>
+            <div class="para-text">Customer data, risk models, and compliance infrastructure are locked within the institution. Cannot be composed or extended externally.</div>
+          </div>
+        </div>
+        <div class="para-row">
+          <div class="para-icon">✕</div>
+          <div>
+            <div class="para-title">Bilateral integration model</div>
+            <div class="para-text">Each partner relationship requires dedicated integration work. Does not scale. Every new integration is an N×M complexity problem.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="paradigm-arrow">
+      <div class="arrow-circle">→</div>
+    </div>
+
+    <div class="paradigm-after">
+      <div class="paradigm-header">
+        <span class="para-tag">The model being built</span>
+      </div>
+      <div class="paradigm-body">
+        <div class="para-row">
+          <div class="para-icon">✓</div>
+          <div>
+            <div class="para-title">Bank as platform substrate</div>
+            <div class="para-text">Bradesco's balance sheet, risk infrastructure, and regulatory licenses become composable services — accessible via governed APIs to qualified builders.</div>
+          </div>
+        </div>
+        <div class="para-row">
+          <div class="para-icon">✓</div>
+          <div>
+            <div class="para-title">Layered composable architecture</div>
+            <div class="para-text">BaaS + LaaS + CaaS + EaaS as independent, composable layers. Each can be consumed independently or combined — without integration knowledge of the others.</div>
+          </div>
+        </div>
+        <div class="para-row">
+          <div class="para-icon">✓</div>
+          <div>
+            <div class="para-title">Technology as revenue layer</div>
+            <div class="para-text">API consumption generates measurable revenue. Usage-based billing, tiered access, partner analytics. The platform is a product with its own P&L logic.</div>
+          </div>
+        </div>
+        <div class="para-row">
+          <div class="para-icon">✓</div>
+          <div>
+            <div class="para-title">Portable financial identity</div>
+            <div class="para-text">Canonical identity layer (BAAS-ARCH-001) enables a single customer registry shared across all products — portable, governed, composable with zero fragmentation.</div>
+          </div>
+        </div>
+        <div class="para-row">
+          <div class="para-icon">✓</div>
+          <div>
+            <div class="para-title">Platform integration model</div>
+            <div class="para-text">One integration standard, one auth model (OAuth2 + mTLS), one developer contract. Each new partner adds to the ecosystem without adding integration debt.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ ARCHITECTURE IN LAYERS ════ -->
+<div class="section-divider"></div>
+<section class="section">
+  <div class="section-tag reveal">02 — Architecture</div>
+  <h2 class="section-headline reveal">A platform in<br><em>four composable layers.</em></h2>
+  <p class="section-lead reveal">
+    The architectural model is not a monolith being split. It is a new layered system being built alongside the existing institution — designed to be consumed independently, composed freely, and governed centrally.
+  </p>
+
+  <div class="arch-wrapper reveal">
+    <div class="arch-intro">// click any layer to expand architecture detail</div>
+    <div class="arch-stack" id="archStack">
+
+      <!-- LAYER 0: Open Cash Hub -->
+      <div class="arch-layer" data-layer="0" onclick="toggleLayer(this)">
+        <div class="arch-layer-header">
+          <div class="arch-layer-left">
+            <div class="arch-layer-index">L0</div>
+            <div class="arch-layer-dot" style="background:#D4A017"></div>
+            <div>
+              <div class="arch-layer-name">Real-Time Settlement Infrastructure</div>
+              <div class="arch-layer-sub">Open Cash Hub · IBM Joint Venture · In Production</div>
+            </div>
+          </div>
+          <div class="arch-layer-right">
+            <div class="arch-layer-chips">
+              <span class="chip">PIX</span>
+              <span class="chip">Cash Management</span>
+              <span class="chip">Settlement</span>
+              <span class="chip">100+ Engineers</span>
+            </div>
+            <div class="arch-chevron">▾</div>
+          </div>
+        </div>
+        <div class="arch-layer-body">
+          <div class="arch-body-inner">
+            <div class="arch-body-cell">
+              <div class="abc-label">What it is</div>
+              <div class="abc-value">Real-time payment infrastructure built as a joint venture with IBM. Handles PIX, cash management, and settlement flows at banking scale. <strong>First production installations completed Q2 2026.</strong></div>
+            </div>
+            <div class="arch-body-cell">
+              <div class="abc-label">Strategic significance</div>
+              <div class="abc-value">The most operationally complex cluster within Tribo BaaS — regulated, zero-downtime, at the scale of one of Brazil's top-3 banks. It is the <strong>financial plumbing</strong> that makes everything above possible.</div>
+            </div>
+            <div class="arch-body-cell">
+              <div class="abc-label">Architecture posture</div>
+              <div class="abc-value">Distributed atomicity via Saga pattern. PII protection via beneficiary tokenization. Regulatory sequencing: Tributos before dealer repasse per CMN 4.282. <strong>Zero tolerance for settlement failure.</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAYER 1: Core Platform -->
+      <div class="arch-layer" data-layer="1" onclick="toggleLayer(this)">
+        <div class="arch-layer-header">
+          <div class="arch-layer-left">
+            <div class="arch-layer-index">L1</div>
+            <div class="arch-layer-dot" style="background:#CC092F"></div>
+            <div>
+              <div class="arch-layer-name">Core Platform — BaaS Backbone</div>
+              <div class="arch-layer-sub">Multi-tenant · Auth · Eventing · Observability · Billing</div>
+            </div>
+          </div>
+          <div class="arch-layer-right">
+            <div class="arch-layer-chips">
+              <span class="chip">OAuth2 + mTLS</span>
+              <span class="chip">Kafka</span>
+              <span class="chip">Multi-tenant</span>
+              <span class="chip">Squad 1</span>
+            </div>
+            <div class="arch-chevron">▾</div>
+          </div>
+        </div>
+        <div class="arch-layer-body">
+          <div class="arch-body-inner">
+            <div class="arch-body-cell">
+              <div class="abc-label">What it is</div>
+              <div class="abc-value">The foundational layer all other BaaS products are built on. <strong>Canonical identity, auth, multi-tenancy, eventing, observability, and usage metering</strong> — enforced uniformly across every product.</div>
+            </div>
+            <div class="arch-body-cell">
+              <div class="abc-label">Key decisions</div>
+              <div class="abc-value">BAAS-ARCH-001 (Customer Registry as Canonical Identity) and BAAS-ARCH-002 (Auth & Authorization for Partners). These two architectural records govern the entire platform — not guidelines, enforced constraints.</div>
+            </div>
+            <div class="arch-body-cell">
+              <div class="abc-label">Stack</div>
+              <div class="abc-value">Java / Spring Boot. ECS Fargate over EKS. Aurora PostgreSQL Serverless v2. DynamoDB for idempotency via conditional writes. EventBridge over Kafka/MSK. <strong>Apigee as MCP Gateway</strong> for AI agent access.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAYER 2: LaaS -->
+      <div class="arch-layer" data-layer="2" onclick="toggleLayer(this)">
+        <div class="arch-layer-header">
+          <div class="arch-layer-left">
+            <div class="arch-layer-index">L2</div>
+            <div class="arch-layer-dot" style="background:#3B82F6"></div>
+            <div>
+              <div class="arch-layer-name">Lending as a Service — LaaS</div>
+              <div class="arch-layer-sub">Structured credit · Full origination-to-contract journeys</div>
+            </div>
+          </div>
+          <div class="arch-layer-right">
+            <div class="arch-layer-chips">
+              <span class="chip">Capital de Giro</span>
+              <span class="chip">Antecipação</span>
+              <span class="chip">Crédito Emergencial</span>
+            </div>
+            <div class="arch-chevron">▾</div>
+          </div>
+        </div>
+        <div class="arch-layer-body">
+          <div class="arch-body-inner">
+            <div class="arch-body-cell">
+              <div class="abc-label">What it is</div>
+              <div class="abc-value">Complete credit journeys — from origination through risk assessment to contract management — exposed as white-label APIs. <strong>Partners embed Bradesco's lending capability without owning the risk infrastructure.</strong></div>
+            </div>
+            <div class="arch-body-cell">
+              <div class="abc-label">Products in scope</div>
+              <div class="abc-value">Capital de Giro (working capital), Crédito Emergencial, Antecipação de Recebíveis. Each exposed as a composable B2B, B2C, and B2B2B embedded scenario — same underlying platform, different surfaces.</div>
+            </div>
+            <div class="arch-body-cell">
+              <div class="abc-label">Extensibility model</div>
+              <div class="abc-value">Credit signal catalog governed by a dedicated squad. New partner segments register new signal codes — no new API versions required. <strong>Extensibility is a data problem, not a versioning problem.</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAYER 3: CaaS -->
+      <div class="arch-layer" data-layer="3" onclick="toggleLayer(this)">
+        <div class="arch-layer-header">
+          <div class="arch-layer-left">
+            <div class="arch-layer-index">L3</div>
+            <div class="arch-layer-dot" style="background:#8B5CF6"></div>
+            <div>
+              <div class="arch-layer-name">Credit as a Service — CaaS</div>
+              <div class="arch-layer-sub">Composable credit primitives · BNPL · Revolving</div>
+            </div>
+          </div>
+          <div class="arch-layer-right">
+            <div class="arch-layer-chips">
+              <span class="chip">BNPL</span>
+              <span class="chip">Limite Rotativo</span>
+              <span class="chip">Composable</span>
+            </div>
+            <div class="arch-chevron">▾</div>
+          </div>
+        </div>
+        <div class="arch-layer-body">
+          <div class="arch-body-inner">
+            <div class="arch-body-cell">
+              <div class="abc-label">What it is</div>
+              <div class="abc-value">Granular, API-first credit primitives for embedded finance contexts. <strong>CaaS ≠ simplified LaaS</strong> — it is a distinct architecture designed for non-financial platforms that need to embed credit without full banking integration.</div>
+            </div>
+            <div class="arch-body-cell">
+              <div class="abc-label">Target contexts</div>
+              <div class="abc-value">E-commerce (BNPL), subscription platforms (revolving credit), marketplace financing. Any digital context where credit needs to be invisible infrastructure — not a bank product the user visits.</div>
+            </div>
+            <div class="arch-body-cell">
+              <div class="abc-label">Integration model</div>
+              <div class="abc-value">White-label MFE components via Module Federation. Design Tokens as runtime CSS Custom Properties — <strong>zero rebuild to apply partner brand</strong>. Shell knows nothing about the products it hosts.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAYER 4: Experience -->
+      <div class="arch-layer" data-layer="4" onclick="toggleLayer(this)">
+        <div class="arch-layer-header">
+          <div class="arch-layer-left">
+            <div class="arch-layer-index">L4</div>
+            <div class="arch-layer-dot" style="background:#1EADAA"></div>
+            <div>
+              <div class="arch-layer-name">BaaS + Developer Portal & Open API Surface</div>
+              <div class="arch-layer-sub">API Gateway · Developer Portal · Partner Onboarding · BaaS + Dev Portal Cluster</div>
+            </div>
+          </div>
+          <div class="arch-layer-right">
+            <div class="arch-layer-chips">
+              <span class="chip">Axway → Apigee</span>
+              <span class="chip">OpenAPI 3.1</span>
+              <span class="chip">DevPortal</span>
+            </div>
+            <div class="arch-chevron">▾</div>
+          </div>
+        </div>
+        <div class="arch-layer-body">
+          <div class="arch-body-inner">
+            <div class="arch-body-cell">
+              <div class="abc-label">What it is</div>
+              <div class="abc-value">The surface layer where all platform capabilities are exposed — governed, monetized, and consumed by partners. The BaaS + Developer Portal cluster owns this layer, working alongside the Integração Digital cluster to connect Bradesco's internal systems to external partners.</div>
+            </div>
+            <div class="arch-body-cell">
+              <div class="abc-label">Governance model</div>
+              <div class="abc-value">Any published API with basepath /mcp automatically becomes an MCP proxy — inheriting auth, quota, and observability policies. AI agents consume the same surface as human developers. <strong>One governance layer for everything.</strong></div>
+            </div>
+            <div class="arch-body-cell">
+              <div class="abc-label">Modernization roadmap</div>
+              <div class="abc-value">Axway Amplify as current gateway (subject of ongoing modernization proposal). Apigee as the target architecture for unified gateway + MCP proxy + billing. 18-month DX improvement roadmap already benchmarked and sequenced.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════ MULTIDIMENSIONAL CHANGE ════ -->
+<div class="section-divider"></div>
+<section class="section">
+  <div class="section-tag reveal">03 — Dimensions of Change</div>
+  <h2 class="section-headline reveal">Six simultaneous<br><em>transformations.</em></h2>
+  <p class="section-lead reveal">
+    What makes this moment singular is not the scale of a single change — it is the number of dimensions changing simultaneously, and the fact that each one depends on the others to deliver its full value.
+  </p>
+
+  <div class="dimensions-grid reveal">
+    <div class="dim-card d1">
+      <div class="dim-num">DIM 01</div>
+      <div class="dim-title">Architectural Transformation</div>
+      <div class="dim-body">From product-siloed systems to a shared platform with composable layers (L0–L4). Multi-tenant isolation, shared identity, standardized auth, centralized observability — patterns that eliminate entire classes of future architectural debt.</div>
+    </div>
+    <div class="dim-card d2">
+      <div class="dim-num">DIM 02</div>
+      <div class="dim-title">Organizational Transformation</div>
+      <div class="dim-body">A new organizational topology: Tribo BaaS with three independent clusters — Open Cash Hub, Integração Digital, and BaaS + Developer Portal — each with distinct missions, with squads that have product-level ownership and chapters that enforce horizontal standards across the entire Tribe.</div>
+    </div>
+    <div class="dim-card d3">
+      <div class="dim-num">DIM 03</div>
+      <div class="dim-title">Economic Transformation</div>
+      <div class="dim-body">The move from cost-center IT to a platform P&L model. API consumption becomes measurable, billable, analyzable. Usage-based billing infrastructure is not a future feature — it is being built into Core Platform from day one.</div>
+    </div>
+    <div class="dim-card d4">
+      <div class="dim-num">DIM 04</div>
+      <div class="dim-title">Regulatory Transformation</div>
+      <div class="dim-body">Open Finance, PIX, CMN 4.282, BACEN requirements — translated into architectural constraints enforced in code, not in audit checklists. Compliance becomes infrastructure. The Aarin relationship executes within a governance model that protects IP and regulatory standing simultaneously.</div>
+    </div>
+    <div class="dim-card d5">
+      <div class="dim-num">DIM 05</div>
+      <div class="dim-title">Partnership Transformation</div>
+      <div class="dim-body">From bilateral, custom integrations — each a one-off negotiation — to a single integration contract: one auth standard, one API design pattern, one developer experience. Each new partner enriches the ecosystem rather than adding integration debt. The IBM JV (Open Cash Hub) is the first proof of this model at scale.</div>
+    </div>
+    <div class="dim-card d6">
+      <div class="dim-num">DIM 06</div>
+      <div class="dim-title">Intelligence Transformation</div>
+      <div class="dim-body">GenAI orchestration via Bedrock (generative flows) and classical ML via SageMaker (predictive models, UBI, risk scoring) — separated by design, governed by the same API surface. AI agents consume Bradesco APIs through the same Apigee MCP Gateway as human developers. The platform is AI-native from the architecture up.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ GRAVITY — visual ════ -->
+<div class="section-divider"></div>
+<section class="section">
+  <div class="section-tag reveal">04 — Platform Gravity</div>
+  <h2 class="section-headline reveal">The compounding<br><em>effect.</em></h2>
+  <p class="section-lead reveal">
+    Platform businesses exhibit a specific economic property: each layer enables and amplifies the layer above it. The value is not in any single component — it is in the composition. What is being built here compounds.
+  </p>
+
+  <div class="gravity-section reveal">
+    <div class="gravity-label">// platform value across layers and time — each node represents active capability</div>
+    <canvas id="gravityCanvas"></canvas>
+  </div>
+
+  <!-- Tribo header -->
+  <div class="tribe-header reveal">
+    <div class="tribe-label">// Tribo BaaS — three clusters, one unified platform mission</div>
+    <div class="tribe-total">
+      <span class="tribe-num">~190<span style="font-size:20px;color:var(--silver)">+</span></span>
+      <span class="tribe-sub">engineers & specialists · led as a single tribe</span>
+    </div>
+  </div>
+
+  <div class="people-strip reveal">
+    <div class="people-card pc1">
+      <div class="pc-accent"></div>
+      <div class="pc-tag">Cluster · Open Cash Hub</div>
+      <div class="pc-num">100<span style="font-size:24px;color:var(--silver)">+</span></div>
+      <div class="pc-name">Open Cash Hub / IBM JV</div>
+      <div class="pc-desc">A mission-critical cluster at banking scale. Real-time payment infrastructure, PIX, cash management — first production installations completed. A joint venture with IBM operating at banking scale, zero-downtime, regulated environment.</div>
+      <div class="pc-sub">IBM JV · Production live · PIX · Cash management · Settlement</div>
+    </div>
+    <div class="people-card pc2">
+      <div class="pc-accent"></div>
+      <div class="pc-tag">Cluster · Integração Digital</div>
+      <div class="pc-num">~60<span style="font-size:24px;color:var(--silver)">+</span></div>
+      <div class="pc-name">Integração Digital</div>
+      <div class="pc-desc">An independent cluster within the Tribe — dedicated to the digital integration layer that connects Bradesco's core systems, partners, and external ecosystems. The connective tissue between the bank's internal infrastructure and its open platform surface.</div>
+      <div class="pc-sub">Digital integration · Core connectivity · Partner ecosystem</div>
+    </div>
+    <div class="people-card pc3">
+      <div class="pc-accent"></div>
+      <div class="pc-tag">Cluster · BaaS + Developer Portal</div>
+      <div class="pc-num">30<span style="font-size:24px;color:var(--silver)">+</span></div>
+      <div class="pc-name">BaaS + Developer Portal</div>
+      <div class="pc-desc">The most complex challenge of the entire transformation — and of a 20-year career. Not just operational complexity, but architectural, organizational, and business model complexity simultaneously: building something that didn't exist, inside an institution built to operate differently, with a product paradigm the market is still learning to consume.</div>
+      <div class="pc-sub">4 squads · 13 arch artifacts · BaaS · LaaS · CaaS · growing</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ HORIZONS ════ -->
+<div class="section-divider"></div>
+<section class="section">
+  <div class="section-tag reveal">05 — Horizons</div>
+  <h2 class="section-headline reveal">What can be seen<br><em>from here.</em></h2>
+  <p class="section-lead reveal">
+    The foundation is structural. What it enables — across the next 12 to 36 months — is orders of magnitude beyond what exists today. These are not aspirations. They are the logical continuation of what is already being built.
+  </p>
+
+  <div class="horizons-grid reveal">
+    <div class="horiz-card hw1">
+      <div class="horiz-wave"></div>
+      <div class="horiz-tag">● Executing now</div>
+      <div class="horiz-title">BaaS Architecture Playbook — 13 Artifacts</div>
+      <div class="horiz-body">2 published (BAAS-ARCH-001, 002). 11 remaining across Identity, Auth, LaaS, CaaS, Experience, Developer Platform, and Governance. Each artifact is both a decision record and an engineering contract — the accumulated IP of the platform's construction.</div>
+    </div>
+    <div class="horiz-card hw1">
+      <div class="horiz-wave"></div>
+      <div class="horiz-tag">● Executing now</div>
+      <div class="horiz-title">BaaS Tribe Organizational Formalization</div>
+      <div class="horiz-body">Developer Platform cluster needs a formal transversal mandate — authority that crosses squad boundaries to enforce API standards and platform governance. The organizational design must mirror the architecture: a platform team with governance power, not a committee that advises.</div>
+    </div>
+    <div class="horiz-card hw2">
+      <div class="horiz-wave"></div>
+      <div class="horiz-tag">◆ Near horizon · H1 2027</div>
+      <div class="horiz-title">API Economy Layer — Monetization</div>
+      <div class="horiz-body">Usage-based billing, tiered access tiers, partner analytics dashboards, revenue attribution by API product. The platform generates measurable revenue — not just operational value. Billing infrastructure is already being embedded in Core Platform from the beginning.</div>
+    </div>
+    <div class="horiz-card hw2">
+      <div class="horiz-wave"></div>
+      <div class="horiz-tag">◆ Near horizon · H1 2027</div>
+      <div class="horiz-title">Vehicle as a Service — New Vertical</div>
+      <div class="horiz-body">BaaS primitives applied to automotive finance: dealer embedded credit, fleet management APIs, split payment for vehicle acquisition, usage-based insurance (UBI) scored by SageMaker. A new vertical built entirely on top of the platform — without a new platform.</div>
+    </div>
+    <div class="horiz-card hw3">
+      <div class="horiz-wave"></div>
+      <div class="horiz-tag">▲ Strategic · H2 2027</div>
+      <div class="horiz-title">AI-Native Financial Infrastructure</div>
+      <div class="horiz-body">Multi-agent orchestration via Bedrock consuming Bradesco's APIs through the Apigee MCP Gateway. Every financial service — credit assessment, payment routing, fraud scoring — accessible to AI agents under the same governance model as human developers. Not AI on top of banking. AI inside the platform.</div>
+    </div>
+    <div class="horiz-card hw3">
+      <div class="horiz-wave"></div>
+      <div class="horiz-tag">▲ Strategic · H2 2027</div>
+      <div class="horiz-title">Platform Network Effects</div>
+      <div class="horiz-body">The transition from "bank with APIs" to "financial infrastructure platform" — where each new partner increases value for all existing partners. Requires critical mass in the partner ecosystem and a developer community that self-organizes. The architecture is already designed for it. The question is market velocity.</div>
+    </div>
+    <div class="horiz-card hw4">
+      <div class="horiz-wave"></div>
+      <div class="horiz-tag">◈ Long-range · 2028+</div>
+      <div class="horiz-title">Multi-Jurisdiction Financial Infrastructure</div>
+      <div class="horiz-body">The BaaS architecture — ECS Fargate, Aurora Serverless v2, DynamoDB, EventBridge — scales horizontally and, eventually, across jurisdictions. Bradesco's regulatory standing and balance sheet make it uniquely positioned to export financial infrastructure to adjacent Latin American markets. The platform becomes the product that travels.</div>
+    </div>
+    <div class="horiz-card hw4">
+      <div class="horiz-wave"></div>
+      <div class="horiz-tag">◈ Long-range · 2028+</div>
+      <div class="horiz-title">Industry Reference Architecture</div>
+      <div class="horiz-body">The 13 Architecture Playbook artifacts — once complete — represent a proprietary framework for composable banking. Not a vendor solution. A first-party institutional IP that can be positioned as the reference architecture for Banking as a Service in Brazil and Latin America.</div>
+    </div>
+    <div class="horiz-card hw3">
+      <div class="horiz-wave"></div>
+      <div class="horiz-tag">▲ Strategic · H2 2027</div>
+      <div class="horiz-title">Embedded Finance Everywhere</div>
+      <div class="horiz-body">LaaS + CaaS enabling any qualified digital company to embed Bradesco's credit infrastructure — invisible, composable, API-native. The supermarket, the marketplace, the fleet operator, the hospital — each offering credit powered by Bradesco's infrastructure without their customers ever knowing the bank's name. That is the endgame of Embedded Finance.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ MANIFESTO ════ -->
+<div class="section-divider"></div>
+<section class="section">
+  <div class="manifesto reveal">
+    <div class="manifesto-eyebrow">Bradesco as a Service · The Thesis</div>
+    <p class="manifesto-text">
+      "The most durable competitive advantage a bank can build in the next decade is not a product. It is the infrastructure that allows others to build products — using your balance sheet, your risk models, and your regulatory standing as a substrate. We are building that infrastructure. Now."
+    </p>
+    <div class="manifesto-sub">Head of Technology · Open API, Open Cash Hub & BaaS · Bradesco · 2026</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-l">Bradesco · <span>Open Platform</span></div>
+  <div class="footer-r">
+    Head of Technology · Open API, Open Cash Hub & BaaS<br>
+    Confidential · July 2026 · Architecture of a Platform Shift
+  </div>
+</footer>
+
+<script>
+/* ── ACCORDION ── */
+function toggleLayer(el) {
+  const wasActive = el.classList.contains('active');
+  document.querySelectorAll('.arch-layer').forEach(l => l.classList.remove('active'));
+  if (!wasActive) el.classList.add('active');
+}
+
+/* ── SCROLL REVEAL ── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* ── GRAVITY CANVAS ── */
+(function() {
+  const canvas = document.getElementById('gravityCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  function size() {
+    canvas.width  = canvas.parentElement.offsetWidth - 96;
+    canvas.height = 400;
+  }
+  size();
+  window.addEventListener('resize', () => { size(); });
+
+  const W = () => canvas.width;
+  const H = () => canvas.height;
+
+  // Platform layers
+  const layers = [
+    { label: 'Settlement (L0)', y: 0.85, color: '#D4A017', weight: 3 },
+    { label: 'Core Platform (L1)', y: 0.68, color: '#CC092F', weight: 2.5 },
+    { label: 'LaaS (L2)', y: 0.50, color: '#3B82F6', weight: 2 },
+    { label: 'CaaS (L3)', y: 0.34, color: '#8B5CF6', weight: 1.6 },
+    { label: 'Open API + DX (L4)', y: 0.18, color: '#1EADAA', weight: 1.3 },
+  ];
+
+  // Nodes per layer
+  const nodes = [];
+  layers.forEach((l, li) => {
+    const count = [8, 12, 10, 10, 8][li];
+    for (let i = 0; i < count; i++) {
+      nodes.push({
+        x: (0.08 + Math.random() * 0.84),
+        y: l.y + (Math.random() - 0.5) * 0.06,
+        vx: (Math.random() - 0.5) * 0.0003,
+        vy: (Math.random() - 0.5) * 0.0001,
+        r: 3 + Math.random() * 3,
+        color: l.color,
+        layerIdx: li,
+        pulse: Math.random() * Math.PI * 2,
+      });
+    }
+  });
+
+  let t = 0;
+
+  function draw() {
+    const w = W(), h = H();
+    ctx.clearRect(0, 0, w, h);
+
+    // Layer bands
+    layers.forEach(l => {
+      const cy = l.y * h;
+      const grad = ctx.createLinearGradient(0, cy - 18, 0, cy + 18);
+      grad.addColorStop(0, 'transparent');
+      grad.addColorStop(0.5, l.color + '10');
+      grad.addColorStop(1, 'transparent');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, cy - 18, w, 36);
+
+      // Layer label
+      ctx.font = '500 10px JetBrains Mono';
+      ctx.fillStyle = l.color + '88';
+      ctx.textAlign = 'right';
+      ctx.fillText(l.label, w - 8, cy + 4);
+
+      // Layer line
+      ctx.beginPath();
+      ctx.moveTo(0, cy);
+      ctx.lineTo(w * 0.82, cy);
+      ctx.strokeStyle = l.color + '20';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 8]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    });
+
+    // Connections between layers
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        if (Math.abs(a.layerIdx - b.layerIdx) !== 1) continue;
+        const dx = (a.x - b.x) * w, dy = (a.y - b.y) * h;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 160) continue;
+        const alpha = (1 - dist / 160) * 0.25;
+        ctx.beginPath();
+        ctx.moveTo(a.x * w, a.y * h);
+        ctx.lineTo(b.x * w, b.y * h);
+        const blend = Math.round(alpha * 255).toString(16).padStart(2,'0');
+        ctx.strokeStyle = '#ffffff' + blend;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+
+    // Nodes
+    nodes.forEach(n => {
+      const px = n.x * w, py = n.y * h;
+      const pulse = Math.sin(t * 0.8 + n.pulse);
+      const glow = ctx.createRadialGradient(px, py, 0, px, py, n.r * 3);
+      glow.addColorStop(0, n.color + '40');
+      glow.addColorStop(1, 'transparent');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(px, py, n.r * 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(px, py, n.r * (0.9 + 0.1 * pulse), 0, Math.PI * 2);
+      ctx.fillStyle = n.color + 'CC';
+      ctx.fill();
+
+      // Drift
+      n.x += n.vx;
+      n.y += n.vy * 0.3;
+      if (n.x < 0.04 || n.x > 0.92) n.vx *= -1;
+      const layer = layers[n.layerIdx];
+      if (Math.abs(n.y - layer.y) > 0.05) n.vy *= -1;
+    });
+
+    // Upward flow particles
+    if (Math.random() < 0.12) {
+      const li = Math.floor(Math.random() * (layers.length - 1));
+      const src = layers[li];
+      const dst = layers[li + 1];
+      // We just animate existing particles — keep it lightweight
+    }
+
+    t += 0.018;
+    requestAnimationFrame(draw);
+  }
+
+  draw();
+})();
+</script>
+</body>
+</html>
