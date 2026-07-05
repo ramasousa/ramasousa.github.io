@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raul Sousa — Head of Open Platform</title>
+<meta name="description" content="Technology leader building composable financial infrastructure at Bradesco. 20 years at the intersection of architecture and platform strategy.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink:    #08080D;
+  --deep:   #10101A;
+  --raised: #141420;
+  --border: #1C1C2C;
+  --muted:  #2E2E48;
+  --dim:    #555575;
+  --silver: #8080A0;
+  --pale:   #BBBBD0;
+  --white:  #E8E8F2;
+  --red:    #CC092F;
+  --red-f:  rgba(204,9,47,0.07);
+  --red-m:  rgba(204,9,47,0.18);
+  --gold:   #D4A017;
+  --teal:   #1EADAA;
+  --violet: #8B5CF6;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--ink);
+  color: var(--white);
+  font-family: 'Syne', sans-serif;
+  font-weight: 400;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HEX GRID BACKGROUND ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104'%3E%3Cpath d='M30 2 L58 18 L58 50 L30 66 L2 50 L2 18 Z' fill='none' stroke='%23ffffff' stroke-width='0.6'/%3E%3Cpath d='M30 70 L58 86 L58 118 L30 134 L2 118 L2 86 Z' fill='none' stroke='%23ffffff' stroke-width='0.6'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── LANG TOGGLE ── */
+.lang-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 52px;
+  background: rgba(8,8,13,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.lang-brand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.lang-brand span { color: var(--red); }
+
+.lang-switcher {
+  display: flex;
+  gap: 2px;
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.lang-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  padding: 6px 14px;
+  border: none;
+  background: transparent;
+  color: var(--dim);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.lang-btn.active {
+  background: var(--red);
+  color: var(--white);
+}
+
+/* ── MAIN LAYOUT ── */
+main {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 52px;
+}
+
+/* ── LEFT PANEL — identity ── */
+.panel-left {
+  position: sticky;
+  top: 52px;
+  height: calc(100vh - 52px);
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  padding: 48px 64px;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) transparent;
+}
+.panel-left::-webkit-scrollbar { width: 5px; }
+.panel-left::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }
+
+/* Radial glow behind the name */
+.panel-left::before {
+  content: '';
+  position: absolute;
+  bottom: -20%; left: -10%;
+  width: 500px; height: 400px;
+  background: radial-gradient(ellipse, var(--red-m) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.name-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.name-eyebrow::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--red);
+  opacity: 0.6;
+}
+
+.name-main {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(48px, 5vw, 72px);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+
+.name-role {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(16px, 1.8vw, 22px);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--silver);
+  margin-bottom: 40px;
+  line-height: 1.4;
+}
+
+.name-role strong {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--pale);
+}
+
+/* Thesis statement */
+.thesis {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--silver);
+  line-height: 1.85;
+  max-width: 380px;
+  padding-left: 16px;
+  border-left: 2px solid var(--red);
+  margin-bottom: 48px;
+}
+
+/* 20-year mini-arc */
+.arc {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 48px;
+}
+
+.arc-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.arc-item:first-child { border-top: 1px solid var(--border); }
+
+.arc-period {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  min-width: 72px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+
+.arc-content {}
+
+.arc-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pale);
+  margin-bottom: 1px;
+}
+
+.arc-desc {
+  font-size: 11px;
+  color: var(--dim);
+  line-height: 1.5;
+}
+
+.arc-item.current .arc-period { color: var(--red); }
+.arc-item.current .arc-title  { color: var(--white); }
+.arc-item.current .arc-desc   { color: var(--silver); }
+
+/* Social / contact links */
+.contact-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 7px 14px;
+  border-radius: 2px;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.contact-link:hover {
+  color: var(--white);
+  border-color: var(--muted);
+  background: var(--raised);
+}
+
+.contact-link .dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+/* ── RIGHT PANEL — work ── */
+.panel-right {
+  padding: 72px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.right-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Featured work card */
+.work-card {
+  background: var(--deep);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  transition: border-color 0.3s, transform 0.3s;
+  text-decoration: none;
+  display: block;
+}
+
+.work-card:hover {
+  border-color: var(--muted);
+  transform: translateY(-2px);
+}
+
+.work-card-top {
+  padding: 28px 28px 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.work-card-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.wc-featured .work-card-tag {
+  background: var(--red-f);
+  color: var(--red);
+  border: 1px solid rgba(204,9,47,0.2);
+}
+
+.wc-artifact .work-card-tag {
+  background: rgba(212,160,23,0.07);
+  color: var(--gold);
+  border: 1px solid rgba(212,160,23,0.2);
+}
+
+.wc-doc .work-card-tag {
+  background: rgba(139,92,246,0.07);
+  color: var(--violet);
+  border: 1px solid rgba(139,92,246,0.2);
+}
+
+.work-card-arrow {
+  font-size: 14px;
+  color: var(--muted);
+  transition: color 0.2s, transform 0.2s;
+  flex-shrink: 0;
+}
+
+.work-card:hover .work-card-arrow {
+  color: var(--white);
+  transform: translateX(3px);
+}
+
+.work-card-body {
+  padding: 16px 28px 28px;
+}
+
+.work-card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.work-card-sub {
+  font-size: 12px;
+  color: var(--silver);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.work-card-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.wchip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.04);
+  color: var(--dim);
+  border: 1px solid var(--border);
+}
+
+/* Bottom bar accent on featured */
+.work-card.wc-featured {
+  border-bottom: 2px solid var(--red);
+}
+.work-card.wc-artifact {
+  border-bottom: 2px solid var(--gold);
+}
+.work-card.wc-doc {
+  border-bottom: 2px solid var(--violet);
+}
+
+/* Principles strip */
+.principles-strip {
+  margin-top: 40px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.ps-header {
+  padding: 14px 24px;
+  background: var(--raised);
+  border-bottom: 1px solid var(--border);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ps-item {
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.ps-item:last-child { border-bottom: none; }
+
+.ps-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  color: var(--red);
+  letter-spacing: 0.1em;
+  min-width: 28px;
+  padding-top: 2px;
+  flex-shrink: 0;
+}
+
+.ps-text {
+  font-size: 12px;
+  color: var(--silver);
+  line-height: 1.6;
+}
+
+.ps-text strong { color: var(--pale); font-weight: 600; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  main { grid-template-columns: 1fr; }
+  .panel-left {
+    position: static;
+    height: auto;
+    padding: 60px 28px 40px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-right { padding: 40px 28px 64px; }
+  .lang-bar { padding: 0 24px; }
+}
+
+/* ── I18N — hide/show by lang ── */
+[data-lang="en"] .t-pt,
+[data-lang="pt"] .t-en { display: none; }
+</style>
+</head>
+<body>
+
+<!-- ── LANG BAR ── -->
+<div class="lang-bar">
+  <div class="lang-brand">raul<span>.</span>sousa</div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('pt')">PT</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- ══════════════════════════════
+       LEFT PANEL
+  ══════════════════════════════ -->
+  <div class="panel-left">
+
+    <div class="name-eyebrow">
+      <span class="t-en">Technology Leadership · Open Platform</span>
+      <span class="t-pt">Liderança em Tecnologia · Open Platform</span>
+    </div>
+
+    <div class="name-main">Raul Sousa</div>
+
+    <div class="name-role t-en">
+      Head of Technology,<br>
+      <strong>Open Platform — Bradesco</strong>
+    </div>
+    <div class="name-role t-pt">
+      Head de Tecnologia,<br>
+      <strong>Open Platform — Bradesco</strong>
+    </div>
+
+    <!-- THESIS -->
+    <p class="thesis t-en">
+      I build the infrastructure layer that allows financial institutions to operate as composable platforms — at the intersection of architecture, product strategy, and organizational design. Twenty years finding clarity at the point where technical decisions become business outcomes.
+    </p>
+    <p class="thesis t-pt">
+      Construo a camada de infraestrutura que permite que instituições financeiras operem como plataformas componíveis — na interseção entre arquitetura, estratégia de produto e design organizacional. Vinte anos encontrando clareza no ponto onde decisões técnicas se tornam resultados de negócio.
+    </p>
+
+    <!-- 20-YEAR ARC -->
+    <div class="arc">
+      <div class="arc-item">
+        <div class="arc-period">2005 — 2012</div>
+        <div class="arc-content">
+          <div class="arc-title t-en">Foundations — Systems & Integration</div>
+          <div class="arc-title t-pt">Fundações — Sistemas & Integração</div>
+          <div class="arc-desc t-en">Engineering and architecture roles building large-scale integration and distributed systems across financial and technology sectors.</div>
+          <div class="arc-desc t-pt">Atuação em engenharia e arquitetura, construindo sistemas de integração em larga escala no setor financeiro e de tecnologia.</div>
+        </div>
+      </div>
+      <div class="arc-item">
+        <div class="arc-period">2012 — 2019</div>
+        <div class="arc-content">
+          <div class="arc-title t-en">Platform & API Strategy</div>
+          <div class="arc-title t-pt">Estratégia de Plataforma & APIs</div>
+          <div class="arc-desc t-en">Led platform and API programs for complex organizations — governance models, partner ecosystems, and the organizational design that makes platforms work.</div>
+          <div class="arc-desc t-pt">Liderou programas de plataforma e API em organizações complexas — modelos de governança, ecossistemas de parceiros e o design organizacional que faz plataformas funcionarem.</div>
+        </div>
+      </div>
+      <div class="arc-item">
+        <div class="arc-period">2019 — 2025</div>
+        <div class="arc-content">
+          <div class="arc-title t-en">Executive Leadership — Digital Transformation</div>
+          <div class="arc-title t-pt">Liderança Executiva — Transformação Digital</div>
+          <div class="arc-desc t-en">Technology leadership across financial services, driving open banking, embedded finance, and BaaS initiatives at institutional scale.</div>
+          <div class="arc-desc t-pt">Liderança de tecnologia em serviços financeiros, conduzindo iniciativas de open banking, embedded finance e BaaS em escala institucional.</div>
+        </div>
+      </div>
+      <div class="arc-item current">
+        <div class="arc-period">2026 →</div>
+        <div class="arc-content">
+          <div class="arc-title t-en">Head of Technology · Open Platform · Bradesco</div>
+          <div class="arc-title t-pt">Head de Tecnologia · Open Platform · Bradesco</div>
+          <div class="arc-desc t-en">Leading Tribo BaaS (~190 engineers) across three clusters: Open Cash Hub / IBM JV (in production), Integração Digital, and BaaS + Developer Portal — the most architecturally complex challenge of a 20-year career.</div>
+          <div class="arc-desc t-pt">Liderando a Tribo BaaS (~190 engenheiros) em três clusters: Open Cash Hub / IBM JV (em produção), Integração Digital e BaaS + Developer Portal — o desafio arquitetural mais complexo de 20 anos de carreira.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="contact-row">
+      <a class="contact-link" href="https://www.linkedin.com/in/raul-marinho-sousa" target="_blank">
+        <div class="dot"></div> LinkedIn
+      </a>
+      <a class="contact-link" href="https://github.com/ramasousa" target="_blank">
+        <div class="dot"></div> GitHub
+      </a>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════
+       RIGHT PANEL
+  ══════════════════════════════ -->
+  <div class="panel-right">
+
+    <div class="right-section-label t-en">// selected work · 2026</div>
+    <div class="right-section-label t-pt">// trabalhos selecionados · 2026</div>
+
+    <!-- CARD 1 — Platform Shift (links to the storytelling doc) -->
+    <a class="work-card wc-featured" href="baas-platform-shift-v3.html">
+      <div class="work-card-top">
+        <div class="work-card-tag t-en">Featured · Transformation Narrative</div>
+        <div class="work-card-tag t-pt">Destaque · Narrativa de Transformação</div>
+        <div class="work-card-arrow">→</div>
+      </div>
+      <div class="work-card-body">
+        <div class="work-card-title t-en">The Architecture of a Platform Shift</div>
+        <div class="work-card-title t-pt">A Arquitetura de uma Mudança de Plataforma</div>
+        <div class="work-card-sub t-en">
+          How Bradesco is being transformed from a product bank into a composable financial substrate — across six simultaneous dimensions of change. A strategic narrative documenting the construction of Tribo BaaS and the "Bradesco as a Service" paradigm.
+        </div>
+        <div class="work-card-sub t-pt">
+          Como o Bradesco está sendo transformado de um banco de produtos em um substrato financeiro componível — em seis dimensões simultâneas de mudança. Uma narrativa estratégica documentando a construção da Tribo BaaS e o paradigma "Bradesco as a Service".
+        </div>
+        <div class="work-card-chips">
+          <span class="wchip">BaaS</span>
+          <span class="wchip">LaaS · CaaS</span>
+          <span class="wchip">Open Cash Hub</span>
+          <span class="wchip">IBM JV</span>
+          <span class="wchip">~190 engineers</span>
+          <span class="wchip">Platform Architecture</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- CARD 2 — Developer Portal -->
+    <a class="work-card wc-doc" href="https://ramasousa.github.io/dev-portal-grpc" target="_blank">
+      <div class="work-card-top">
+        <div class="work-card-tag t-en">Architecture · Developer Platform</div>
+        <div class="work-card-tag t-pt">Arquitetura · Developer Platform</div>
+        <div class="work-card-arrow">→</div>
+      </div>
+      <div class="work-card-body">
+        <div class="work-card-title t-en">Developer Portal — gRPC & API Platform</div>
+        <div class="work-card-title t-pt">Portal do Desenvolvedor — gRPC & API Platform</div>
+        <div class="work-card-sub t-en">
+          A reference developer portal integrating gRPC documentation, Test Clock API panel, and the BaaS API surface — designed as a product, not a documentation page.
+        </div>
+        <div class="work-card-sub t-pt">
+          Um portal de desenvolvedor de referência integrando documentação gRPC, painel da Test Clock API e a superfície de APIs do BaaS — tratado como produto, não como página de documentação.
+        </div>
+        <div class="work-card-chips">
+          <span class="wchip">gRPC</span>
+          <span class="wchip">Test Clock API</span>
+          <span class="wchip">OpenAPI 3.1</span>
+          <span class="wchip">Developer Experience</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- PRINCIPLES STRIP -->
+    <div class="principles-strip">
+      <div class="ps-header t-en">// principles I build by</div>
+      <div class="ps-header t-pt">// princípios que guiam minha construção</div>
+
+      <div class="ps-item">
+        <div class="ps-num">01</div>
+        <div class="ps-text t-en"><strong>Agent plans. Domain executes. Policy never delegates.</strong> The deterministic gate lives in domain service code — regardless of what any upstream agent decides.</div>
+        <div class="ps-text t-pt"><strong>O agente planeja. O domínio executa. A política nunca delega.</strong> A porta determinística vive no código do domain service — independente do que qualquer agente upstream decida.</div>
+      </div>
+      <div class="ps-item">
+        <div class="ps-num">02</div>
+        <div class="ps-text t-en"><strong>Single source of truth or nothing.</strong> Any data with two authoritative sources is data in the process of diverging.</div>
+        <div class="ps-text t-pt"><strong>Fonte única de verdade ou nada.</strong> Qualquer dado com duas fontes autoritativas é um dado em processo de divergência.</div>
+      </div>
+      <div class="ps-item">
+        <div class="ps-num">03</div>
+        <div class="ps-text t-en"><strong>Extensibility is a data problem, not a versioning problem.</strong> New segments register new codes — the API surface stays stable.</div>
+        <div class="ps-text t-pt"><strong>Extensibilidade é um problema de dados, não de versionamento.</strong> Novos segmentos registram novos códigos — a superfície da API permanece estável.</div>
+      </div>
+      <div class="ps-item">
+        <div class="ps-num">04</div>
+        <div class="ps-text t-en"><strong>Every document must work at two levels.</strong> Architecture blueprints must also serve as executive presentations — and vice versa.</div>
+        <div class="ps-text t-pt"><strong>Todo documento deve funcionar em dois níveis.</strong> Blueprints de arquitetura também devem funcionar como apresentações executivas — e vice-versa.</div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+function setLang(lang) {
+  document.documentElement.setAttribute('data-lang', lang);
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  document.documentElement.setAttribute('lang', lang);
+}
+</script>
+
+</body>
+</html>
