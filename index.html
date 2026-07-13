@@ -1,719 +1,1492 @@
 <!DOCTYPE html>
-<html lang="en" data-lang="en">
+<html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Raul Sousa — Head of Open Platform</title>
-<meta name="description" content="Technology leader building composable financial infrastructure at Bradesco. 20 years at the intersection of architecture and platform strategy.">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Bradesco Developer Portal — Guia Técnico Completo v2.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --ink:    #08080D;
-  --deep:   #10101A;
-  --raised: #141420;
-  --border: #1C1C2C;
-  --muted:  #2E2E48;
-  --dim:    #555575;
-  --silver: #8080A0;
-  --pale:   #BBBBD0;
-  --white:  #E8E8F2;
-  --red:    #CC092F;
-  --red-f:  rgba(204,9,47,0.07);
-  --red-m:  rgba(204,9,47,0.18);
-  --gold:   #D4A017;
-  --teal:   #1EADAA;
-  --violet: #8B5CF6;
+:root{
+  --bg:#05080F;--s1:#0B0F1C;--s2:#121828;--s3:#1A2035;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.12);
+  --text:#F0EDE8;--muted:rgba(240,237,232,.5);--faint:rgba(240,237,232,.22);
+  --red:#CC092F;--rd:#900F15;--red-f:rgba(204,9,47,.12);
+  --green:#10B981;--green-f:rgba(16,185,129,.12);
+  --amber:#F59E0B;--amber-f:rgba(245,158,11,.12);
+  --blue:#3B82F6;--blue-f:rgba(59,130,246,.12);
+  --purple:#8B5CF6;--purple-f:rgba(139,92,246,.12);
+  --teal:#14B8A6;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --display:'Syne',sans-serif;
+  --mono:'DM Mono',monospace;
+  --sb:260px;
 }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;min-height:100vh}
 
-html { scroll-behavior: smooth; }
+/* ── TOPBAR ────────────────────────────────────────────────────────────────── */
+.topbar{height:48px;background:rgba(5,8,15,.97);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 20px;gap:14px;position:sticky;top:0;z-index:200}
+.tb-brand{font-family:var(--display);font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+.tb-title{font-size:11.5px;color:var(--muted);border-left:1px solid var(--border);padding-left:14px;margin-left:6px}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.tb-badge{font-size:9.5px;font-weight:700;letter-spacing:.08em;padding:3px 10px;border-radius:100px;border:1px solid var(--border2);color:var(--muted)}
+.tb-version{font-size:9.5px;color:var(--faint);font-family:var(--mono)}
+.tb-new{background:rgba(16,185,129,.15);border-color:rgba(16,185,129,.3);color:#34D399}
 
-body {
-  background: var(--ink);
-  color: var(--white);
-  font-family: 'Syne', sans-serif;
-  font-weight: 400;
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+/* ── SHELL ─────────────────────────────────────────────────────────────────── */
+.shell{display:flex;min-height:calc(100vh - 48px)}
 
-/* ── HEX GRID BACKGROUND ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='104'%3E%3Cpath d='M30 2 L58 18 L58 50 L30 66 L2 50 L2 18 Z' fill='none' stroke='%23ffffff' stroke-width='0.6'/%3E%3Cpath d='M30 70 L58 86 L58 118 L30 134 L2 118 L2 86 Z' fill='none' stroke='%23ffffff' stroke-width='0.6'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-}
+/* ── SIDEBAR ───────────────────────────────────────────────────────────────── */
+.sidebar{width:var(--sb);background:var(--s1);border-right:1px solid var(--border);padding:20px 0;position:sticky;top:48px;height:calc(100vh - 48px);overflow-y:auto;flex-shrink:0}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+.sb-group{margin-bottom:6px}
+.sb-group-label{font-size:8.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);padding:14px 18px 5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 18px;font-size:12px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .12s;border:none;background:none;width:100%;text-align:left;position:relative}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.sb-item.on{color:var(--text);background:rgba(255,255,255,.05)}
+.sb-item.on::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:2px;background:var(--red);border-radius:1px}
+.sb-icon{flex-shrink:0;width:16px;text-align:center;font-size:13px}
+.sb-new{font-size:8.5px;font-weight:700;padding:1px 6px;border-radius:100px;background:rgba(16,185,129,.2);color:#34D399;margin-left:auto;flex-shrink:0}
+.sb-upd{font-size:8.5px;font-weight:700;padding:1px 6px;border-radius:100px;background:rgba(245,158,11,.15);color:#FCD34D;margin-left:auto;flex-shrink:0}
 
-/* ── LANG TOGGLE ── */
-.lang-bar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 48px;
-  height: 52px;
-  background: rgba(8,8,13,0.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
+/* ── CONTENT ───────────────────────────────────────────────────────────────── */
+.content{flex:1;overflow:hidden}
+.panel{display:none;padding:36px 40px 80px;max-width:860px}
+.panel.on{display:block}
+@media(max-width:768px){.shell{flex-direction:column}.sidebar{width:100%;height:auto;position:relative}.panel{padding:24px 20px 60px}}
 
-.lang-brand {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
+/* ── TYPOGRAPHY ─────────────────────────────────────────────────────────────── */
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.eyebrow::before{content:'';width:18px;height:2px;background:var(--red);border-radius:1px}
+h1{font-family:var(--display);font-size:clamp(28px,4vw,42px);font-weight:800;line-height:1.06;letter-spacing:-.02em;color:var(--text);margin-bottom:12px}
+h1 em{color:var(--red);font-style:normal}
+h2{font-family:var(--display);font-size:20px;font-weight:800;color:var(--text);margin:28px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+h3{font-size:13.5px;font-weight:700;color:var(--text);margin:18px 0 8px;display:flex;align-items:center;gap:7px}
+h3::before{content:'';width:3px;height:14px;background:var(--red);border-radius:2px;flex-shrink:0}
+.lead{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:18px;max-width:640px}
+.body{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:14px}
+.rule{border:none;border-top:1px solid var(--border);margin:24px 0}
 
-.lang-brand span { color: var(--red); }
+/* ── CARDS & GRIDS ───────────────────────────────────────────────────────────── */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+@media(max-width:640px){.grid2,.grid3{grid-template-columns:1fr}}
+.card{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.card-accent{position:absolute;top:0;left:0;right:0;height:2.5px}
+.card-label{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:8px}
+.card-title{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:5px}
+.card-body{font-size:12.5px;color:var(--muted);line-height:1.65}
+.card-size{font-family:var(--mono);font-size:10.5px;color:var(--faint);margin-top:8px}
+.tag{display:inline-block;font-size:9px;font-weight:700;padding:1.5px 7px;border-radius:100px;margin:0 2px}
+.tag-new{background:rgba(16,185,129,.2);color:#34D399}
+.tag-upd{background:rgba(245,158,11,.15);color:#FCD34D}
+.tag-stable{background:rgba(59,130,246,.15);color:#93C5FD}
+.tag-ready{background:rgba(139,92,246,.15);color:#C4B5FD}
 
-.lang-switcher {
-  display: flex;
-  gap: 2px;
-  background: var(--raised);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  overflow: hidden;
-}
+/* ── CALLOUTS ────────────────────────────────────────────────────────────────── */
+.callout{border-left:3px solid;padding:13px 16px;border-radius:0 8px 8px 0;margin:16px 0}
+.callout-red{border-color:var(--red);background:var(--red-f)}
+.callout-green{border-color:var(--green);background:var(--green-f)}
+.callout-amber{border-color:var(--amber);background:var(--amber-f)}
+.callout-blue{border-color:var(--blue);background:var(--blue-f)}
+.callout-label{font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.callout-red .callout-label{color:var(--red)}
+.callout-green .callout-label{color:var(--green)}
+.callout-amber .callout-label{color:var(--amber)}
+.callout-blue .callout-label{color:var(--blue)}
+.callout-body{font-size:12.5px;color:var(--muted);line-height:1.65}
+.callout-body code{font-family:var(--mono);font-size:11px;background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px;color:var(--text)}
+.callout-body strong{color:var(--text)}
 
-.lang-btn {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  padding: 6px 14px;
-  border: none;
-  background: transparent;
-  color: var(--dim);
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
+/* ── TABLES ──────────────────────────────────────────────────────────────────── */
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:var(--s2);color:var(--faint);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--muted);vertical-align:top}
+td:first-child{font-weight:600;color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
 
-.lang-btn.active {
-  background: var(--red);
-  color: var(--white);
-}
+/* ── CODE ────────────────────────────────────────────────────────────────────── */
+.code-wrap{background:#03050C;border:1px solid var(--border);border-radius:10px;margin:12px 0;overflow:hidden}
+.code-head{background:var(--s2);border-bottom:1px solid var(--border);padding:7px 14px;display:flex;align-items:center;justify-content:space-between}
+.code-lang{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.code-file{font-family:var(--mono);font-size:10px;color:rgba(139,92,246,.7)}
+pre{padding:16px;font-family:var(--mono);font-size:12px;line-height:1.75;color:#94A3B8;overflow-x:auto}
+.kw{color:#818CF8}.fn{color:#34D399}.str{color:#86EFAC}.cm{color:#374151}
 
-/* ── MAIN LAYOUT ── */
-main {
-  position: relative;
-  z-index: 1;
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding-top: 52px;
-}
+/* ── DECISION ITEMS ──────────────────────────────────────────────────────────── */
+.decision-list{display:flex;flex-direction:column;gap:10px}
+.decision-item{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:14px 16px}
+.di-num{font-family:var(--display);font-size:11px;font-weight:800;color:var(--red);margin-bottom:5px;letter-spacing:.04em}
+.di-title{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:4px}
+.di-body{font-size:12.5px;color:var(--muted);line-height:1.65}
+.di-body code{font-family:var(--mono);font-size:11px;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;color:var(--text)}
 
-/* ── LEFT PANEL — identity ── */
-.panel-left {
-  position: sticky;
-  top: 52px;
-  height: calc(100vh - 52px);
-  display: flex;
-  flex-direction: column;
-  justify-content: safe center;
-  padding: 48px 64px;
-  border-right: 1px solid var(--border);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--muted) transparent;
-}
-.panel-left::-webkit-scrollbar { width: 5px; }
-.panel-left::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 3px; }
+/* ── DEPARA TABLE ────────────────────────────────────────────────────────────── */
+.depara{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.dp-row{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:12px 14px}
+.dp-from{font-size:12px;color:var(--red);font-weight:600}
+.dp-arrow{color:var(--faint);font-size:16px;text-align:center}
+.dp-to{font-size:12px;color:var(--green);font-weight:700}
+.dp-note{font-size:10.5px;color:var(--faint);margin-top:4px}
 
-/* Radial glow behind the name */
-.panel-left::before {
-  content: '';
-  position: absolute;
-  bottom: -20%; left: -10%;
-  width: 500px; height: 400px;
-  background: radial-gradient(ellipse, var(--red-m) 0%, transparent 65%);
-  pointer-events: none;
-}
+/* ── SCALE NUMBERS ───────────────────────────────────────────────────────────── */
+.scale-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}
+@media(max-width:700px){.scale-row{grid-template-columns:1fr 1fr}}
+.scale-card{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.scale-n{font-family:var(--display);font-size:32px;font-weight:800;line-height:1;margin-bottom:4px}
+.scale-l{font-size:11px;color:var(--muted);line-height:1.4}
 
-.name-eyebrow {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--red);
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+/* ── TIMELINE ────────────────────────────────────────────────────────────────── */
+.timeline{display:flex;flex-direction:column;gap:0;padding:4px 0}
+.tl-item{display:grid;grid-template-columns:80px 1fr;gap:16px;position:relative;padding-bottom:20px}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:36px;top:28px;bottom:4px;width:1.5px;background:var(--border)}
+.tl-time{display:flex;flex-direction:column;align-items:center;gap:4px;padding-top:4px}
+.tl-dot{width:14px;height:14px;border-radius:50%;border:2px solid;flex-shrink:0;background:var(--s1);position:relative;z-index:1}
+.dot-done{border-color:var(--green);background:rgba(16,185,129,.2)}
+.dot-now{border-color:var(--amber);background:rgba(245,158,11,.2)}
+.dot-next{border-color:var(--border2)}
+.tl-label{font-size:9.5px;font-weight:700;font-family:var(--mono);color:var(--faint);text-align:center;line-height:1.3}
+.tl-content{padding-top:1px}
+.tl-title{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:4px}
+.tl-body{font-size:12.5px;color:var(--muted);line-height:1.6}
 
-.name-eyebrow::before {
-  content: '';
-  width: 20px; height: 1px;
-  background: var(--red);
-  opacity: 0.6;
-}
-
-.name-main {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(48px, 5vw, 72px);
-  font-weight: 300;
-  line-height: 1.0;
-  letter-spacing: -0.02em;
-  color: var(--white);
-  margin-bottom: 6px;
-}
-
-.name-role {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(16px, 1.8vw, 22px);
-  font-weight: 300;
-  font-style: italic;
-  color: var(--silver);
-  margin-bottom: 40px;
-  line-height: 1.4;
-}
-
-.name-role strong {
-  font-style: normal;
-  font-weight: 400;
-  color: var(--pale);
-}
-
-/* Thesis statement */
-.thesis {
-  font-size: 13.5px;
-  font-weight: 400;
-  color: var(--silver);
-  line-height: 1.8;
-  max-width: 420px;
-  padding-left: 18px;
-  border-left: 2px solid var(--red);
-  margin-bottom: 44px;
-}
-.thesis-lead {
-  display: block;
-  color: var(--pale);
-  font-weight: 500;
-  font-size: 15px;
-  line-height: 1.55;
-  margin-bottom: 16px;
-}
-
-/* 20-year mini-arc */
-.arc {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-bottom: 48px;
-}
-
-.arc-item {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--border);
-  transition: background 0.2s;
-}
-.arc-item:first-child { border-top: 1px solid var(--border); }
-
-.arc-period {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-  min-width: 72px;
-  padding-top: 2px;
-  flex-shrink: 0;
-}
-
-.arc-content {}
-
-.arc-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--pale);
-  margin-bottom: 1px;
-}
-
-.arc-desc {
-  font-size: 11px;
-  color: var(--dim);
-  line-height: 1.5;
-}
-
-.arc-item.current .arc-period { color: var(--red); }
-.arc-item.current .arc-title  { color: var(--white); }
-.arc-item.current .arc-desc   { color: var(--silver); }
-
-/* Social / contact links */
-.contact-row {
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.contact-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--dim);
-  text-decoration: none;
-  border: 1px solid var(--border);
-  padding: 7px 14px;
-  border-radius: 2px;
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
-}
-
-.contact-link:hover {
-  color: var(--white);
-  border-color: var(--muted);
-  background: var(--raised);
-}
-
-.contact-link .dot {
-  width: 4px; height: 4px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.6;
-}
-
-/* ── RIGHT PANEL — work ── */
-.panel-right {
-  padding: 72px 56px;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.right-section-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 24px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-/* Featured work card */
-.work-card {
-  background: var(--deep);
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 16px;
-  transition: border-color 0.3s, transform 0.3s;
-  text-decoration: none;
-  display: block;
-}
-
-.work-card:hover {
-  border-color: var(--muted);
-  transform: translateY(-2px);
-}
-
-.work-card-top {
-  padding: 28px 28px 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.work-card-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 2px;
-  flex-shrink: 0;
-}
-
-.wc-featured .work-card-tag {
-  background: var(--red-f);
-  color: var(--red);
-  border: 1px solid rgba(204,9,47,0.2);
-}
-
-.wc-artifact .work-card-tag {
-  background: rgba(212,160,23,0.07);
-  color: var(--gold);
-  border: 1px solid rgba(212,160,23,0.2);
-}
-
-.wc-doc .work-card-tag {
-  background: rgba(139,92,246,0.07);
-  color: var(--violet);
-  border: 1px solid rgba(139,92,246,0.2);
-}
-
-.wc-exec .work-card-tag {
-  background: rgba(30,173,170,0.07);
-  color: var(--teal);
-  border: 1px solid rgba(30,173,170,0.2);
-}
-
-.work-card-arrow {
-  font-size: 14px;
-  color: var(--muted);
-  transition: color 0.2s, transform 0.2s;
-  flex-shrink: 0;
-}
-
-.work-card:hover .work-card-arrow {
-  color: var(--white);
-  transform: translateX(3px);
-}
-
-.work-card-body {
-  padding: 16px 28px 28px;
-}
-
-.work-card-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 24px;
-  font-weight: 400;
-  color: var(--white);
-  line-height: 1.2;
-  margin-bottom: 8px;
-}
-
-.work-card-sub {
-  font-size: 12px;
-  color: var(--silver);
-  line-height: 1.7;
-  margin-bottom: 20px;
-}
-
-.work-card-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.wchip {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 3px 8px;
-  border-radius: 2px;
-  background: rgba(255,255,255,0.04);
-  color: var(--dim);
-  border: 1px solid var(--border);
-}
-
-/* Bottom bar accent on featured */
-.work-card.wc-featured {
-  border-bottom: 2px solid var(--red);
-}
-.work-card.wc-artifact {
-  border-bottom: 2px solid var(--gold);
-}
-.work-card.wc-doc {
-  border-bottom: 2px solid var(--violet);
-}
-.work-card.wc-exec {
-  border-bottom: 2px solid var(--teal);
-}
-
-/* Principles strip */
-.principles-strip {
-  margin-top: 40px;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.ps-header {
-  padding: 14px 24px;
-  background: var(--raised);
-  border-bottom: 1px solid var(--border);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.ps-item {
-  padding: 14px 24px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-}
-.ps-item:last-child { border-bottom: none; }
-
-.ps-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  color: var(--red);
-  letter-spacing: 0.1em;
-  min-width: 28px;
-  padding-top: 2px;
-  flex-shrink: 0;
-}
-
-.ps-text {
-  font-size: 12px;
-  color: var(--silver);
-  line-height: 1.6;
-}
-
-.ps-text strong { color: var(--pale); font-weight: 600; }
-
-/* ── RESPONSIVE ── */
-@media (max-width: 900px) {
-  main { grid-template-columns: 1fr; }
-  .panel-left {
-    position: static;
-    height: auto;
-    padding: 60px 28px 40px;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
-  .panel-right { padding: 40px 28px 64px; }
-  .lang-bar { padding: 0 24px; }
-}
-
-/* ── I18N — hide/show by lang ── */
-[data-lang="en"] .t-pt,
-[data-lang="pt"] .t-en { display: none; }
+/* ── HERO STAT ───────────────────────────────────────────────────────────────── */
+.hero-stats{display:flex;gap:28px;flex-wrap:wrap;margin:24px 0;padding:20px 22px;background:var(--s2);border:1px solid var(--border);border-radius:12px}
+.hs{display:flex;flex-direction:column;gap:4px}
+.hs-n{font-family:var(--display);font-size:30px;font-weight:800;line-height:1}
+.hs-l{font-size:10.5px;color:var(--muted)}
 </style>
 </head>
 <body>
 
-<!-- ── LANG BAR ── -->
-<div class="lang-bar">
-  <div class="lang-brand">raul<span>.</span>sousa</div>
-  <div class="lang-switcher">
-    <button class="lang-btn active" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" onclick="setLang('pt')">PT</button>
+<!-- TOPBAR ──────────────────────────────────────────────────────────────────── -->
+<div class="topbar">
+  <div class="tb-brand">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+      <path d="M5 11.5L12 3l7 8.5" stroke="#CC092F" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M3.5 15L12 6.5l8.5 8.5" stroke="#CC092F" stroke-width="2.2" stroke-linecap="round" opacity=".5"/>
+      <path d="M9.5 15.5v5.5M14.5 15.5v5.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+    Bradesco Developers
+  </div>
+  <div class="tb-title">Guia Técnico Completo</div>
+  <div class="tb-right">
+    <span class="tb-version">v2.0 Jul 2026</span>
+    <span class="tb-badge tb-new">Atualizado</span>
+    <span class="tb-badge">Confidencial</span>
   </div>
 </div>
 
-<main>
+<div class="shell">
 
-  <!-- ══════════════════════════════
-       LEFT PANEL
-  ══════════════════════════════ -->
-  <div class="panel-left">
+<!-- SIDEBAR ─────────────────────────────────────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="sb-group">
+    <div class="sb-group-label">Visão Geral</div>
+    <button class="sb-item on" onclick="show('capa',this)"><span class="sb-icon">🏠</span>Capa & Resumo Executivo</button>
+    <button class="sb-item" onclick="show('construido',this)"><span class="sb-icon">📦</span>O que foi construído<span class="sb-upd">UPD</span></button>
+    <button class="sb-item" onclick="show('arquivos',this)"><span class="sb-icon">🗂️</span>Inventário de artefatos<span class="sb-upd">UPD</span></button>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-label">Portal & Sandbox</div>
+    <button class="sb-item" onclick="show('portal',this)"><span class="sb-icon">🌐</span>Developer Portal gRPC</button>
+    <button class="sb-item" onclick="show('testclock',this)"><span class="sb-icon">⏰</span>Test Clock API<span class="sb-new">NOVO</span></button>
+    <button class="sb-item" onclick="show('console',this)"><span class="sb-icon">📊</span>Console Avançado<span class="sb-new">NOVO</span></button>
+    <button class="sb-item" onclick="show('webhook',this)"><span class="sb-icon">🔔</span>Webhook Dashboard<span class="sb-new">NOVO</span></button>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-label">Partner Success</div>
+    <button class="sb-item" onclick="show('ps-playbook',this)"><span class="sb-icon">📋</span>Playbook Operacional<span class="sb-new">NOVO</span></button>
+    <button class="sb-item" onclick="show('ps-view',this)"><span class="sb-icon">👁️</span>Partner Success View<span class="sb-new">NOVO</span></button>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-label">Gateway & Infraestrutura</div>
+    <button class="sb-item" onclick="show('gateway-bench',this)"><span class="sb-icon">⚖️</span>Benchmark de Gateway<span class="sb-new">NOVO</span></button>
+    <button class="sb-item" onclick="show('gateway-intel',this)"><span class="sb-icon">🗺️</span>Intelligence Dashboard<span class="sb-new">NOVO</span></button>
+    <button class="sb-item" onclick="show('gateway-spec',this)"><span class="sb-icon">📐</span>Tech Spec do Dashboard<span class="sb-new">NOVO</span></button>
+    <button class="sb-item" onclick="show('infra',this)"><span class="sb-icon">☁️</span>Infra: Firebase → Azure<span class="sb-upd">UPD</span></button>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-label">Negócio & Receita</div>
+    <button class="sb-item" onclick="show('revenue',this)"><span class="sb-icon">💰</span>Estudo de Receita<span class="sb-new">NOVO</span></button>
+    <button class="sb-item" onclick="show('backlog',this)"><span class="sb-icon">⭐</span>Backlog do Head<span class="sb-new">NOVO</span></button>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-label">Para as Squads</div>
+    <button class="sb-item" onclick="show('squads',this)"><span class="sb-icon">👥</span>Estrutura de squads</button>
+    <button class="sb-item" onclick="show('cicd',this)"><span class="sb-icon">⚙️</span>Esteira CI/CD</button>
+    <button class="sb-item" onclick="show('evoluir',this)"><span class="sb-icon">🚀</span>Como evoluir o portal</button>
+    <button class="sb-item" onclick="show('decisoes',this)"><span class="sb-icon">🧠</span>Decisões técnicas<span class="sb-upd">UPD</span></button>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-label">Técnico · Referência</div>
+    <button class="sb-item" onclick="show('codigo',this)"><span class="sb-icon">💻</span>Exemplos multi-linguagem</button>
+    <button class="sb-item" onclick="show('readme',this)"><span class="sb-icon">📖</span>Migração para ReadMe.io</button>
+    <button class="sb-item" onclick="show('checklist',this)"><span class="sb-icon">✅</span>Arquivos obrigatórios por API</button>
+    <button class="sb-item" onclick="show('statuspage',this)"><span class="sb-icon">🟢</span>Status Page — como construir</button>
+    <button class="sb-item" onclick="show('console-guia',this)"><span class="sb-icon">🖥️</span>Console — propósito e gestão</button>
+    <button class="sb-item" onclick="show('sdks',this)"><span class="sb-icon">📦</span>SDKs — multi-linguagem</button>
+    <button class="sb-item" onclick="show('postman',this)"><span class="sb-icon">📮</span>Postman Hub</button>
+    <button class="sb-item" onclick="show('chatbot',this)"><span class="sb-icon">🤖</span>Chatbot — conectar com IA</button>
+  </div>
+  <div class="sb-group">
+    <div class="sb-group-label">Próximos Passos</div>
+    <button class="sb-item" onclick="show('roadmap',this)"><span class="sb-icon">📅</span>Jornada 18 meses<span class="sb-upd">UPD</span></button>
+    <button class="sb-item" onclick="show('impacto',this)"><span class="sb-icon">⭐</span>Impacto & Conquistas</button>
+  </div>
+</aside>
 
-    <div class="name-eyebrow">
-      <span class="t-en">Technology Leadership · Open Platform</span>
-      <span class="t-pt">Liderança em Tecnologia · Open Platform</span>
-    </div>
+<!-- CONTENT ──────────────────────────────────────────────────────────────────── -->
+<div class="content">
 
-    <div class="name-main">Raul Sousa</div>
+<!-- ═══ CAPA ══════════════════════════════════════════════════════════════════ -->
+<div class="panel on" id="p-capa">
+  <div class="eyebrow">Bradesco · Head de Tecnologia Open Platform · Julho 2026</div>
+  <h1>Tudo que foi feito,<br>como escalar,<br><em>como vencer.</em></h1>
+  <div class="lead">Guia técnico completo v2.0 do ecossistema Bradesco as a Service — Portal gRPC, Console Avançado, Partner Success, Gateway Intelligence, Revenue Study e o caminho para a infraestrutura interna.</div>
 
-    <div class="name-role t-en">
-      Head of Technology,<br>
-      <strong>Open Platform — Bradesco</strong>
-    </div>
-    <div class="name-role t-pt">
-      Head de Tecnologia,<br>
-      <strong>Open Platform — Bradesco</strong>
-    </div>
-
-    <!-- THESIS -->
-    <p class="thesis t-en">
-      <span class="thesis-lead">I build the platforms, organizations, and operating models that enable financial institutions to scale as platform businesses.</span>
-      For more than 20 years, I have worked at the intersection of technology strategy, platform architecture, payments, and organizational leadership — translating technical complexity into business capability and sustainable growth.
-    </p>
-    <p class="thesis t-pt">
-      <span class="thesis-lead">Construo as plataformas, organizações e modelos operacionais que permitem que instituições financeiras escalem como negócios de plataforma.</span>
-      Há mais de 20 anos, atuo na interseção entre estratégia de tecnologia, arquitetura de plataforma, meios de pagamento e liderança organizacional — traduzindo complexidade técnica em capacidade de negócio e crescimento sustentável.
-    </p>
-
-    <!-- 20-YEAR ARC -->
-    <div class="arc">
-      <div class="arc-item">
-        <div class="arc-period">2005 — 2012</div>
-        <div class="arc-content">
-          <div class="arc-title t-en">Foundations — Systems & Integration</div>
-          <div class="arc-title t-pt">Fundações — Sistemas & Integração</div>
-          <div class="arc-desc t-en">Engineering and architecture roles building large-scale integration and distributed systems across financial and technology sectors.</div>
-          <div class="arc-desc t-pt">Atuação em engenharia e arquitetura, construindo sistemas de integração em larga escala no setor financeiro e de tecnologia.</div>
-        </div>
-      </div>
-      <div class="arc-item">
-        <div class="arc-period">2012 — 2019</div>
-        <div class="arc-content">
-          <div class="arc-title t-en">Platform & API Strategy</div>
-          <div class="arc-title t-pt">Estratégia de Plataforma & APIs</div>
-          <div class="arc-desc t-en">Led platform and API programs for complex organizations — governance models, partner ecosystems, and the organizational design that makes platforms work.</div>
-          <div class="arc-desc t-pt">Liderou programas de plataforma e API em organizações complexas — modelos de governança, ecossistemas de parceiros e o design organizacional que faz plataformas funcionarem.</div>
-        </div>
-      </div>
-      <div class="arc-item">
-        <div class="arc-period">2019 — 2025</div>
-        <div class="arc-content">
-          <div class="arc-title t-en">Executive Leadership — Digital Transformation</div>
-          <div class="arc-title t-pt">Liderança Executiva — Transformação Digital</div>
-          <div class="arc-desc t-en">Technology leadership across financial services, driving open banking, embedded finance, and BaaS initiatives at institutional scale.</div>
-          <div class="arc-desc t-pt">Liderança de tecnologia em serviços financeiros, conduzindo iniciativas de open banking, embedded finance e BaaS em escala institucional.</div>
-        </div>
-      </div>
-      <div class="arc-item current">
-        <div class="arc-period">2026 →</div>
-        <div class="arc-content">
-          <div class="arc-title t-en">Head of Technology · Open Platform · Bradesco</div>
-          <div class="arc-title t-pt">Head de Tecnologia · Open Platform · Bradesco</div>
-          <div class="arc-desc t-en">Leading Tribo BaaS (~190 engineers) across three clusters: Open Cash Hub / IBM JV (in production), Integração Digital, and BaaS + Developer Portal — the most architecturally complex challenge of a 20-year career.</div>
-          <div class="arc-desc t-pt">Liderando a Tribo BaaS (~190 engenheiros) em três clusters: Open Cash Hub / IBM JV (em produção), Integração Digital e BaaS + Developer Portal — o desafio arquitetural mais complexo de 20 anos de carreira.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CONTACT -->
-    <div class="contact-row">
-      <a class="contact-link" href="https://www.linkedin.com/in/raul-marinho-sousa" target="_blank">
-        <div class="dot"></div> LinkedIn
-      </a>
-      <a class="contact-link" href="https://github.com/ramasousa" target="_blank">
-        <div class="dot"></div> GitHub
-      </a>
-    </div>
-
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-n" style="color:var(--red)">45</div><div class="hs-l">DX Score atual</div></div>
+    <div class="hs"><div class="hs-n" style="color:var(--green)">82+</div><div class="hs-l">Meta 18 meses</div></div>
+    <div class="hs"><div class="hs-n" style="color:var(--amber)">27+</div><div class="hs-l">Artefatos gerados</div></div>
+    <div class="hs"><div class="hs-n" style="color:var(--blue)">R$12M</div><div class="hs-l">Receita incremental/ano</div></div>
+    <div class="hs"><div class="hs-n" style="color:var(--purple)">120</div><div class="hs-l">Pessoas na Tribo BaaS</div></div>
   </div>
 
-  <!-- ══════════════════════════════
-       RIGHT PANEL
-  ══════════════════════════════ -->
-  <div class="panel-right">
-
-    <div class="right-section-label t-en">// selected work · 2026</div>
-    <div class="right-section-label t-pt">// trabalhos selecionados · 2026</div>
-
-    <!-- CARD 1 — Platform Shift (links to the storytelling doc) -->
-    <a class="work-card wc-featured" href="baas-platform-shift-v3.html">
-      <div class="work-card-top">
-        <div class="work-card-tag t-en">Featured · Transformation Narrative</div>
-        <div class="work-card-tag t-pt">Destaque · Narrativa de Transformação</div>
-        <div class="work-card-arrow">→</div>
-      </div>
-      <div class="work-card-body">
-        <div class="work-card-title t-en">The Architecture of a Platform Shift</div>
-        <div class="work-card-title t-pt">A Arquitetura de uma Mudança de Plataforma</div>
-        <div class="work-card-sub t-en">
-          How Bradesco is being transformed from a product bank into a composable financial substrate — across six simultaneous dimensions of change. A strategic narrative documenting the construction of Tribo BaaS and the "Bradesco as a Service" paradigm.
-        </div>
-        <div class="work-card-sub t-pt">
-          Como o Bradesco está sendo transformado de um banco de produtos em um substrato financeiro componível — em seis dimensões simultâneas de mudança. Uma narrativa estratégica documentando a construção da Tribo BaaS e o paradigma "Bradesco as a Service".
-        </div>
-        <div class="work-card-chips">
-          <span class="wchip">BaaS</span>
-          <span class="wchip">LaaS · CaaS</span>
-          <span class="wchip">Open Cash Hub</span>
-          <span class="wchip">IBM JV</span>
-          <span class="wchip">~190 engineers</span>
-          <span class="wchip">Platform Architecture</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- CARD 2 — Developer Portal Benchmark -->
-    <a class="work-card wc-doc" href="https://ramasousa.github.io/benchmark-devportal/" target="_blank">
-      <div class="work-card-top">
-        <div class="work-card-tag t-en">Strategic Analysis · Developer Experience</div>
-        <div class="work-card-tag t-pt">Análise Estratégica · Developer Experience</div>
-        <div class="work-card-arrow">→</div>
-      </div>
-      <div class="work-card-body">
-        <div class="work-card-title t-en">Developer Portal Benchmark — Bradesco vs. Global Market</div>
-        <div class="work-card-title t-pt">Benchmark de Developer Portal — Bradesco vs. Mercado Global</div>
-        <div class="work-card-sub t-en">
-          A multidimensional benchmark of 7 developer portals across 10 weighted DX dimensions — positioning Bradesco's proposed portal against Stripe, Twilio, Plaid, and national banking peers. Includes gap analysis, Time-to-First-Call comparison, and a phased roadmap from 82 to 96 on the DX Score. Key finding: Bradesco already leads Stripe in AI-native (MCP) and financial product coverage.
-        </div>
-        <div class="work-card-sub t-pt">
-          Um benchmark multidimensional de 7 portais de desenvolvedor em 10 dimensões ponderadas de DX — posicionando o portal proposto do Bradesco frente a Stripe, Twilio, Plaid e pares bancários nacionais. Inclui análise de gaps, comparativo de Time-to-First-Call e um roadmap em fases de 82 a 96 no DX Score. Achado central: o Bradesco já lidera a Stripe em IA nativa (MCP) e cobertura de produtos financeiros.
-        </div>
-        <div class="work-card-chips">
-          <span class="wchip">7 Portals · 10 Dimensions</span>
-          <span class="wchip">DX Score</span>
-          <span class="wchip">Gap Analysis</span>
-          <span class="wchip">MCP / AI-Native</span>
-          <span class="wchip">Strategic Roadmap</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- CARD 3 — Developer Portal gRPC (execution) -->
-    <a class="work-card wc-exec" href="https://ramasousa.github.io/dev-portal-grpc" target="_blank">
-      <div class="work-card-top">
-        <div class="work-card-tag t-en">Execution · Developer Platform</div>
-        <div class="work-card-tag t-pt">Execução · Developer Platform</div>
-        <div class="work-card-arrow">→</div>
-      </div>
-      <div class="work-card-body">
-        <div class="work-card-title t-en">Developer Portal — gRPC & API Platform</div>
-        <div class="work-card-title t-pt">Portal do Desenvolvedor — gRPC & API Platform</div>
-        <div class="work-card-sub t-en">
-          The benchmark, turned into product. A reference developer portal integrating gRPC documentation, Test Clock API panel, and the BaaS API surface — designed as a product experience, not a documentation page. The execution answer to the gaps the benchmark identified.
-        </div>
-        <div class="work-card-sub t-pt">
-          O benchmark, transformado em produto. Um portal de desenvolvedor de referência integrando documentação gRPC, painel da Test Clock API e a superfície de APIs do BaaS — tratado como experiência de produto, não como página de documentação. A resposta de execução aos gaps que o benchmark identificou.
-        </div>
-        <div class="work-card-chips">
-          <span class="wchip">gRPC</span>
-          <span class="wchip">Test Clock API</span>
-          <span class="wchip">OpenAPI 3.1</span>
-          <span class="wchip">Developer Experience</span>
-        </div>
-      </div>
-    </a>
-
-    <!-- PRINCIPLES STRIP -->
-    <div class="principles-strip">
-      <div class="ps-header t-en">// principles I build by</div>
-      <div class="ps-header t-pt">// princípios que guiam minha construção</div>
-
-      <div class="ps-item">
-        <div class="ps-num">01</div>
-        <div class="ps-text t-en"><strong>Agent plans. Domain executes. Policy never delegates.</strong> The deterministic gate lives in domain service code — regardless of what any upstream agent decides.</div>
-        <div class="ps-text t-pt"><strong>O agente planeja. O domínio executa. A política nunca delega.</strong> A porta determinística vive no código do domain service — independente do que qualquer agente upstream decida.</div>
-      </div>
-      <div class="ps-item">
-        <div class="ps-num">02</div>
-        <div class="ps-text t-en"><strong>Single source of truth or nothing.</strong> Any data with two authoritative sources is data in the process of diverging.</div>
-        <div class="ps-text t-pt"><strong>Fonte única de verdade ou nada.</strong> Qualquer dado com duas fontes autoritativas é um dado em processo de divergência.</div>
-      </div>
-      <div class="ps-item">
-        <div class="ps-num">03</div>
-        <div class="ps-text t-en"><strong>Extensibility is a data problem, not a versioning problem.</strong> New segments register new codes — the API surface stays stable.</div>
-        <div class="ps-text t-pt"><strong>Extensibilidade é um problema de dados, não de versionamento.</strong> Novos segmentos registram novos códigos — a superfície da API permanece estável.</div>
-      </div>
-      <div class="ps-item">
-        <div class="ps-num">04</div>
-        <div class="ps-text t-en"><strong>Every document must work at two levels.</strong> Architecture blueprints must also serve as executive presentations — and vice versa.</div>
-        <div class="ps-text t-pt"><strong>Todo documento deve funcionar em dois níveis.</strong> Blueprints de arquitetura também devem funcionar como apresentações executivas — e vice-versa.</div>
-      </div>
-    </div>
-
+  <h2>O que há de novo na v2.0</h2>
+  <div class="callout callout-green">
+    <div class="callout-label">Julho 2026 — Expansão do ecossistema</div>
+    <div class="callout-body">A v2.0 cobre tudo construído entre Junho e Julho 2026. Além do Developer Portal estabilizado, adicionamos: <strong>Test Clock API</strong> como painel nativo, <strong>Console Avançado</strong> com 4 views analíticas e pipeline "Sob o Capô", <strong>Partner Success</strong> com playbook e view operacional, <strong>Webhook Delivery Dashboard</strong>, <strong>API Gateway Intelligence</strong> com mapa global ao vivo, <strong>Benchmark de Gateway</strong> (Apigee vs Azure APIM vs Kong vs AWS vs Axway), <strong>Tech Spec completa</strong> do dashboard, <strong>Estudo de Receita</strong> (R$12M/ano) e o <strong>Backlog Estratégico do Head</strong> com 10 oportunidades priorizadas.</div>
   </div>
 
-</main>
+  <h2>Resumo executivo</h2>
+  <div class="body">O Bradesco possui hoje <strong style="color:var(--text)">4.400 APIs em produção</strong> processando <strong style="color:var(--text)">30 bilhões de requisições/mês</strong> através de <strong style="color:var(--text)">24 gateways</strong> (12 internos + 12 externos). O developer portal gRPC está publicado e estável em <strong style="color:var(--text)">ramasousa.github.io/dev-portal-grpc/</strong>. A decisão de gateway (Apigee 88/100 vs Azure APIM 84/100 — POC paralela recomendada) está fundamentada com benchmark e tech spec prontos para a squad A5.</div>
+  <div class="body">O que existe hoje é protótipo de alto impacto com Firebase como backend interim. O caminho para produção corporativa está mapeado: GitHub Pages → Azure Static Web Apps, Firebase → Cosmos DB, Anonymous Auth → Entra ID, todas as chamadas passando por Spring Boot REST API.</div>
+</div>
+
+<!-- ═══ O QUE FOI CONSTRUÍDO ══════════════════════════════════════════════════ -->
+<div class="panel" id="p-construido">
+  <div class="eyebrow">Inventário funcional · v1.0 + v2.0</div>
+  <h1>O que foi <em>construído</em></h1>
+  <div class="lead">Componentes ativos no ecossistema — organizados por área. Itens marcados com NOVO foram adicionados em Julho 2026.</div>
+
+  <h2>Portal & Sandbox</h2>
+  <div class="grid2">
+    <div class="card"><div class="card-accent" style="background:var(--blue)"></div>
+      <div class="card-label">Estável · publicado</div>
+      <div class="card-title">Developer Portal gRPC <span class="tag tag-stable">STABLE</span></div>
+      <div class="card-body">dev-portal-v3.html em ramasousa.github.io/dev-portal-grpc/. Sidebar navegável, CaaS + PIX + BaaS + MCP, wizard OAuth2, Try-it com 5 estados de token, mobile responsive, Firebase sync.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--green)"></div>
+      <div class="card-label">Novo · Julho 2026</div>
+      <div class="card-title">Test Clock API <span class="tag tag-new">NOVO</span></div>
+      <div class="card-body">Painel nativo no portal (não página separada). Calendar Clock SVG animado, sandbox interativo com presets +1/+7/+30/+90 dias, event stream simulado, tabs de código estático (sem template literals).</div>
+    </div>
+  </div>
+
+  <h2>Console & Observabilidade</h2>
+  <div class="grid2">
+    <div class="card"><div class="card-accent" style="background:var(--purple)"></div>
+      <div class="card-label">Novo · Julho 2026</div>
+      <div class="card-title">Console Avançado <span class="tag tag-new">NOVO</span></div>
+      <div class="card-body">4 views: Uso por Endpoint (heatmap), Funil de Onboarding (23% → 35%), Alertas de Degradação (threshold + payload webhook), Comparação de Latência (p50/p95/p99 v1 vs v2). Cada view com painel "Sob o Capô" mostrando SQL + schema + pipeline.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--teal)"></div>
+      <div class="card-label">Novo · Julho 2026</div>
+      <div class="card-title">Webhook Delivery Dashboard <span class="tag tag-new">NOVO</span></div>
+      <div class="card-body">Live stream de eventos (~1.2s), KPIs ao vivo (delivery rate, req/min, retry queue, DLQ), health grid por parceiro, fila de retry com countdown real, painel HMAC-SHA256. Painel interno (ops + PS Specialist).</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--red)"></div>
+      <div class="card-label">Novo · Julho 2026</div>
+      <div class="card-title">API Gateway Intelligence <span class="tag tag-new">NOVO</span></div>
+      <div class="card-body">Mapa SVG do Brasil com arcos animados (Bézier) convergindo ao gateway em SP. Gateway Heartbeat pulsando em vermelho Bradesco. 17 cidades + internacionais. API breakdown com req/s ao vivo. Live stream na base.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--green)"></div>
+      <div class="card-label">Novo · Julho 2026</div>
+      <div class="card-title">Partner Success View <span class="tag tag-new">NOVO</span></div>
+      <div class="card-body">Fila priorizada de parceiros que cruzaram threshold (Sandbox Stall / Degradação / Volume Drop). Cards expandíveis com playbook steps visuais, histórico de contatos, modal de registro. Sidebar com filtros e stats do especialista.</div>
+    </div>
+  </div>
+
+  <h2>Documentos estratégicos</h2>
+  <div class="grid3">
+    <div class="card"><div class="card-accent" style="background:var(--amber)"></div>
+      <div class="card-label">Novo</div>
+      <div class="card-title">Benchmark de Gateway <span class="tag tag-new">NOVO</span></div>
+      <div class="card-body">5 gateways × 10 dimensões. Escala real (4.400 APIs PRD, 30Bi req/mês). Matriz de riscos. Toggle dark/light, radar Chart.js.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--blue)"></div>
+      <div class="card-label">Novo</div>
+      <div class="card-title">Revenue Study <span class="tag tag-new">NOVO</span></div>
+      <div class="card-body">R$12.3M/ano (conservador) → R$19.8M (ambicioso). 5 alavancas modeladas. ROI 680%. One-pager dark + estudo completo.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--purple)"></div>
+      <div class="card-label">Novo</div>
+      <div class="card-title">Backlog do Head <span class="tag tag-new">NOVO</span></div>
+      <div class="card-body">10 oportunidades em 3 horizontes. Cards expandíveis com esforço × impacto. Matriz visual. Filtros por categoria.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--green)"></div>
+      <div class="card-label">Novo</div>
+      <div class="card-title">Partner Success Playbook <span class="tag tag-new">NOVO</span></div>
+      <div class="card-body">3 gatilhos (Sandbox Stall, Degradação, Volume Drop). 3 playbooks sequenciais com templates de mensagem. RACI completo.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--blue)"></div>
+      <div class="card-label">Novo</div>
+      <div class="card-title">Gateway Tech Spec <span class="tag tag-new">NOVO</span></div>
+      <div class="card-body">7 tabs: Visão Geral, Coleta APIGEE, Pipeline Dataflow/BigQuery, API Layer Spring Boot, Frontend, Infraestrutura, Fases & Critérios.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--amber)"></div>
+      <div class="card-label">Atualizado</div>
+      <div class="card-title">Tribo BaaS (doc principal) <span class="tag tag-upd">UPD</span></div>
+      <div class="card-body">~120 pessoas alocadas. SVG externo invertido (squads esquerda, deps direita) com badge de contagem. Bug de race condition corrigido.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INVENTÁRIO ══════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-arquivos">
+  <div class="eyebrow">27+ artefatos · v1.0 + v2.0</div>
+  <h1>Inventário de <em>artefatos</em></h1>
+
+  <h2>Portais & Dashboards (v2.0 — novos)</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Arquivo</th><th>Descrição</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>dev-portal-v3.html</td><td>Developer Portal gRPC — versão estável atual. Test Clock como painel nativo.</td><td><span class="tag tag-stable">STABLE</span></td></tr>
+      <tr><td>test-clock.html</td><td>Standalone Test Clock (descontinuado — substituído pelo painel nativo)</td><td><span class="tag">DEPREC</span></td></tr>
+      <tr><td>console-avancado-mockup.html</td><td>Console Avançado — 4 views + "Sob o Capô" com SQL e pipeline</td><td><span class="tag tag-new">NOVO</span></td></tr>
+      <tr><td>partner-success-view-v2.html</td><td>Partner Success View — fila operacional com playbook steps e log de contatos</td><td><span class="tag tag-new">NOVO</span></td></tr>
+      <tr><td>webhook-dashboard.html</td><td>Webhook Delivery Dashboard — live stream, retry queue, HMAC</td><td><span class="tag tag-new">NOVO</span></td></tr>
+      <tr><td>api-gateway-intelligence-v1.html</td><td>Mapa global de tráfego com Gateway Heartbeat em São Paulo</td><td><span class="tag tag-new">NOVO</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Documentos estratégicos (v2.0 — novos)</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Arquivo</th><th>Descrição</th><th>Tamanho</th></tr></thead>
+    <tbody>
+      <tr><td>benchmark-gateway-v2.html</td><td>Benchmark 5 gateways × 10 dimensões + escala real + matriz de riscos. Toggle dark/light, radar Chart.js.</td><td>~66KB</td></tr>
+      <tr><td>api-gateway-tech-spec-v1.html</td><td>Tech Spec completa do Gateway Intelligence Dashboard — 7 tabs, código APIGEE, SQL BigQuery, API Spring Boot.</td><td>~68KB</td></tr>
+      <tr><td>partner-success-playbook.html</td><td>Playbook operacional Partner Success — 3 gatilhos, 3 playbooks sequenciais, RACI completo, métricas.</td><td>~38KB</td></tr>
+      <tr><td>devportal-revenue-study.html</td><td>Estudo de receita detalhado — 5 alavancas, R$12M/ano conservador, benchmarks Stripe/Plaid/Twilio.</td><td>~42KB</td></tr>
+      <tr><td>devportal-onepage-v3.html</td><td>One-pager executivo dark — BaaS framing, R$12M, 5 alavancas, ROI 680%.</td><td>~16KB</td></tr>
+      <tr><td>devportal-onepage.pdf</td><td>PDF tema claro gerado via WeasyPrint para distribuição por e-mail.</td><td>~33KB</td></tr>
+      <tr><td>head-backlog-estrategico.html</td><td>10 oportunidades priorizadas em 3 horizontes, filtros por categoria, matriz esforço × impacto.</td><td>~48KB</td></tr>
+      <tr><td>tribo-baas-20260704-v1.html</td><td>Documento principal da Tribo BaaS — 120+ pessoas, SVG corrigido, bugs Firebase resolvidos.</td><td>~140KB</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Portais & artefatos v1.0 (herdados)</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Arquivo</th><th>Descrição</th></tr></thead>
+    <tbody>
+      <tr><td>bradesco-dev-portal-v7.html</td><td>Portal original v7 — CaaS (17 endpoints) + PIX (12 endpoints). Base do portal atual.</td></tr>
+      <tr><td>caas-capital-de-giro-fluxo.html</td><td>Diagrama interativo dark da jornada CaaS — 3 abas, campos por etapa.</td></tr>
+      <tr><td>caas-roadmap.html</td><td>Roadmap interativo — 3 horizontes, stack Axway, KPIs por horizonte.</td></tr>
+      <tr><td>bradesco-dev-portal-referencia.html</td><td>Documento de referência — 11 seções, ADRs 001-006, checklist de publicação.</td></tr>
+      <tr><td>benchmark-devportal</td><td>Benchmark DX publicado em ramasousa.github.io/benchmark-devportal/</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ═══ PORTAL ══════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-portal">
+  <div class="eyebrow">ramasousa.github.io/dev-portal-grpc/</div>
+  <h1>Developer Portal <em>gRPC</em></h1>
+  <div class="lead">O portal estável atual. Arquivo: dev-portal-v3.html. Estrutura de <code>&lt;article class="article panel"&gt;</code> para todos os painéis — incluindo o Test Clock.</div>
+
+  <h2>Arquitetura do portal</h2>
+  <div class="body">O portal usa um padrão de SPA (Single-Page Application) com sidebar navigation e painéis que mostram/ocultam via JavaScript. O estado é persistido via Firebase Realtime Database com Anonymous Auth. A função <code>showPanel(id, sbEl, sbId)</code> gerencia a navegação.</div>
+
+  <div class="callout callout-amber">
+    <div class="callout-label">Convenção crítica</div>
+    <div class="callout-body">Painéis devem ser <code>&lt;article class="article panel" id="panel-[name]"&gt;</code> inseridos DENTRO do <code>content-wrap</code> — nunca antes de <code>&lt;/body&gt;</code>. Inserção fora do content-wrap quebra o layout de sidebar no mobile.</div>
+  </div>
+
+  <h2>Decisões técnicas consolidadas</h2>
+  <div class="decision-list">
+    <div class="decision-item">
+      <div class="di-num">PORTAL-001</div>
+      <div class="di-title">Código em &lt;pre&gt; HTML estático — nunca template literals</div>
+      <div class="di-body">Backticks não-escapados dentro de template literals JavaScript corrompem silenciosamente todo o script. Blocos de código nos painéis devem ser <code>&lt;pre&gt;</code> estáticos. <code>switchTab()</code> alterna <code>display:none/block</code>, não <code>innerHTML</code>.</div>
+    </div>
+    <div class="decision-item">
+      <div class="di-num">PORTAL-002</div>
+      <div class="di-title">Botões interativos: sempre &lt;button&gt; — nunca &lt;div onclick&gt;</div>
+      <div class="di-body">iOS Safari não dispara eventos de toque em <code>&lt;div&gt;</code> com <code>onclick</code>. Todos os elementos clicáveis (tabs, presets, ações) devem ser <code>&lt;button&gt;</code> com <code>-webkit-appearance:none</code>.</div>
+    </div>
+    <div class="decision-item">
+      <div class="di-num">PORTAL-003</div>
+      <div class="di-title">Firebase Anonymous Auth com regra auth != null</div>
+      <div class="di-body">A regra <code>auth.token.email.matches(/@bradesco\.com\.br/)</code> falha com Anonymous Auth (sem campo email no token). Estado correto e seguro para o protótipo: <code>".read": "auth != null", ".write": "auth != null"</code>. A validação de e-mail corporativo será habilitada com a migração para Entra ID.</div>
+    </div>
+    <div class="decision-item">
+      <div class="di-num">PORTAL-004</div>
+      <div class="di-title">GitHub Pages CDN (Fastly) tem delay de cache</div>
+      <div class="di-body">Arquivos recém-publicados podem aparecer com conteúdo antigo. Usar nomes com versão (<code>dev-portal-v3.html</code>, não <code>index.html</code>) e verificar via URL direta após Actions check verde.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TEST CLOCK ═══════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-testclock">
+  <div class="eyebrow">Sandbox · Simulação Temporal</div>
+  <h1>Test Clock <em>API</em></h1>
+  <div class="lead">Painel nativo dentro do portal gRPC — não uma página separada. Permite avançar o relógio do sandbox sem esperar tempo real, simulando vencimentos, cobranças e expiração de tokens.</div>
+
+  <div class="callout callout-blue">
+    <div class="callout-label">Estado atual</div>
+    <div class="callout-body">O painel existe como <strong>mockup de design e especificação viva</strong>. Os endpoints <code>/sandbox/v1/clock</code> não existem no backend — são o contrato que orienta a implementação. A squad A4 (DX & Confiabilidade) implementa o backend estimando <strong>6-10 semanas</strong>, com a principal complexidade sendo mapear todos os <code>now()</code> no código do sandbox.</div>
+  </div>
+
+  <h2>Padrão Stripe — o que é o Test Clock</h2>
+  <div class="body">Originado na Stripe, o Test Clock permite que o sandbox avance no tempo de forma controlada. O parceiro cria uma proposta de crédito com vencimento em 30 dias, avança o relógio +30 dias, e observa o webhook de cobrança sendo disparado — sem esperar o mês real passar.</div>
+
+  <h2>Casos de uso validados</h2>
+  <div class="grid3">
+    <div class="card"><div class="card-title">💳 Capital de Giro</div><div class="card-body">Vencimento em 30 dias → avança +30d → valida webhook de cobrança.</div></div>
+    <div class="card"><div class="card-title">⏰ Expiração de Proposta</div><div class="card-body">Proposta expira em 7 dias → avança +7d → valida comportamento de não-assinatura.</div></div>
+    <div class="card"><div class="card-title">🔑 Token OAuth</div><div class="card-body">Refresh token expira em 90 dias → avança +90d → valida fluxo de renovação.</div></div>
+  </div>
+
+  <h2>API — contrato definido</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Método</th><th>Endpoint</th><th>Descrição</th></tr></thead>
+    <tbody>
+      <tr><td>POST</td><td>/sandbox/v1/clock</td><td>Avança o relógio para a data especificada (ISO 8601)</td></tr>
+      <tr><td>GET</td><td>/sandbox/v1/clock</td><td>Retorna sandbox_time, offset_days, events_triggered</td></tr>
+      <tr><td>DELETE</td><td>/sandbox/v1/clock</td><td>Reseta para tempo real — 204 No Content</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ═══ CONSOLE ════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-console">
+  <div class="eyebrow">Analytics · Console Avançado</div>
+  <h1>Console <em>Avançado</em></h1>
+  <div class="lead">4 views analíticas com painel "Sob o Capô" — tornando visível a infraestrutura que alimenta cada métrica. Pré-requisito: instrumentação do APIGEE pela squad A5.</div>
+
+  <h2>As 4 views</h2>
+  <div class="grid2">
+    <div class="card"><div class="card-accent" style="background:var(--blue)"></div>
+      <div class="card-title">📊 Uso por Endpoint</div>
+      <div class="card-body">Heatmap de chamadas por hora (roxo = volume, vermelho = erro), top 5 endpoints, distribuição de status codes. Sob o Capô: SELECT com DATE_TRUNC + GROUP BY partner_id.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--green)"></div>
+      <div class="card-title">🎯 Funil de Onboarding</div>
+      <div class="card-body">47 credenciais → 11 em produção (23%). Gargalo identificado na Etapa 4 (aprovação manual). Sob o Capô: eventos que definem cada etapa + proposta de auto-aprovação.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--red)"></div>
+      <div class="card-title">🚨 Alertas de Degradação</div>
+      <div class="card-body">Thresholds por parceiro (error_rate, p95, volume). Payload webhook real. Sob o Capô: Dataflow tumbling window 15min com Rules Engine via Cloud Functions.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--purple)"></div>
+      <div class="card-title">⚡ Comparação de Latência</div>
+      <div class="card-body">p50/p95/p99 v1 vs v2 por endpoint. Regressão p99 em /proposals sinalizada em âmbar. Sob o Capô: APPROX_QUANTILES com HLL sketch no BigQuery.</div>
+    </div>
+  </div>
+
+  <div class="callout callout-red">
+    <div class="callout-label">Bloqueador — infra necessária antes do Console ser real</div>
+    <div class="callout-body">O Console é um mockup com dados simulados até a squad A5 instrumentar o APIGEE para emitir eventos estruturados (<strong>partner_id, latency_ms, endpoint, api_version</strong>) ao Pub/Sub. Pipeline completo: APIGEE → Pub/Sub → Dataflow → BigQuery → Spring Boot → Console. A tech spec completa está em api-gateway-tech-spec-v1.html.</div>
+  </div>
+</div>
+
+<!-- ═══ WEBHOOK ════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-webhook">
+  <div class="eyebrow">Operações · Confiabilidade</div>
+  <h1>Webhook Delivery <em>Dashboard</em></h1>
+  <div class="lead">Painel interno para equipe de operações e Partner Success Specialist. Mostra o estado de entrega de webhooks em tempo real — não é o que o parceiro vê.</div>
+
+  <h2>Componentes ao vivo</h2>
+  <div class="body">Live stream de eventos simulados a cada ~1.2s. KPIs atualizando a cada 3s (delivery rate, events/min, retry queue, DLQ). Fila de retry com countdown real decrescente. Health grid de 8 parceiros com taxa de entrega e barra colorida. Painel HMAC-SHA256 com contador ao vivo.</div>
+
+  <h2>Próximo passo: versão para o parceiro</h2>
+  <div class="callout callout-blue">
+    <div class="callout-label">Próxima entrega</div>
+    <div class="callout-body">O dashboard atual mostra TODOS os parceiros — é a visão interna. A versão para o parceiro (dentro do Developer Portal) mostra apenas os próprios eventos, filtrados por <code>partner_id</code> da sessão, com botão de retry manual. A arquitetura é idêntica — apenas o filtro muda. Estimativa: 1 sprint da squad A4.</div>
+  </div>
+
+  <h2>Decisão de ownership</h2>
+  <div class="body">O dashboard interno pertence à equipe de Operações (R1 Run). A versão para o parceiro pertence ao Developer Portal (A4 DX & Confiabilidade). A decisão de ownership do Partner Success (quem opera o painel interno como trabalho primário) requer alinhamento com Rafael Patz e Comercial Atacado.</div>
+</div>
+
+<!-- ═══ PLAYBOOK ════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-ps-playbook">
+  <div class="eyebrow">Partner Success · Operacional</div>
+  <h1>Playbook <em>Operacional</em></h1>
+  <div class="lead">A tecnologia identifica o parceiro em risco. O processo humano age. Sem esse elo, o dado vira relatório que ninguém lê.</div>
+
+  <h2>Os 3 gatilhos</h2>
+  <div class="grid3">
+    <div class="card"><div class="card-accent" style="background:var(--amber)"></div>
+      <div class="card-title">🏖️ Sandbox Stall</div>
+      <div class="card-body">Threshold: ≥7 dias sem evolução. Playbook de 5 passos (Dia 7 e-mail auto → Dia 10 pessoal → Dia 14 ligação → Dia 18 escalada → Dia 21 decisão). SLA: 7 dias.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--red)"></div>
+      <div class="card-title">🚨 Degradação em PRD</div>
+      <div class="card-body">Threshold: error_rate &gt;5% por 15min. Playbook de 4 passos (t=0 webhook auto → t=15min diagnóstico → t=30min ação → t=2h status update). SLA: 30 min.</div>
+    </div>
+    <div class="card"><div class="card-accent" style="background:var(--blue)"></div>
+      <div class="card-title">📉 Volume Drop</div>
+      <div class="card-body">Threshold: volume &lt;70% da média por 3 dias. Playbook: Dia 3 flag interno → Dia 5 contato consultivo → Dia 10 comercial. SLA: 5 dias.</div>
+    </div>
+  </div>
+
+  <h2>RACI simplificado</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Atividade</th><th>PS Specialist</th><th>Tech Lead A4</th><th>R1 Run</th><th>Comercial</th></tr></thead>
+    <tbody>
+      <tr><td>Monitorar Console diariamente</td><td>R</td><td>I</td><td>I</td><td>I</td></tr>
+      <tr><td>Contato Dia 7/10/14</td><td>R</td><td>C</td><td>—</td><td>—</td></tr>
+      <tr><td>Escalada Dia 18</td><td>A</td><td>R</td><td>I</td><td>R</td></tr>
+      <tr><td>Incidente de plataforma</td><td>I</td><td>C</td><td>R</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout callout-amber">
+    <div class="callout-label">Decisão pendente</div>
+    <div class="callout-body">Partner Success como função dentro do R1 (Run) existente vs. squad nova vs. função de negócios fora da Tribo. Requer alinhamento com Rafael Patz e Comercial Atacado.</div>
+  </div>
+</div>
+
+<!-- ═══ PS VIEW ═════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-ps-view">
+  <div class="eyebrow">Partner Success · Interface Operacional</div>
+  <h1>Partner Success <em>View</em></h1>
+  <div class="lead">Painel dentro do Console Avançado. Fila priorizada de parceiros que cruzaram algum threshold — tudo que o especialista precisa para executar o Playbook sem planilha.</div>
+
+  <h2>O que o especialista vê</h2>
+  <div class="body">Sidebar com fila por tipo de gatilho e filtros de urgência. 10 parceiros simulados com dados reais (RetailPay Dia 18, ERP Corp com degradação ativa). Cards expandíveis com: dados do parceiro, steps visuais do Playbook (✓ feito / → atual / · futuro), histórico de contatos. Botões: registrar e-mail, ligação, escalada, marcar resolvido. Modal de registro com tipo, desfecho e observação.</div>
+
+  <h2>Integração com a tecnologia</h2>
+  <div class="body">A Partner Success View é alimentada pelo mesmo pipeline do Console Avançado: APIGEE → Pub/Sub → Dataflow → BigQuery → Spring Boot → View. Os três gatilhos (Sandbox Stall, Degradação, Volume Drop) são alertas gerados automaticamente quando os thresholds do BigQuery são cruzados.</div>
+
+  <h2>Versão atual</h2>
+  <div class="callout callout-green">
+    <div class="callout-label">partner-success-view-v2.html</div>
+    <div class="callout-body">Sidebar com navegação funcional (Sandbox Stall / Degradação / Volume Drop / Resolvidos / Em monitoramento). Dados simulados de 10 parceiros. Modal de registro funcional. v2 corrigiu bug de sidebar que não filtrava a fila — apenas trocava a classe CSS ativa.</div>
+  </div>
+</div>
+
+<!-- ═══ GATEWAY BENCH ══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-gateway-bench">
+  <div class="eyebrow">Decisão estratégica · A5 + Arquitetura</div>
+  <h1>Benchmark de <em>Gateway</em></h1>
+  <div class="lead">5 gateways avaliados em 10 dimensões. Recomendação: POC paralela Apigee + Azure APIM antes da decisão definitiva.</div>
+
+  <h2>Scores consolidados</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Gateway</th><th>Score</th><th>Papel</th><th>Decisão</th></tr></thead>
+    <tbody>
+      <tr><td>Apigee (Google)</td><td style="color:#4285F4;font-weight:700;font-family:var(--mono)">88/100</td><td>POC 1</td><td>Lidera em IA/ML Native (10/10) e Observabilidade</td></tr>
+      <tr><td>Azure APIM</td><td style="color:#0078D4;font-weight:700;font-family:var(--mono)">84/100</td><td>POC 2 · contexto Bradesco</td><td>Lidera em Banking Fit e Migration/Ops. Entra ID já existe.</td></tr>
+      <tr><td>Kong Enterprise</td><td style="font-weight:700;font-family:var(--mono)">81/100</td><td>Referência</td><td>Forte em Protocol Support e Ecosystem</td></tr>
+      <tr><td>AWS API Gateway</td><td style="font-weight:700;font-family:var(--mono)">73/100</td><td>Referência</td><td>Simples para casos básicos, complexo para bancário regulado</td></tr>
+      <tr><td>Axway (atual)</td><td style="color:var(--red);font-weight:700;font-family:var(--mono)">58/100</td><td>Legado</td><td>Banking Fit alto (9/10) mas IA/ML = 2/10. Bloqueador.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Escala da migração</h2>
+  <div class="scale-row">
+    <div class="scale-card"><div class="scale-n" style="color:var(--red)">4.400</div><div class="scale-l">APIs em Produção</div></div>
+    <div class="scale-card"><div class="scale-n" style="color:var(--amber)">30Bi</div><div class="scale-l">Requests / mês</div></div>
+    <div class="scale-card"><div class="scale-n" style="color:var(--purple)">24</div><div class="scale-l">Gateways ativos</div></div>
+    <div class="scale-card"><div class="scale-n" style="color:var(--blue)">23</div><div class="scale-l">Políticas de segurança</div></div>
+  </div>
+
+  <h2>Recomendação de sequência</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-now"></div><div class="tl-label">0–30d</div></div><div class="tl-content"><div class="tl-title">Decisão de POC</div><div class="tl-body">Aprovar budget e squads para POC paralela. Benchmark e tech spec estão prontos.</div></div></div>
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-next"></div><div class="tl-label">30–90d</div></div><div class="tl-content"><div class="tl-title">POC paralela</div><div class="tl-body">3 proxies representativos (PIX, CaaS, Auth) em ambos os gateways. Benchmark de latência real.</div></div></div>
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-next"></div><div class="tl-label">90d+</div></div><div class="tl-content"><div class="tl-title">Decisão definitiva → programa de migração</div><div class="tl-body">12-18 meses para migrar 4.400 APIs com zero downtime. Axway em fallback progressivo.</div></div></div>
+  </div>
+</div>
+
+<!-- ═══ GATEWAY INTEL ══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-gateway-intel">
+  <div class="eyebrow">Visualização · Tempo Real</div>
+  <h1>API Gateway <em>Intelligence</em></h1>
+  <div class="lead">Dashboard com mapa do Brasil mostrando fluxo de requisições ao gateway em São Paulo em tempo real. Alimentado pelo pipeline APIGEE → Pub/Sub → Dataflow → BigQuery.</div>
+
+  <h2>Componentes</h2>
+  <div class="grid2">
+    <div class="card"><div class="card-title">🗺️ Mapa SVG animado</div><div class="card-body">Brasil + América do Sul com 17 cidades. Arcos de Bézier em cores por tipo de API. Gateway Heartbeat pulsando em Bradesco vermelho em São Paulo.</div></div>
+    <div class="card"><div class="card-title">📊 API Breakdown</div><div class="card-body">Todas as APIs do dev portal agrupadas por categoria (PIX, CaaS, Auth, LaaS, BaaS, Seguros, Veicular, Consórcio) com req/s ao vivo.</div></div>
+    <div class="card"><div class="card-title">🌍 Distribuição regional</div><div class="card-body">Grande SP (45%), Rio/ES (22%), Nordeste (16%), Sul (10%), Centro-Oeste (5%), Internacional (2%).</div></div>
+    <div class="card"><div class="card-title">⚡ Live Stream</div><div class="card-body">Requisições individuais via SSE: cidade origem, API, endpoint, status HTTP, latência. Atualiza a cada ~900ms.</div></div>
+  </div>
+
+  <div class="callout callout-amber">
+    <div class="callout-label">Estado atual — mockup</div>
+    <div class="callout-body">Todos os dados são simulados com JavaScript (setInterval + Math.random ponderado). Para dados reais, a squad A5 precisa completar a instrumentação do APIGEE descrita na Tech Spec (Tab 02: Coleta de Dados).</div>
+  </div>
+</div>
+
+<!-- ═══ GATEWAY SPEC ═══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-gateway-spec">
+  <div class="eyebrow">api-gateway-tech-spec-v1.html</div>
+  <h1>Tech Spec do <em>Dashboard</em></h1>
+  <div class="lead">Especificação técnica completa para construção do API Gateway Intelligence Dashboard. Contrato entre A4 e A5.</div>
+
+  <h2>7 tabs — o que cada uma cobre</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Tab</th><th>Conteúdo</th><th>Responsável</th></tr></thead>
+    <tbody>
+      <tr><td>01 · Visão Geral</td><td>Arquitetura end-to-end, pipeline visual, 6 componentes do dashboard</td><td>A4 + A5</td></tr>
+      <tr><td>02 · Coleta de Dados</td><td>Schema do evento (18 campos), JavaScript callout APIGEE, Policy XML GeoIP, LGPD</td><td>A5</td></tr>
+      <tr><td>03 · Pipeline & Storage</td><td>Pub/Sub config, código Apache Beam Dataflow, DDL BigQuery, queries SQL</td><td>A5 + Infra</td></tr>
+      <tr><td>04 · API Layer</td><td>8 endpoints REST Spring Boot, cache TTL, SSE controller, auth Entra ID</td><td>A4</td></tr>
+      <tr><td>05 · Frontend</td><td>Frequência de atualização por componente, coords SVG cidades, SLOs (TTI &lt;1.5s)</td><td>A4</td></tr>
+      <tr><td>06 · Infraestrutura</td><td>Serviços GCP + custo estimado (R$3.130/mês), IAM roles, 3 ambientes</td><td>Infra</td></tr>
+      <tr><td>07 · Fases & Critérios</td><td>4 fases com Definition of Done, riscos com mitigações</td><td>Todos</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ═══ INFRA ═══════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-infra">
+  <div class="eyebrow">Infraestrutura · Migração</div>
+  <h1>Firebase → <em>Azure</em></h1>
+  <div class="lead">O Firebase é a infraestrutura interim correta para o protótipo. Para produção corporativa no Bradesco, toda a stack muda. O De-Para está mapeado.</div>
+
+  <h2>De-Para completo</h2>
+  <div class="depara">
+    <div class="dp-row"><div class="dp-from">GitHub Pages<div class="dp-note">hospedagem atual</div></div><div class="dp-arrow">→</div><div class="dp-to">Azure Static Web Apps<div class="dp-note">domínio *.bradesco.com.br</div></div></div>
+    <div class="dp-row"><div class="dp-from">Firebase Realtime DB<div class="dp-note">banco atual</div></div><div class="dp-arrow">→</div><div class="dp-to">Azure Cosmos DB<div class="dp-note">NoSQL, suporte tempo real</div></div></div>
+    <div class="dp-row"><div class="dp-from">Firebase Anonymous Auth<div class="dp-note">auth atual (interim)</div></div><div class="dp-arrow">→</div><div class="dp-to">Microsoft Entra ID<div class="dp-note">já existe no Bradesco</div></div></div>
+    <div class="dp-row"><div class="dp-from">Firebase SSE<div class="dp-note">sync ao vivo</div></div><div class="dp-arrow">→</div><div class="dp-to">Azure SignalR Service<div class="dp-note">WebSocket gerenciado</div></div></div>
+    <div class="dp-row"><div class="dp-from">HTML → Firebase direto<div class="dp-note">anti-pattern atual</div></div><div class="dp-arrow">→</div><div class="dp-to">HTML → Spring Boot REST → BD<div class="dp-note">thin client obrigatório</div></div></div>
+  </div>
+
+  <h2>Segurança Firebase — estado atual</h2>
+  <div class="callout callout-green">
+    <div class="callout-label">Regra correta (aplicada)</div>
+    <div class="callout-body"><code>{".read":"auth != null",".write":"auth != null"}</code> — exige sessão autenticada. Melhor que aberto. A validação de e-mail <code>@bradesco.com.br</code> só funciona com Google Auth ou Email/Password Auth, não com Anonymous Auth (token não carrega campo email).</div>
+  </div>
+
+  <h2>Sequência de migração recomendada</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-done"></div><div class="tl-label">Hoje</div></div><div class="tl-content"><div class="tl-title">Firebase + auth != null</div><div class="tl-body">Seguro suficiente para protótipo interno. Chave restrita ao domínio ramasousa.github.io no Google Cloud Console.</div></div></div>
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-next"></div><div class="tl-label">Próximo</div></div><div class="tl-content"><div class="tl-title">Hospedar internamente</div><div class="tl-body">Azure Static Web Apps em domínio *.bradesco.com.br. HTML não muda — apenas a origem muda.</div></div></div>
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-next"></div><div class="tl-label">Médio prazo</div></div><div class="tl-content"><div class="tl-title">Spring Boot + Cosmos DB + Entra ID</div><div class="tl-body">Substitui Firebase de uma vez. HTML vira thin client. Entra ID já existe no Bradesco — não há novo sistema de identidade a configurar.</div></div></div>
+  </div>
+
+  <div class="callout callout-red">
+    <div class="callout-label">Princípio inegociável</div>
+    <div class="callout-body">O HTML deve ser um <strong>thin client</strong> que chama uma API REST. Nunca acessar o banco de dados diretamente do frontend. É o mesmo padrão que o BaaS usa para parceiros externos — e é o que permite auditoria, controle de acesso e escalabilidade.</div>
+  </div>
+</div>
+
+<!-- ═══ REVENUE ═════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-revenue">
+  <div class="eyebrow">Argumento de negócio · Fernando Flyberger</div>
+  <h1>Estudo de <em>Receita</em></h1>
+  <div class="lead">O Developer Portal não é custo de infraestrutura — é canal de distribuição. 5 alavancas modeladas com benchmarks auditáveis.</div>
+
+  <h2>As 5 alavancas</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Alavanca</th><th>Premissa</th><th>Conservador</th><th>Ambicioso</th></tr></thead>
+    <tbody>
+      <tr><td>Conversão funil</td><td>23% → 35% sandbox-para-produção</td><td style="color:var(--green);font-weight:700">R$4.8M</td><td>R$8.5M</td></tr>
+      <tr><td>Aceleração onboarding</td><td>45 dias → 28 dias até produção</td><td style="color:var(--green);font-weight:700">R$1.4M</td><td>R$2.1M</td></tr>
+      <tr><td>Retenção de parceiros</td><td>Churn 8% → 4% ao ano</td><td style="color:var(--green);font-weight:700">R$3.8M</td><td>R$5.7M</td></tr>
+      <tr><td>Uplift de volume</td><td>+15% por parceiro integrado</td><td style="color:var(--green);font-weight:700">R$1.4M</td><td>R$2.3M</td></tr>
+      <tr><td>Deflexão de suporte</td><td>40% menos tickets</td><td style="color:var(--green);font-weight:700">R$850K</td><td>R$1.2M</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout callout-green">
+    <div class="callout-label">Total</div>
+    <div class="callout-body">Conservador: <strong>R$12.3M/ano</strong> · Ambicioso: <strong>R$19.8M/ano</strong> · Investimento: R$1.74M · ROI: <strong>680%</strong> · Payback: 3 meses</div>
+  </div>
+
+  <h2>Frase de fechamento (one-pager)</h2>
+  <div class="card" style="border-color:rgba(204,9,47,.2)">
+    <div class="card-body" style="font-size:14px;font-style:italic;line-height:1.75;color:var(--text)">"A janela é agora. O mercado de Banking as a Service no Brasil está em formação — e a experiência de desenvolvedor é o que separa plataformas que <strong>escalam com parceiros</strong> das que dependem de integrações manuais para sempre."</div>
+  </div>
+
+  <h2>Artefatos disponíveis</h2>
+  <div class="grid2">
+    <div class="card"><div class="card-title">devportal-revenue-study.html</div><div class="card-body">Estudo completo com 5 seções, benchmarks Stripe/Plaid/Twilio, modelo de investimento detalhado.</div></div>
+    <div class="card"><div class="card-title">devportal-onepage-v3.html + .pdf</div><div class="card-body">One-pager dark para reunião executiva. PDF tema claro para envio por e-mail.</div></div>
+  </div>
+</div>
+
+<!-- ═══ BACKLOG ══════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-backlog">
+  <div class="eyebrow">Head de Open Platform · Backlog estratégico</div>
+  <h1>10 Oportunidades <em>não mapeadas</em></h1>
+  <div class="lead">Identificadas durante a construção do ecossistema. Organizadas por horizonte e esforço × impacto. Documento completo: head-backlog-estrategico.html.</div>
+
+  <h2>Agora — máximo 90 dias</h2>
+  <div class="grid2">
+    <div class="card"><div class="card-accent" style="background:var(--purple)"></div><div class="card-title">Webhook Governance Framework</div><div class="card-body">Dead letter queue, HMAC-SHA256, delivery dashboard. Pré-requisito silencioso para retenção de parceiros. Parceiros churnaram por webhooks não entregues — não por documentação ruim.</div></div>
+    <div class="card"><div class="card-accent" style="background:var(--amber)"></div><div class="card-title">Política de API Sunset</div><div class="card-body">v1 e v2 já coexistem sem regra formal. 12% do tráfego em v1. Sem política: breaking changes viram incidentes de confiança com parceiros.</div></div>
+    <div class="card"><div class="card-accent" style="background:var(--blue)"></div><div class="card-title">Console Infra (APIGEE → BigQuery)</div><div class="card-body">O Console está como mockup. A squad A5 precisa instrumentar o APIGEE. Sem isso: nenhuma das 4 views tem dados reais.</div></div>
+    <div class="card"><div class="card-accent" style="background:var(--red)"></div><div class="card-title">Internalização (Firebase → Azure)</div><div class="card-body">GitHub Pages e Firebase não sobrevivem a uma revisão de segurança corporativa. Compliance e governança de dados exigem infraestrutura interna.</div></div>
+  </div>
+
+  <h2>Próximo · 90-180 dias</h2>
+  <div class="grid2">
+    <div class="card"><div class="card-title">Partner Success View no Console</div><div class="card-body">Enabler do Partner Success Playbook. Sem fila priorizada no Console, o especialista trabalha com dashboard genérico. Estimativa: 1 sprint.</div></div>
+    <div class="card"><div class="card-title">Auto-aprovação de parceiros</div><div class="card-body">Critérios: ≥500 calls sandbox, error_rate &lt;1%, compliance_check=passed. Elimina o gargalo do Dia 18 que causa 23% de churn.</div></div>
+    <div class="card"><div class="card-title">Portal para audiência interna</div><div class="card-body">Wealth, Atacado e Mesa precisam consumir a Open Platform. Portal interno multiplica impacto sem multiplicar custo.</div></div>
+    <div class="card"><div class="card-title">Axway Migration com Budget</div><div class="card-body">O argumento técnico existe. Precisa virar proposta formal com orçamento e prazo aprovados. Mandato sem budget é intenção.</div></div>
+  </div>
+</div>
+
+<!-- ═══ SQUADS ═══════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-squads">
+  <div class="eyebrow">Tribo BaaS · ~120 pessoas</div>
+  <h1>Estrutura de <em>squads</em></h1>
+  <div class="lead">A Tribo BaaS tem ~120 pessoas alocadas em 3 clusters. Meta: 160 pessoas. O documento principal da Tribo é tribo-baas-20260704-v1.html.</div>
+
+  <h2>Os 3 clusters</h2>
+  <div class="grid3">
+    <div class="card"><div class="card-accent" style="background:var(--blue)"></div><div class="card-title">Open Cash Hub</div><div class="card-body">JV com IBM. 100+ pessoas. Primeiras instalações em produção concluídas. Primeiro cluster a ter presença no mercado.</div></div>
+    <div class="card"><div class="card-accent" style="background:var(--green)"></div><div class="card-title">Integração Digital</div><div class="card-body">Cluster independente. Responsável pelas integrações externas e Open Finance.</div></div>
+    <div class="card"><div class="card-accent" style="background:var(--red)"></div><div class="card-title">BaaS + Developer Portal</div><div class="card-body">30+ pessoas, 4 squads: Core Platform (A1), LaaS (A2), CaaS (A3), DX & Confiabilidade (A4). O cluster mais complexo dos três.</div></div>
+  </div>
+
+  <h2>Squads-chave para os entregáveis desta v2.0</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Squad</th><th>Mandato relevante</th><th>Entregáveis pendentes</th></tr></thead>
+    <tbody>
+      <tr><td>A4 · DX & Confiabilidade</td><td>Developer Portal, Console Avançado, Partner Success View, Test Clock backend</td><td>Console Infra frontend, Partner Success View, Test Clock API, Webhook Dashboard (versão parceiro)</td></tr>
+      <tr><td>A5 · Plataforma API & Gateway</td><td>APIGEE, gateway candidatos, instrumentação, Pipeline</td><td>Instrumentação APIGEE (Pub/Sub), Dataflow job, BigQuery schema, POC Apigee + Azure APIM</td></tr>
+      <tr><td>R1 · Run</td><td>Operação 24/7, incidentes, SLA</td><td>Operação do Webhook Dashboard, resposta a alertas de degradação</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ═══ CI/CD ═══════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-cicd">
+  <div class="eyebrow">Automação · Pipeline</div>
+  <h1>Esteira <em>CI/CD</em></h1>
+  <div class="lead">O pipeline do Developer Portal permanece o mesmo da v1.0. Qualquer alteração em specs ou docs no repositório dispara validação e publicação automática.</div>
+
+  <h2>Pipeline atual (GitHub Pages)</h2>
+  <div class="body">Push em main → GitHub Actions → Spectral (lint OpenAPI) → test-examples.sh (sandbox) → publicação automática em ramasousa.github.io/dev-portal-grpc/. Delay de CDN Fastly: 2-5 minutos. Verificar via URL direta após Actions ✓ verde.</div>
+
+  <h2>Pipeline alvo (Azure)</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Etapa</th><th>Atual</th><th>Alvo</th></tr></thead>
+    <tbody>
+      <tr><td>Hospedagem</td><td>GitHub Pages</td><td>Azure Static Web Apps</td></tr>
+      <tr><td>CI/CD</td><td>GitHub Actions</td><td>GitHub Actions → Azure Deployment</td></tr>
+      <tr><td>Auth</td><td>Anonymous Firebase</td><td>Entra ID (MSAL)</td></tr>
+      <tr><td>Backend</td><td>Firebase direto do HTML</td><td>Spring Boot REST API</td></tr>
+      <tr><td>Dados</td><td>Firebase Realtime DB</td><td>Azure Cosmos DB</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ═══ DECISÕES ═════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-decisoes">
+  <div class="eyebrow">ADRs · Architecture Decision Records</div>
+  <h1>Decisões <em>técnicas</em></h1>
+  <div class="lead">Decisões consolidadas durante a construção. Algumas são atualizações das ADRs originais da v1.0, outras são novas.</div>
+
+  <h2>ADRs originais (v1.0) — mantidas</h2>
+  <div class="decision-list">
+    <div class="decision-item"><div class="di-num">ADR-001</div><div class="di-title">URL Pattern: /v{n}/produto/recurso/{id}/ação</div><div class="di-body">Versionamento major na URL. Minor/patch via changelog sem mudança de URL.</div></div>
+    <div class="decision-item"><div class="di-num">ADR-002</div><div class="di-title">Erros: RFC 7807 com campo code em SNAKE_CASE</div><div class="di-body">Campo <code>code</code> é string estável para lógica de negócio. Inclui <code>traceId</code> para correlação de logs.</div></div>
+    <div class="decision-item"><div class="di-num">ADR-003</div><div class="di-title">IdempotencyKey obrigatório em todas as escritas</div><div class="di-body">GUID v4 único por requisição POST/PUT. Validade 24h. Reutilização retorna resultado original.</div></div>
+    <div class="decision-item"><div class="di-num">ADR-005</div><div class="di-title">Design-First: spec OpenAPI 3.1 antes da página de docs</div><div class="di-body">A spec é a fonte de verdade. Docs, exemplos e Try-it são derivados da spec.</div></div>
+  </div>
+
+  <h2>ADRs novas (v2.0)</h2>
+  <div class="decision-list">
+    <div class="decision-item"><div class="di-num">ADR-007</div><div class="di-title">HTML é thin client — nunca acessa banco diretamente</div><div class="di-body">Toda lógica de dados passa por uma API REST Spring Boot. O HTML não tem credenciais de banco de dados. Aplica-se a Firebase (interim) e Cosmos DB (produção).</div></div>
+    <div class="decision-item"><div class="di-num">ADR-008</div><div class="di-title">Código em &lt;pre&gt; estático — nunca template literals</div><div class="di-body">Backticks não-escapados dentro de template literals JavaScript corrompem silenciosamente o script inteiro. Todo código exibido ao usuário deve estar em <code>&lt;pre&gt;</code> HTML. Tabs alternam com <code>display:none/block</code>, não com <code>innerHTML = CODE[lang]</code>.</div></div>
+    <div class="decision-item"><div class="di-num">ADR-009</div><div class="di-title">Botões interativos: sempre &lt;button&gt;</div><div class="di-body">iOS Safari não dispara eventos de toque em <code>&lt;div onclick&gt;</code>. Todos os elementos clicáveis usam <code>&lt;button&gt;</code> com <code>-webkit-appearance:none</code> no CSS.</div></div>
+    <div class="decision-item"><div class="di-num">ADR-010</div><div class="di-title">Extensibilidade via catálogo — não versão de API</div><div class="di-body">Novos segmentos de parceiros registram novos signal codes no catálogo de crédito — não criam uma nova versão da API. Mantém a API estável enquanto o catálogo cresce.</div></div>
+    <div class="decision-item"><div class="di-num">ADR-011</div><div class="di-title">Aarin: Modelo Híbrido com Governança</div><div class="di-body">Recomendação consolidada: Aarin executa, Bradesco retém IP e governa. Não delegar o roadmap do produto ao parceiro operacional.</div></div>
+    <div class="decision-item"><div class="di-num">ADR-012</div><div class="di-title">Firebase Anonymous Auth com auth != null (interim)</div><div class="di-body">A regra com <code>email.matches(/.*@bradesco\.com\.br/)</code> não funciona com Anonymous Auth — o token não carrega campo email. Estado correto: <code>auth != null</code> até migração para Entra ID.</div></div>
+  </div>
+</div>
+
+<!-- ═══ ROADMAP ══════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-roadmap">
+  <div class="eyebrow">Jornada · 18 meses</div>
+  <h1>Jornada para <em>liderar</em></h1>
+  <div class="lead">DX Score 45 → 82+ em 18 meses. O que já fizemos, o que vem a seguir.</div>
+
+  <h2>Estado atual (Julho 2026)</h2>
+  <div class="callout callout-green">
+    <div class="callout-label">Conquistas até aqui</div>
+    <div class="callout-body">Portal gRPC estável publicado · Test Clock como painel nativo · Console Avançado (4 views + Sob o Capô) · Partner Success Playbook + View · Webhook Dashboard · Gateway Intelligence · Benchmark de Gateway completo · Revenue Study aprovado · Backlog estratégico do Head · Tribo BaaS com ~120 pessoas alocadas · Firebase com regras de segurança corretas · De-Para de infraestrutura mapeado · <strong>Bradesco já lidera Stripe em IA-native (MCP)</strong></div>
+  </div>
+
+  <h2>Próximos 90 dias — o que desbloqueiam tudo</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-now"></div><div class="tl-label">30d</div></div><div class="tl-content"><div class="tl-title">Decisão de gateway (POC aprovada)</div><div class="tl-body">Benchmark e tech spec prontos. Budget e squads para POC paralela Apigee + Azure APIM.</div></div></div>
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-now"></div><div class="tl-label">60d</div></div><div class="tl-content"><div class="tl-title">APIGEE instrumentado (A5)</div><div class="tl-body">Sem isso: Console Avançado, Gateway Intelligence e Partner Success ficam com dados simulados.</div></div></div>
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-now"></div><div class="tl-label">90d</div></div><div class="tl-content"><div class="tl-title">Revenue Study apresentado ao Fernando Flyberger</div><div class="tl-body">One-pager + estudo completo. Argumento: R$12M/ano conservador, ROI 680%, payback 3 meses.</div></div></div>
+  </div>
+
+  <h2>6-12 meses</h2>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-next"></div><div class="tl-label">6m</div></div><div class="tl-content"><div class="tl-title">Console Avançado em produção com dados reais</div><div class="tl-body">Após instrumentação APIGEE. DX Score esperado: 62+.</div></div></div>
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-next"></div><div class="tl-label">9m</div></div><div class="tl-content"><div class="tl-title">Internalização completa (Azure)</div><div class="tl-body">GitHub Pages → Azure SWA, Firebase → Cosmos DB + Entra ID. Portal em domínio corporativo.</div></div></div>
+    <div class="tl-item"><div class="tl-time"><div class="tl-dot dot-next"></div><div class="tl-label">12m</div></div><div class="tl-content"><div class="tl-title">Programa de migração de gateway em execução</div><div class="tl-body">Novos endpoints no gateway escolhido. Axway em fallback progressivo. DX Score: 72+.</div></div></div>
+  </div>
+
+  <h2>12-18 meses — meta final</h2>
+  <div class="body">Auto-aprovação de parceiros ativa · Portal para audiência interna (Wealth, Atacado) · Webhook Governance com DLQ e HMAC · Test Clock API implementado no backend · DX Score 82+ · Bradesco como referência de developer experience entre bancos brasileiros.</div>
+</div>
+
+<!-- ═══ IMPACTO ═══════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-impacto">
+  <div class="eyebrow">Julho 2026 · Conquistas</div>
+  <h1>Impacto & <em>Conquistas</em></h1>
+
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-n" style="color:var(--red)">27+</div><div class="hs-l">Artefatos produzidos</div></div>
+    <div class="hs"><div class="hs-n" style="color:var(--green)">R$12M</div><div class="hs-l">Receita incremental mapeada</div></div>
+    <div class="hs"><div class="hs-n" style="color:var(--amber)">680%</div><div class="hs-l">ROI estimado</div></div>
+    <div class="hs"><div class="hs-n" style="color:var(--blue)">10</div><div class="hs-l">Oportunidades no backlog</div></div>
+  </div>
+
+  <h2>O que é inédito no Bradesco</h2>
+  <div class="body">Um ecossistema completo de plataforma construído com a qualidade visual e técnica de empresas como Stripe — em protótipo funcional navegável, publicado e demonstrável. Console Avançado com "Sob o Capô" mostrando a cadeia APIGEE → Pub/Sub → Dataflow → BigQuery é o tipo de transparência arquitetural que nenhum banco brasileiro oferece hoje. O Gateway Intelligence Dashboard com mapa ao vivo faz o tráfego invisível da plataforma se tornar tangível para qualquer stakeholder.</div>
+
+  <div class="callout callout-blue">
+    <div class="callout-label">Diferencial competitivo único</div>
+    <div class="callout-body"><strong>Bradesco já lidera Stripe em IA-native (MCP).</strong> O DX Score benchmark mostra Bradesco à frente de Stripe nessa dimensão específica — o único banco com MCP Server nativo integrado ao portal. O caminho agora é fechar os demais gaps (documentação, sandbox, onboarding) enquanto se mantém a vantagem em IA.</div>
+  </div>
+</div>
+
+
+<!-- ═══ COMO EVOLUIR ══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-evoluir">
+  <div class="eyebrow">Evolução do portal</div>
+  <h1>Quão simples é <em>evoluir</em> este portal</h1>
+  <div class="lead">A resposta direta: <strong>muito simples</strong>. O protótipo foi construído com separação clara entre conteúdo e layout. Adicionar uma nova API segue um padrão de 4 passos idêntico para qualquer produto.</div>
+
+  <h2>Padrão de 4 passos para nova API</h2>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time"><div class="tl-dot dot-done" style="border-color:var(--red);background:rgba(204,9,47,.2)"><span style="color:var(--red);font-size:10px;font-weight:800">1</span></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Adicionar entradas na sidebar</div>
+        <div class="tl-body">Copie o bloco de sidebar do PIX (6 linhas de HTML) e substitua os IDs. Cada produto tem: visão geral, 2-3 subseções e API Reference. Total: 10 min.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time"><div class="tl-dot dot-now" style="border-color:var(--red);background:rgba(204,9,47,.2)"><span style="color:var(--red);font-size:10px;font-weight:800">2</span></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Criar os painéis de artigo</div>
+        <div class="tl-body">Copie o template do PIX ou CaaS como base. Substitua: nome do produto, endpoints, campos, exemplos e erros. O Try-it herda automaticamente o token já gerado. 3-4 horas por produto.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time"><div class="tl-dot dot-now" style="border-color:var(--red);background:rgba(204,9,47,.2)"><span style="color:var(--red);font-size:10px;font-weight:800">3</span></div></div>
+      <div class="tl-content">
+        <div class="tl-title">Registrar na home e nos produtos</div>
+        <div class="tl-body">Adicionar o card do produto no grid da home (4 linhas de HTML). Atualizar a barra inferior do mobile com o novo produto se necessário.</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time"><div class="tl-dot dot-done"><span style="color:var(--green);font-size:10px;font-weight:800">✓</span></div></div>
+      <div class="tl-content">
+        <div class="tl-title" style="color:var(--green)">Deploy em segundos</div>
+        <div class="tl-body">Push para o repositório. GitHub Pages publica automaticamente. ReadMe.io sincroniza via <code style="font-family:var(--mono);font-size:11px;background:rgba(255,255,255,.08);padding:1px 5px;border-radius:4px">rdme</code>. Amplify atualiza o catálogo via CI/CD.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Complexidade de cada tipo de adição</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Tarefa</th><th>Complexidade</th><th>Estimativa</th><th>Quem</th></tr></thead>
+    <tbody>
+      <tr><td>Nova seção (ex: Open Finance)</td><td><span style="color:var(--green);font-weight:700">Fácil</span></td><td>2-4h</td><td>Tech Writer</td></tr>
+      <tr><td>API completa (ex: LaaS)</td><td><span style="color:var(--amber);font-weight:700">Média</span></td><td>1-2 dias</td><td>Tech Writer + Dev SME</td></tr>
+      <tr><td>Novo componente UI</td><td><span style="color:var(--amber);font-weight:700">Média</span></td><td>3-6h</td><td>Frontend Dev</td></tr>
+      <tr><td>Busca semântica ⌘K</td><td><span style="color:var(--red);font-weight:700">Alto</span></td><td>1-2 semanas</td><td>Frontend Dev + Algolia</td></tr>
+      <tr><td>Migração para ReadMe.io</td><td><span style="color:var(--green);font-weight:700">Fácil</span></td><td>2-3 dias</td><td>Tech Writer + rdme CLI</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="callout callout-green">
+    <div class="callout-label">Regra de ouro</div>
+    <div class="callout-body">Cada novo produto documenta apenas <em>seus endpoints</em>. O layout, os tokens de design, a lógica do Try-it, o wizard de credenciais — tudo é reutilizado. <strong>O custo marginal do 3º produto é 60% do primeiro.</strong></div>
+  </div>
+</div>
+
+<!-- ═══ CÓDIGO MULTI-LANG ══════════════════════════════════════════════════════ -->
+<div class="panel" id="p-codigo">
+  <div class="eyebrow">Código de referência</div>
+  <h1>Exemplos <em>multi-linguagem</em> para todas as APIs</h1>
+  <div class="lead">Templates prontos para copiar. Cada squad preenche os valores específicos do endpoint — a estrutura é sempre a mesma.</div>
+
+  <h2>Autenticação — obter Bearer Token</h2>
+  <div class="code-wrap">
+    <div class="code-head">
+      <div style="display:flex;gap:4px" id="auth-tabs">
+        <button onclick="switchLang('auth','node',this)" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:6px;border:none;background:rgba(255,255,255,.15);color:var(--text);cursor:pointer;font-family:var(--sans)">Node.js</button>
+        <button onclick="switchLang('auth','python',this)" style="font-size:11px;padding:4px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans)">Python</button>
+        <button onclick="switchLang('auth','java',this)" style="font-size:11px;padding:4px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans)">Java</button>
+        <button onclick="switchLang('auth','curl',this)" style="font-size:11px;padding:4px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans)">cURL</button>
+      </div>
+      <button onclick="copyCode('auth-code')" style="font-size:11px;color:var(--muted);background:rgba(255,255,255,.07);border:none;border-radius:5px;padding:3px 10px;cursor:pointer;font-family:var(--sans)">Copiar</button>
+    </div>
+    <pre id="auth-code-node" class="auth-code-pane">// Node.js (axios) — obter Bearer Token
+const axios = require('axios');
+const qs = require('querystring');
+
+async function getToken() {
+  const { data } = await axios.post(
+    'https://auth.bradesco.com.br/oauth2/token',
+    qs.stringify({
+      grant_type: 'client_credentials',
+      client_id: process.env.BRADESCO_CLIENT_ID,
+      client_secret: process.env.BRADESCO_CLIENT_SECRET,
+      scope: 'caas:read caas:write payments:read payments:write'
+    }),
+    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+  );
+  return data.access_token; // expira em 3600s
+}
+
+// Uso em todas as requisições seguintes:
+const token = await getToken();
+const client = axios.create({
+  baseURL: 'https://sandbox.bradesco.com.br/v1',
+  headers: { Authorization: `Bearer ${token}` }
+});</pre>
+    <pre id="auth-code-python" class="auth-code-pane" style="display:none"># Python (requests) — obter Bearer Token
+import os, requests
+
+def get_token() -> str:
+    resp = requests.post(
+        "https://auth.bradesco.com.br/oauth2/token",
+        data={
+            "grant_type": "client_credentials",
+            "client_id": os.environ["BRADESCO_CLIENT_ID"],
+            "client_secret": os.environ["BRADESCO_CLIENT_SECRET"],
+            "scope": "caas:read caas:write payments:read payments:write",
+        },
+        timeout=10
+    )
+    resp.raise_for_status()
+    return resp.json()["access_token"]
+
+TOKEN = get_token()
+HEADERS = {"Authorization": f"Bearer {TOKEN}", "Content-Type": "application/json"}
+BASE = "https://sandbox.bradesco.com.br/v1"</pre>
+    <pre id="auth-code-java" class="auth-code-pane" style="display:none">// Java (Spring RestTemplate) — obter Bearer Token
+@Service
+public class BradescoAuthService {
+    @Value("${bradesco.client-id}")  private String clientId;
+    @Value("${bradesco.client-secret}") private String clientSecret;
+
+    public String getToken() {
+        MultiValueMap&lt;String, String&gt; body = new LinkedMultiValueMap&lt;&gt;();
+        body.add("grant_type", "client_credentials");
+        body.add("client_id", clientId);
+        body.add("client_secret", clientSecret);
+        body.add("scope", "caas:read caas:write payments:read payments:write");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        ResponseEntity&lt;Map&gt; response = restTemplate.exchange(
+            "https://auth.bradesco.com.br/oauth2/token",
+            HttpMethod.POST, new HttpEntity&lt;&gt;(body, headers), Map.class);
+        return (String) response.getBody().get("access_token");
+    }
+}</pre>
+    <pre id="auth-code-curl" class="auth-code-pane" style="display:none"># cURL — obter Bearer Token
+TOKEN=$(curl -s -X POST \
+  https://auth.bradesco.com.br/oauth2/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials" \
+  -d "client_id=$BRADESCO_CLIENT_ID" \
+  -d "client_secret=$BRADESCO_CLIENT_SECRET" \
+  -d "scope=caas:read caas:write payments:read payments:write" \
+  | jq -r .access_token)
+
+echo "Token: $TOKEN"</pre>
+  </div>
+
+  <h2>CaaS — Simulação de Crédito</h2>
+  <div class="code-wrap">
+    <div class="code-head">
+      <div style="display:flex;gap:4px">
+        <button onclick="switchLang('caas','node',this)" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:6px;border:none;background:rgba(255,255,255,.15);color:var(--text);cursor:pointer;font-family:var(--sans)">Node.js</button>
+        <button onclick="switchLang('caas','python',this)" style="font-size:11px;padding:4px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans)">Python</button>
+        <button onclick="switchLang('caas','java',this)" style="font-size:11px;padding:4px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans)">Java</button>
+      </div>
+      <button onclick="copyCode('caas-code')" style="font-size:11px;color:var(--muted);background:rgba(255,255,255,.07);border:none;border-radius:5px;padding:3px 10px;cursor:pointer;font-family:var(--sans)">Copiar</button>
+    </div>
+    <pre id="caas-code-node" class="caas-code-pane">// Node.js — Simulação de Crédito CaaS
+const response = await client.post('/caas/simulacao/grade', {
+  vlrSolicitado: 50000,
+  percJurosNegociado: 2.5,
+  tipoPessoa: 2, // 1=PF, 2=PJ
+  numCNPJ: '12345678000195',
+  dataVencimento: '2026-09-01'
+}, {
+  headers: {
+    'IdempotencyKey': crypto.randomUUID(), // obrigatório
+    'Authorization': `Bearer ${token}`
+  }
+});
+
+const { vlrParcela, numParcelas, taxaEfetiva } = response.data;
+console.log(`Parcela: R$ ${vlrParcela} | ${numParcelas}x | Taxa: ${taxaEfetiva}%`);</pre>
+    <pre id="caas-code-python" class="caas-code-pane" style="display:none"># Python — Simulação de Crédito CaaS
+import uuid
+
+resp = requests.post(
+    f"{BASE}/caas/simulacao/grade",
+    json={
+        "vlrSolicitado": 50000,
+        "percJurosNegociado": 2.5,
+        "tipoPessoa": 2,
+        "numCNPJ": "12345678000195",
+        "dataVencimento": "2026-09-01"
+    },
+    headers={**HEADERS, "IdempotencyKey": str(uuid.uuid4())}
+)
+data = resp.json()
+print(f"Parcela: R$ {data['vlrParcela']} | {data['numParcelas']}x")</pre>
+    <pre id="caas-code-java" class="caas-code-pane" style="display:none">// Java — Simulação de Crédito CaaS
+SimulacaoRequest req = SimulacaoRequest.builder()
+    .vlrSolicitado(new BigDecimal("50000"))
+    .percJurosNegociado(new BigDecimal("2.5"))
+    .tipoPessoa(2)
+    .numCNPJ("12345678000195")
+    .dataVencimento(LocalDate.of(2026, 9, 1))
+    .build();
+
+HttpHeaders headers = new HttpHeaders();
+headers.set("IdempotencyKey", UUID.randomUUID().toString());
+headers.setBearerAuth(token);
+
+SimulacaoResponse resp = restTemplate.postForObject(
+    BASE + "/caas/simulacao/grade",
+    new HttpEntity&lt;&gt;(req, headers),
+    SimulacaoResponse.class);</pre>
+  </div>
+
+  <h2>PIX — Criar cobrança (Cob)</h2>
+  <div class="code-wrap">
+    <div class="code-head">
+      <div style="display:flex;gap:4px">
+        <button onclick="switchLang('pix','node',this)" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:6px;border:none;background:rgba(255,255,255,.15);color:var(--text);cursor:pointer;font-family:var(--sans)">Node.js</button>
+        <button onclick="switchLang('pix','python',this)" style="font-size:11px;padding:4px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans)">Python</button>
+        <button onclick="switchLang('pix','curl',this)" style="font-size:11px;padding:4px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans)">cURL</button>
+      </div>
+      <button onclick="copyCode('pix-code')" style="font-size:11px;color:var(--muted);background:rgba(255,255,255,.07);border:none;border-radius:5px;padding:3px 10px;cursor:pointer;font-family:var(--sans)">Copiar</button>
+    </div>
+    <pre id="pix-code-node" class="pix-code-pane">// Node.js — PIX Criar cobrança
+const cob = await client.post('/pix/cob', {
+  calendario: { expiracao: 3600 },
+  devedor: {
+    cpf: '12345678901',
+    nome: 'João Silva'
+  },
+  valor: { original: '100.50' },
+  chave: 'parceiro@empresa.com.br',
+  solicitacaoPagador: 'Pagamento referente ao pedido #1234'
+});
+
+const { txid, pixCopiaECola, qrcode } = cob.data;
+console.log(`TxID: ${txid}`);
+console.log(`Pix Copia e Cola: ${pixCopiaECola}`);</pre>
+    <pre id="pix-code-python" class="pix-code-pane" style="display:none"># Python — PIX Criar cobrança
+cob = requests.post(f"{BASE}/pix/cob", json={
+    "calendario": {"expiracao": 3600},
+    "devedor": {"cpf": "12345678901", "nome": "João Silva"},
+    "valor": {"original": "100.50"},
+    "chave": "parceiro@empresa.com.br",
+    "solicitacaoPagador": "Pagamento referente ao pedido #1234"
+}, headers=HEADERS)
+
+data = cob.json()
+print(f"TxID: {data['txid']}")
+print(f"Pix C&C: {data['pixCopiaECola']}")</pre>
+    <pre id="pix-code-curl" class="pix-code-pane" style="display:none"># cURL — PIX Criar cobrança
+curl -X POST https://sandbox.bradesco.com.br/v1/pix/cob \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "calendario": {"expiracao": 3600},
+    "devedor": {"cpf": "12345678901", "nome": "João Silva"},
+    "valor": {"original": "100.50"},
+    "chave": "parceiro@empresa.com.br",
+    "solicitacaoPagador": "Pedido #1234"
+  }'</pre>
+  </div>
+
+  <h2>Webhook — verificar assinatura HMAC</h2>
+  <div class="code-wrap">
+    <div class="code-head">
+      <div style="display:flex;gap:4px">
+        <button onclick="switchLang('wh','node',this)" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:6px;border:none;background:rgba(255,255,255,.15);color:var(--text);cursor:pointer;font-family:var(--sans)">Node.js</button>
+        <button onclick="switchLang('wh','python',this)" style="font-size:11px;padding:4px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans)">Python</button>
+        <button onclick="switchLang('wh','java',this)" style="font-size:11px;padding:4px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--sans)">Java</button>
+      </div>
+    </div>
+    <pre id="wh-code-node" class="wh-code-pane">// Node.js (Express) — Webhook com HMAC-SHA256
+const crypto = require('crypto');
+
+app.post('/webhook/bradesco', express.raw({ type: 'application/json' }), (req, res) => {
+  const signature = req.headers['x-bradesco-signature'];
+  const secret    = process.env.WEBHOOK_SECRET;
+  
+  // timing-safe comparison — NUNCA usar === para assinaturas
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(req.body)
+    .digest('hex');
+  
+  const valid = crypto.timingSafeEqual(
+    Buffer.from(signature, 'hex'),
+    Buffer.from(expected,  'hex')
+  );
+  
+  if (!valid) return res.status(401).json({ error: 'Assinatura inválida' });
+  
+  const event = JSON.parse(req.body);
+  console.log(`Evento: ${event.type} — ${event.resourceId}`);
+  res.status(200).json({ received: true });
+});</pre>
+    <pre id="wh-code-python" class="wh-code-pane" style="display:none"># Python (FastAPI) — Webhook com HMAC-SHA256
+import hmac, hashlib, os
+from fastapi import Request, HTTPException
+
+@app.post("/webhook/bradesco")
+async def webhook(request: Request):
+    body      = await request.body()
+    signature = request.headers.get("x-bradesco-signature", "")
+    secret    = os.environ["WEBHOOK_SECRET"].encode()
+
+    expected = hmac.new(secret, body, hashlib.sha256).hexdigest()
+
+    # compare_digest previne timing attacks
+    if not hmac.compare_digest(signature, expected):
+        raise HTTPException(status_code=401, detail="Assinatura inválida")
+
+    event = await request.json()
+    print(f"Evento: {event['type']} — {event['resourceId']}")
+    return {"received": True}</pre>
+    <pre id="wh-code-java" class="wh-code-pane" style="display:none">// Java (Spring Boot) — Webhook com HMAC-SHA256
+@PostMapping("/webhook/bradesco")
+public ResponseEntity&lt;?&gt; webhook(
+    @RequestHeader("X-Bradesco-Signature") String signature,
+    @RequestBody byte[] body) throws Exception {
+
+    String secret = System.getenv("WEBHOOK_SECRET");
+    Mac mac = Mac.getInstance("HmacSHA256");
+    mac.init(new SecretKeySpec(secret.getBytes(), "HmacSHA256"));
+    String expected = Hex.encodeHexString(mac.doFinal(body));
+
+    // MessageDigest.isEqual previne timing attacks
+    if (!MessageDigest.isEqual(expected.getBytes(), signature.getBytes()))
+        return ResponseEntity.status(401).body("Assinatura inválida");
+
+    Map&lt;?,?&gt; event = objectMapper.readValue(body, Map.class);
+    log.info("Evento: {} — {}", event.get("type"), event.get("resourceId"));
+    return ResponseEntity.ok(Map.of("received", true));
+}</pre>
+  </div>
+</div>
+
+<!-- ═══ README ══════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-readme">
+  <div class="eyebrow">Evolução da plataforma</div>
+  <h1>Migração para <em>ReadMe.io</em></h1>
+  <div class="lead">O ReadMe.io é o padrão da indústria para developer portals — Stripe, Twilio e Plaid usam. A migração do HTML atual é direta e pode ser feita em 2-3 dias.</div>
+
+  <h2>Por que migrar?</h2>
+  <div class="grid2">
+    <div class="card"><div class="card-accent" style="background:var(--green)"></div><div class="card-title">O que você ganha</div><div class="card-body">Busca semântica nativa (AI-powered), Try-it automático via spec OpenAPI, changelog gerado por release, versionamento de docs, analytics de uso por endpoint, comunidade de devs integrada.</div></div>
+    <div class="card"><div class="card-accent" style="background:var(--amber)"></div><div class="card-title">O que você perde (temporariamente)</div><div class="card-body">Controle total do CSS e do layout. O Design System Bradesco precisará ser adaptado para o sistema de customização do ReadMe (cores, fontes, logo). Sem o Antes × Depois nativo.</div></div>
+  </div>
+
+  <h2>Passo a passo da migração</h2>
+  <div class="decision-list">
+    <div class="decision-item"><div class="di-num">Passo 1</div><div class="di-title">Instalar o rdme CLI</div><div class="di-body"><code>npm install -g rdme</code> — ferramenta oficial do ReadMe para sincronizar specs e docs.</div></div>
+    <div class="decision-item"><div class="di-num">Passo 2</div><div class="di-title">Subir os specs OpenAPI</div><div class="di-body"><code>rdme openapi specs/caas/openapi.yaml --key=&lt;API_KEY&gt; --id=&lt;API_ID&gt;</code> — repita para cada produto (CaaS, PIX, Auth, LaaS).</div></div>
+    <div class="decision-item"><div class="di-num">Passo 3</div><div class="di-title">Sincronizar os docs Markdown</div><div class="di-body"><code>rdme docs docs/caas/ --version=v1.0 --key=&lt;API_KEY&gt;</code> — o Markdown existente vai direto. Links entre páginas precisam ser ajustados.</div></div>
+    <div class="decision-item"><div class="di-num">Passo 4</div><div class="di-title">Customizar o Design System</div><div class="di-body">ReadMe → Appearance → Custom CSS. Aplicar as variáveis de cor do Bradesco (--primary: #CC092F) e a fonte Bradesco Sans (Inter como fallback).</div></div>
+    <div class="decision-item"><div class="di-num">Passo 5</div><div class="di-title">Configurar CI/CD</div><div class="di-body">Adicionar o step <code>rdme</code> no GitHub Actions (ver seção CI/CD). A partir daí, push em main sincroniza docs e specs automaticamente.</div></div>
+  </div>
+</div>
+
+<!-- ═══ CHECKLIST ══════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-checklist">
+  <div class="eyebrow">Governança · Qualidade</div>
+  <h1>Arquivos obrigatórios <em>por API</em></h1>
+  <div class="lead">Checklist de 20 critérios que cada API precisa cumprir antes de ser publicada no portal. A squad de produto é responsável — a squad DX Platform valida.</div>
+
+  <h2>Estrutura mínima por produto</h2>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">Estrutura de diretório</span></div>
+    <pre>specs/{produto}/
+├── openapi.yaml          ✅ obrigatório — spec OpenAPI 3.1
+├── examples/
+│   ├── request-*.json    ✅ obrigatório — ao menos 1 por endpoint
+│   └── response-*.json   ✅ obrigatório — ao menos 1 por endpoint
+├── sandbox-data.yaml     ✅ obrigatório — CNPJs/CPFs de teste
+└── changelog.md          ✅ obrigatório — histórico de versões
+
+docs/{produto}/
+├── overview.md           ✅ obrigatório — visão geral + casos de uso
+├── quickstart.md         ✅ obrigatório — hello world em &lt;5 min
+├── authentication.md     ✅ obrigatório — como obter token
+├── errors.md             ✅ obrigatório — tabela de erros com código
+└── webhooks.md           ⚡ recomendado — se o produto emite eventos</pre>
+  </div>
+
+  <h2>Checklist de publicação — 20 critérios</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>#</th><th>Critério</th><th>Responsável</th><th>Bloqueante?</th></tr></thead>
+    <tbody>
+      <tr><td>01</td><td>Spec OpenAPI 3.1 válida (Spectral lint = 0 erros)</td><td>Dev SME</td><td style="color:var(--red)">Sim</td></tr>
+      <tr><td>02</td><td>Todos os endpoints com summary e description</td><td>Tech Writer</td><td style="color:var(--red)">Sim</td></tr>
+      <tr><td>03</td><td>Ao menos 1 exemplo de request por endpoint</td><td>Dev SME</td><td style="color:var(--red)">Sim</td></tr>
+      <tr><td>04</td><td>Ao menos 1 exemplo de response 200 e 1 de erro</td><td>Dev SME</td><td style="color:var(--red)">Sim</td></tr>
+      <tr><td>05</td><td>IdempotencyKey documentado para todas as escritas</td><td>Tech Writer</td><td style="color:var(--red)">Sim</td></tr>
+      <tr><td>06</td><td>Erros no formato RFC 7807 com campo code</td><td>Dev SME</td><td style="color:var(--red)">Sim</td></tr>
+      <tr><td>07</td><td>Quickstart testado e funcionando no sandbox</td><td>Tech Writer</td><td style="color:var(--red)">Sim</td></tr>
+      <tr><td>08</td><td>Dados de teste documentados (CNPJs, CPFs sintéticos)</td><td>Dev SME</td><td style="color:var(--red)">Sim</td></tr>
+      <tr><td>09</td><td>Try-it configurado e testado no sandbox</td><td>Frontend Dev</td><td style="color:var(--red)">Sim</td></tr>
+      <tr><td>10</td><td>Versionamento na URL (/v1/) definido</td><td>Arquitetura</td><td style="color:var(--red)">Sim</td></tr>
+      <tr><td>11</td><td>Exemplos de código em Node.js, Python e Java</td><td>Tech Writer</td><td style="color:var(--amber)">Rec.</td></tr>
+      <tr><td>12</td><td>Webhook documentado com payload e verificação HMAC</td><td>Dev SME</td><td style="color:var(--amber)">Rec.</td></tr>
+      <tr><td>13</td><td>Changelog.md com histórico desde v1.0</td><td>Tech Writer</td><td style="color:var(--amber)">Rec.</td></tr>
+      <tr><td>14</td><td>Rate limits documentados por endpoint</td><td>Dev SME</td><td style="color:var(--amber)">Rec.</td></tr>
+      <tr><td>15</td><td>Revisão de segurança pelo time de InfoSec</td><td>InfoSec</td><td style="color:var(--amber)">Rec.</td></tr>
+      <tr><td>16</td><td>Aprovação do Product Owner do produto</td><td>PO</td><td style="color:var(--faint)">Opcional</td></tr>
+      <tr><td>17</td><td>Diagrama de fluxo da jornada principal</td><td>Tech Writer</td><td style="color:var(--faint)">Opcional</td></tr>
+      <tr><td>18</td><td>SDK em ao menos 1 linguagem</td><td>Dev SME</td><td style="color:var(--faint)">Futuro</td></tr>
+      <tr><td>19</td><td>Postman Collection atualizada</td><td>Dev SME</td><td style="color:var(--faint)">Futuro</td></tr>
+      <tr><td>20</td><td>Analytics de uso configurados (ReadMe ou Amplify)</td><td>Frontend Dev</td><td style="color:var(--faint)">Futuro</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<!-- ═══ STATUS PAGE ══════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-statuspage">
+  <div class="eyebrow">Status Page</div>
+  <h1>Como construir e atualizar a <em>Status Page</em></h1>
+  <div class="lead">A Status Page do portal foi construída como componente HTML puro — sem dependências externas, sem backend. JavaScript vanilla com dados simulados substituídos por chamadas reais ao Axway Analytics em produção.</div>
+
+  <div class="callout callout-blue">
+    <div class="callout-label">Por que uma Status Page de nível Stripe importa</div>
+    <div class="callout-body">Uma Status Page bem feita não é apenas uma tela de monitoramento — é um instrumento de confiança institucional. Quando um parceiro detecta um problema, a primeira coisa que faz é checar o status. Se encontra dados atualizados, um incidente reconhecido e histórico honesto, a percepção é de <strong>controle e transparência</strong>. Se encontra "tudo verde" enquanto a API falha, perde a confiança. A diferença entre Stripe (96/100 DX) e a média bancária (54/100) começa aqui.</div>
+  </div>
+
+  <h2>Arquitetura atual → produção</h2>
+  <div class="depara">
+    <div class="dp-row"><div class="dp-from">JavaScript puro<div class="dp-note">genLat(base, noise) — dados simulados</div></div><div class="dp-arrow">→</div><div class="dp-to">Axway Analytics API<div class="dp-note">latência e disponibilidade reais</div></div></div>
+    <div class="dp-row"><div class="dp-from">Sparklines CSS<div class="dp-note">dados fictícios com variação realista</div></div><div class="dp-arrow">→</div><div class="dp-to">Séries temporais BigQuery<div class="dp-note">últimas 24h por endpoint</div></div></div>
+    <div class="dp-row"><div class="dp-from">Contadores setInterval<div class="dp-note">flutuam a cada 4s</div></div><div class="dp-arrow">→</div><div class="dp-to">WebSocket / SSE<div class="dp-note">push em tempo real do gateway</div></div></div>
+  </div>
+
+  <h2>Como atualizar um incidente</h2>
+  <div class="body">No protótipo atual, os incidentes são atualizados diretamente no HTML. Em produção, o fluxo será: o time de operações cria um incidente no Statuspage.io ou PagerDuty → o componente da Status Page consome a API deles → exibe automaticamente. Para o protótipo:</div>
+
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">JavaScript</span><span class="code-file">status-incidents.js</span></div>
+    <pre>// Adicionar um incidente na Status Page (protótipo)
+const INCIDENTS = [
+  {
+    id: 'INC-001',
+    status: 'investigating', // investigating | identified | monitoring | resolved
+    title: 'Latência elevada em /v1/pix/cob',
+    impact: 'partial',       // none | minor | major | critical
+    startedAt: '2026-07-04T10:30:00Z',
+    updatedAt: '2026-07-04T11:15:00Z',
+    updates: [
+      { at: '11:15', msg: 'Identificamos a causa: pico de tráfego no processador PIX. Mitigation em andamento.' },
+      { at: '10:45', msg: 'Investigando latência acima do normal em cobranças PIX. Outros serviços operando normalmente.' },
+      { at: '10:30', msg: 'Incidente detectado — abrindo investigação.' }
+    ]
+  }
+];
+
+// Em produção: substituir por chamada à API do Statuspage.io
+// GET https://api.statuspage.io/v1/pages/{page_id}/incidents/unresolved</pre>
+  </div>
+</div>
+
+<!-- ═══ CONSOLE GUIA ══════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-console-guia">
+  <div class="eyebrow">Console · Developer Experience</div>
+  <h1>Console — propósito <em>e gestão</em></h1>
+  <div class="lead">O Console do Developer Portal é onde o parceiro gerencia suas credenciais, monitora uso e acessa o sandbox. É diferente do Console Avançado (interno) — este é o console voltado ao parceiro.</div>
+
+  <h2>Console do parceiro vs Console Avançado</h2>
+  <div class="grid2">
+    <div class="card"><div class="card-accent" style="background:var(--blue)"></div><div class="card-title">Console do Parceiro (Developer Portal)</div><div class="card-body">Gerenciar credenciais (Client ID/Secret), ver uso de APIs próprias, acessar sandbox, gerenciar webhooks e ver histórico de chamadas. Público-alvo: o desenvolvedor do parceiro.</div></div>
+    <div class="card"><div class="card-accent" style="background:var(--purple)"></div><div class="card-title">Console Avançado (Interno)</div><div class="card-body">Visão cross-partner: funil de onboarding, alertas de degradação, comparação de latência, heatmap de endpoints. Público-alvo: equipe interna (ops, Partner Success). Ver seção Console Avançado.</div></div>
+  </div>
+
+  <h2>Como o console do parceiro é gerenciado</h2>
+  <div class="body">No modelo atual com Axway Amplify, o console do parceiro é o <strong>Amplify Engage</strong> — o portal de marketplace nativo da plataforma. O parceiro cria uma App, subscreve um API Product e recebe as credenciais automaticamente. A squad DX Platform configura os Products e Plans no Amplify; a squad A4 mantém o portal customizado que orquestra essa experiência.</div>
+
+  <h2>Configuração de um API Product no Axway</h2>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">Axway CLI</span></div>
+    <pre># Publicar spec no Amplify Engage
+axway auth login \
+  --client-id $AXWAY_CLIENT_ID \
+  --client-secret $AXWAY_CLIENT_SECRET
+
+# Publicar API Product
+axway central publish -f specs/caas/openapi.yaml \
+  --title "CaaS — Capital de Giro" \
+  --category "Crédito" \
+  --version v1.0
+
+# Verificar publicação
+axway central get apis --query "title=CaaS"</pre>
+  </div>
+</div>
+
+<!-- ═══ SDKS ══════════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-sdks">
+  <div class="eyebrow">Developer Experience · Adoção</div>
+  <h1>SDKs — <em>multi-linguagem</em></h1>
+  <div class="lead">SDKs reduzem o tempo de integração de dias para horas. A estratégia é gerar SDKs automaticamente a partir das specs OpenAPI usando ferramentas como OpenAPI Generator.</div>
+
+  <h2>Roadmap de SDKs</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>SDK</th><th>Produto</th><th>Fase</th><th>Geração</th></tr></thead>
+    <tbody>
+      <tr><td>bradesco-caas-node</td><td>CaaS (Capital de Giro)</td><td><span style="color:var(--amber)">Fase 2</span></td><td>OpenAPI Generator → npm</td></tr>
+      <tr><td>bradesco-caas-python</td><td>CaaS (Capital de Giro)</td><td><span style="color:var(--amber)">Fase 2</span></td><td>OpenAPI Generator → PyPI</td></tr>
+      <tr><td>bradesco-pix-java</td><td>PIX & Pagamentos</td><td><span style="color:var(--amber)">Fase 2</span></td><td>OpenAPI Generator → Maven</td></tr>
+      <tr><td>bradesco-sdk (all)</td><td>Todos os produtos</td><td><span style="color:var(--blue)">Fase 3</span></td><td>Meta-SDK unificado</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Como gerar um SDK a partir da spec</h2>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">Shell</span></div>
+    <pre># Gerar SDK Node.js para CaaS
+npx @openapitools/openapi-generator-cli generate \
+  -i specs/caas/openapi.yaml \
+  -g typescript-axios \
+  -o sdks/caas-node \
+  --additional-properties=npmName=@bradesco/caas-sdk,npmVersion=1.0.0
+
+# Gerar SDK Python para CaaS
+openapi-generator-cli generate \
+  -i specs/caas/openapi.yaml \
+  -g python \
+  -o sdks/caas-python \
+  --additional-properties=packageName=bradesco_caas
+
+# Testar o SDK gerado
+cd sdks/caas-node && npm install && npm test</pre>
+  </div>
+</div>
+
+<!-- ═══ POSTMAN ══════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-postman">
+  <div class="eyebrow">Ferramentas · Testabilidade</div>
+  <h1>Postman <em>Hub</em></h1>
+  <div class="lead">O Postman Hub centraliza todas as Collections da plataforma Bradesco — uma por produto, com variáveis de ambiente pré-configuradas para sandbox e produção.</div>
+
+  <h2>Estrutura das Collections</h2>
+  <div class="body">Cada produto tem uma Collection Postman organizada espelhando a estrutura da documentação: Autenticação → Simulação → Proposta → Garantias → Assinatura → Webhooks. As variáveis de ambiente (<code>baseUrl</code>, <code>clientId</code>, <code>clientSecret</code>, <code>token</code>) são compartilhadas entre todos os produtos.</div>
+
+  <h2>Como exportar a Collection da spec</h2>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">Shell · Postman CLI</span></div>
+    <pre># Instalar Postman CLI
+npm install -g @postman/cli
+
+# Importar spec OpenAPI como Collection
+postman collection from-file specs/caas/openapi.yaml \
+  --output collections/caas.json
+
+# Publicar no Postman Hub (requer API Key)
+postman collection push collections/caas.json \
+  --api-key $POSTMAN_API_KEY \
+  --workspace "Bradesco Developer Portal"
+
+# Rodar testes automatizados
+postman collection run collections/caas.json \
+  --environment environments/sandbox.json</pre>
+  </div>
+
+  <h2>Variáveis de ambiente padrão</h2>
+  <div class="code-wrap">
+    <div class="code-head"><span class="code-lang">JSON · environments/sandbox.json</span></div>
+    <pre>{
+  "name": "Bradesco Sandbox",
+  "values": [
+    { "key": "baseUrl",      "value": "https://sandbox.bradesco.com.br/v1" },
+    { "key": "clientId",     "value": "{{seu_client_id}}" },
+    { "key": "clientSecret", "value": "{{seu_client_secret}}" },
+    { "key": "token",        "value": "" },
+    { "key": "cnpjTeste",    "value": "12345678000195" },
+    { "key": "cpfTeste",     "value": "12345678901" }
+  ]
+}</pre>
+  </div>
+</div>
+
+<!-- ═══ CHATBOT ═══════════════════════════════════════════════════════════════ -->
+<div class="panel" id="p-chatbot">
+  <div class="eyebrow">IA · Developer Experience</div>
+  <h1>Chatbot — conectar <em>com IA</em></h1>
+  <div class="lead">Um chatbot de documentação reduz o tempo de resposta para perguntas técnicas de horas (suporte humano) para segundos. A abordagem é RAG (Retrieval-Augmented Generation) com as specs e docs do portal como fonte de verdade.</div>
+
+  <div class="callout callout-green">
+    <div class="callout-label">Bradesco já lidera em AI-native (MCP)</div>
+    <div class="callout-body">O DX Score benchmark mostra que o Bradesco <strong>já supera o Stripe</strong> na dimensão AI-native graças ao MCP Server nativo integrado ao portal. O chatbot de documentação é o próximo passo natural — e uma vantagem competitiva real frente ao Itaú e outros pares bancários.</div>
+  </div>
+
+  <h2>Arquitetura recomendada</h2>
+  <div class="decision-list">
+    <div class="decision-item"><div class="di-num">Opção A · Mais rápida</div><div class="di-title">ReadMe.io AI Search (nativo)</div><div class="di-body">Ao migrar para ReadMe.io, a busca semântica AI vem incluída. Indexa specs, docs e changelogs automaticamente. Tempo para ativar: 1 configuração. Sem custo adicional nos planos Enterprise.</div></div>
+    <div class="decision-item"><div class="di-num">Opção B · Mais controle</div><div class="di-title">Claude API + RAG sobre specs OpenAPI</div><div class="di-body">Pipeline: specs OpenAPI 3.1 → embeddings (ex: text-embedding-3-small) → vetor store (Pinecone ou pgvector) → Claude API como LLM. Permite customizar o comportamento, restringir ao escopo da plataforma e adicionar contexto de sandbox.</div></div>
+    <div class="decision-item"><div class="di-num">Opção C · Já implementado</div><div class="di-title">MCP Server do portal gRPC</div><div class="di-body">O portal gRPC já tem um MCP Server que expõe as ferramentas da plataforma para clientes MCP (Claude Desktop, Cursor, etc.). Parceiros técnicos podem usar via protocolo MCP — sem chatbot UI, mas com capacidade equivalente para IDEs.</div></div>
+  </div>
+</div>
+
+
+</div><!-- /content -->
+</div><!-- /shell -->
 
 <script>
-function setLang(lang) {
-  document.documentElement.setAttribute('data-lang', lang);
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
-  document.documentElement.setAttribute('lang', lang);
+function switchLang(group, lang, btn){
+  document.querySelectorAll('.' + group + '-code-pane').forEach(p=>p.style.display='none');
+  document.getElementById(group+'-code-'+lang).style.display='block';
+  btn.closest('div').querySelectorAll('button').forEach(b=>{
+    b.style.background='transparent';
+    b.style.color='var(--muted)';
+    b.style.fontWeight='400';
+  });
+  btn.style.background='rgba(255,255,255,.15)';
+  btn.style.color='var(--text)';
+  btn.style.fontWeight='700';
+}
+function copyCode(prefix){
+  const active=document.querySelector('.'+prefix+'-pane:not([style*="none"])') ||
+               document.querySelector('.'+prefix+'-pane');
+  if(active&&navigator.clipboard) navigator.clipboard.writeText(active.innerText).catch(()=>{});
+}
+function show(id, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.sb-item').forEach(b=>b.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  btn.classList.add('on');
+  document.querySelector('.content').scrollTop=0;
 }
 </script>
-
 </body>
 </html>
