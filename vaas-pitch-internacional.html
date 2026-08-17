@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VaaS — Vehicle as a Service · Bradesco BaaS</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',sans-serif;font-weight:400;
+  background:var(--ink);color:var(--cream);
+  -webkit-font-smoothing:antialiased;
+}
+:root{
+  --cream:#f5f2ec;--cream-2:#ebe6dc;--cream-3:#dcd6c8;--white:#ffffff;
+  --ink:#0b1219;--ink-deep:#070c11;--ink-2:#243444;--ink-3:#5c7082;--ink-4:#98a8b6;
+  --red:#bf1e2d;--red-br:#ff4757;--red-soft:rgba(191,30,45,.08);--red-line:rgba(191,30,45,.22);
+  --green:#4fc79a;--green-d:#1d8f66;--green-s:rgba(79,199,154,.12);
+  --amber:#e0a95f;--amber-d:#b57320;--amber-s:rgba(224,169,95,.12);
+  --blue:#5b9dd9;--blue-d:#2c6ba8;--blue-s:rgba(91,157,217,.12);
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+
+/* LANG TOGGLE */
+.lang-toggle{
+  position:fixed;top:20px;right:24px;z-index:100;
+  display:flex;gap:4px;
+  background:rgba(11,18,25,.85);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.08);border-radius:4px;padding:4px;
+}
+.lang-btn{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;
+  padding:6px 14px;border-radius:2px;border:none;cursor:pointer;
+  color:var(--ink-4);background:transparent;transition:all .25s var(--ease);
+  text-transform:uppercase;
+}
+.lang-btn.active{background:var(--red);color:#fff;}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:90;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 168px 0 40px;height:56px;
+  background:rgba(7,12,17,.92);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.nav-logo{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:14px;
+  letter-spacing:-.02em;color:var(--cream);
+  display:flex;align-items:center;gap:10px;
+}
+.nav-logo span{color:var(--red-br);}
+.nav-back{
+  color:var(--ink-4);text-decoration:none;font-size:14px;line-height:1;
+  padding:4px 8px;border:1px solid rgba(255,255,255,.08);border-radius:2px;
+  transition:color .2s,border-color .2s;
+}
+.nav-back:hover{color:var(--cream);border-color:rgba(255,255,255,.3);}
+.nav-links{display:flex;gap:24px;}
+.nav-links a{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-4);text-decoration:none;
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--cream);}
+
+/* NOISE */
+.noise{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+}
+.glow{position:absolute;border-radius:50%;pointer-events:none;}
+
+/* EYEBROW */
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--red-br);
+  display:flex;align-items:center;gap:10px;margin-bottom:20px;
+}
+.eyebrow::before{content:'';display:block;width:14px;height:1px;background:var(--red-br);}
+.eyebrow-light{color:var(--red);}
+.eyebrow-light::before{background:var(--red);}
+
+/* HERO */
+.hero{
+  position:relative;overflow:hidden;
+  min-height:100vh;display:flex;align-items:center;
+  padding:120px 40px 80px;
+}
+.hero .glow-1{
+  width:700px;height:500px;top:-100px;left:-100px;
+  background:radial-gradient(ellipse,rgba(191,30,45,.18) 0%,transparent 70%);
+}
+.hero .glow-2{
+  width:400px;height:400px;bottom:0;right:-50px;
+  background:radial-gradient(ellipse,rgba(91,157,217,.10) 0%,transparent 70%);
+}
+.hero-inner{position:relative;z-index:1;max-width:1080px;margin:0 auto;width:100%;}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--red-soft);border:1px solid var(--red-line);
+  border-radius:20px;padding:4px 12px;margin-bottom:28px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;
+  color:var(--red-br);
+}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--red-br);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+h1{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(42px,7vw,88px);letter-spacing:-.04em;line-height:1.0;
+  margin-bottom:24px;
+}
+h1 em{color:var(--red-br);font-style:normal;}
+.hero-sub{
+  font-size:clamp(16px,2vw,20px);font-weight:300;color:var(--ink-4);
+  line-height:1.65;max-width:580px;margin-bottom:48px;
+}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;}
+.btn-primary{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;padding:14px 28px;border-radius:2px;
+  background:var(--red);color:#fff;border:none;cursor:pointer;
+  transition:all .3s var(--ease);text-decoration:none;
+}
+.btn-primary:hover{background:var(--red-br);transform:translateY(-2px);}
+.btn-ghost{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;padding:14px 28px;border-radius:2px;
+  background:transparent;color:var(--cream);
+  border:1px solid rgba(255,255,255,.15);cursor:pointer;
+  transition:all .3s var(--ease);text-decoration:none;
+}
+.btn-ghost:hover{border-color:rgba(255,255,255,.4);transform:translateY(-2px);}
+
+/* KPI STRIP */
+.kpi-strip{
+  position:relative;overflow:hidden;
+  background:var(--ink-deep);
+  border-top:1px solid rgba(255,255,255,.04);
+  border-bottom:1px solid rgba(255,255,255,.04);
+  padding:48px 40px;
+}
+.kpi-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2px;}
+.kpi-item{
+  padding:32px 28px;
+  border-right:1px solid rgba(255,255,255,.05);
+}
+.kpi-item:last-child{border-right:none;}
+.kpi-num{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:44px;
+  letter-spacing:-.05em;line-height:1;color:var(--cream);margin-bottom:8px;
+}
+.kpi-num small{font-size:22px;color:var(--ink-4);}
+.kpi-label{font-size:12px;color:var(--ink-4);line-height:1.5;margin-bottom:6px;}
+.kpi-src{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--ink-3);}
+
+/* SECTIONS */
+section{position:relative;overflow:hidden;}
+.section-dark{background:var(--ink);padding:88px 40px;}
+.section-deep{background:var(--ink-deep);padding:88px 40px;}
+.section-light{background:var(--cream);padding:88px 40px;color:var(--ink-2);}
+.section-inner{max-width:1080px;margin:0 auto;}
+
+h2{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(28px,4vw,44px);letter-spacing:-.03em;line-height:1.1;
+  margin-bottom:16px;
+}
+h2.light{color:var(--ink-2);}
+.section-sub{font-size:16px;font-weight:300;color:var(--ink-4);line-height:1.65;max-width:520px;margin-bottom:56px;}
+.section-sub.light{color:var(--ink-3);}
+
+/* PITCH CARDS */
+.pitch-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px;}
+.pitch-card{
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  border-radius:4px;padding:36px;cursor:pointer;
+  transition:all .35s var(--ease);position:relative;overflow:hidden;
+}
+.pitch-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--red);transform:scaleX(0);transform-origin:left;
+  transition:transform .35s var(--ease);
+}
+.pitch-card:hover::after,.pitch-card.open::after{transform:scaleX(1);}
+.pitch-card:hover{background:rgba(255,255,255,.05);transform:translateY(-3px);}
+.pitch-card.open{
+  background:rgba(191,30,45,.04);
+  border-color:rgba(191,30,45,.25);
+  transform:none;
+  box-shadow:0 0 0 1px rgba(191,30,45,.2),0 20px 48px rgba(0,0,0,.3);
+}
+.pitch-card-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+.pitch-card-icon{
+  width:40px;height:40px;border-radius:4px;
+  background:var(--red-soft);border:1px solid var(--red-line);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+}
+.pitch-card-title{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:16px;
+  letter-spacing:-.02em;color:var(--cream);margin-bottom:4px;
+}
+.pitch-card-meta{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;color:var(--red-br);text-transform:uppercase;}
+.pitch-arrow{color:var(--ink-4);font-size:16px;transition:transform .35s var(--ease);flex-shrink:0;}
+.pitch-card.open .pitch-arrow{transform:rotate(180deg);}
+.pitch-body{max-height:0;overflow:hidden;opacity:0;transition:max-height .6s var(--ease),opacity .4s;}
+.pitch-card.open .pitch-body{max-height:1200px;opacity:1;}
+.pitch-body-inner{padding-top:28px;border-top:1px solid rgba(255,255,255,.06);margin-top:20px;}
+.pitch-text{
+  font-size:14px;font-weight:300;color:var(--cream);line-height:1.8;
+  white-space:pre-line;
+}
+.pitch-text strong{color:var(--red-br);font-weight:500;}
+
+/* PROBLEM / SOLUTION */
+.contrast-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:48px;}
+.contrast-card{padding:40px;border-radius:4px;}
+.contrast-before{
+  background:rgba(224,169,95,.06);border:1px solid rgba(224,169,95,.18);
+}
+.contrast-after{
+  background:rgba(79,199,154,.06);border:1px solid rgba(79,199,154,.18);
+}
+.contrast-label{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:8px;
+}
+.contrast-before .contrast-label{color:var(--amber);}
+.contrast-after .contrast-label{color:var(--green);}
+.contrast-item{
+  display:flex;gap:12px;align-items:flex-start;
+  font-size:13px;font-weight:400;color:var(--cream);
+  line-height:1.6;margin-bottom:12px;
+}
+.contrast-dot{
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:7px;
+}
+.contrast-before .contrast-dot{background:var(--amber);}
+.contrast-after .contrast-dot{background:var(--green);}
+
+/* FLOW */
+.flow{display:flex;align-items:stretch;gap:0;margin-top:48px;flex-wrap:wrap;}
+.flow-step{
+  flex:1;min-width:160px;padding:28px 24px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  border-radius:4px;position:relative;
+}
+.flow-step + .flow-step{margin-left:2px;}
+.flow-num{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:36px;
+  letter-spacing:-.05em;color:var(--red-br);opacity:.3;
+  line-height:1;margin-bottom:12px;
+}
+.flow-title{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:13px;
+  letter-spacing:-.01em;color:var(--cream);margin-bottom:6px;
+}
+.flow-desc{font-size:12px;font-weight:300;color:var(--ink-4);line-height:1.6;}
+.flow-time{
+  margin-top:16px;display:inline-flex;align-items:center;gap:6px;
+  background:var(--green-s);border:1px solid rgba(79,199,154,.25);
+  border-radius:20px;padding:3px 10px;
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  color:var(--green-d);letter-spacing:.06em;
+}
+
+/* QUOTE */
+.quote-block{
+  border-left:3px solid var(--red-br);padding:24px 32px;
+  background:rgba(191,30,45,.04);border-radius:0 4px 4px 0;
+  margin:32px 0;
+}
+.quote-text{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:clamp(16px,2.5vw,20px);
+  letter-spacing:-.02em;color:var(--cream);line-height:1.4;margin-bottom:10px;
+}
+.quote-attr{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--red-br);text-transform:uppercase;}
+
+/* Q&A */
+.qa-list{margin-top:48px;display:flex;flex-direction:column;gap:2px;}
+.qa-item{
+  background:var(--white);border:1px solid var(--cream-3);
+  border-radius:4px;overflow:hidden;cursor:pointer;
+  transition:all .3s var(--ease);
+}
+.qa-item:hover{background:var(--cream-2);}
+.qa-item.open{border-color:var(--red-line);background:var(--white);}
+.qa-q{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px;gap:16px;
+}
+.qa-q-text{
+  font-family:'Syne',sans-serif;font-weight:700;font-size:14px;
+  letter-spacing:-.01em;color:var(--ink-2);flex:1;
+}
+.qa-badge{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.08em;
+  padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0;
+  text-transform:uppercase;
+}
+.badge-amber{background:var(--amber-s);color:var(--amber-d);border:1px solid rgba(224,169,95,.35);}
+.badge-blue{background:var(--blue-s);color:var(--blue-d);border:1px solid rgba(91,157,217,.35);}
+.badge-green{background:var(--green-s);color:var(--green-d);border:1px solid rgba(79,199,154,.35);}
+.qa-arrow{color:var(--ink-3);font-size:14px;transition:transform .3s var(--ease);flex-shrink:0;}
+.qa-item.open .qa-arrow{transform:rotate(180deg);}
+.qa-a{max-height:0;overflow:hidden;opacity:0;transition:max-height .5s var(--ease),opacity .35s;}
+.qa-item.open .qa-a{max-height:800px;opacity:1;}
+.qa-a-inner{
+  padding:0 24px 24px;font-size:13px;font-weight:400;color:var(--ink-3);
+  line-height:1.8;border-top:1px solid var(--cream-3);padding-top:20px;
+  white-space:pre-line;
+}
+.qa-a-inner strong{color:var(--red);font-weight:600;}
+
+/* BIO */
+.bio-card{
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+  border-radius:4px;padding:40px;display:grid;
+  grid-template-columns:auto 1fr;gap:32px;align-items:start;
+  margin-top:48px;
+}
+.bio-avatar{
+  width:80px;height:80px;border-radius:4px;
+  background:var(--red-soft);border:2px solid var(--red-line);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:28px;
+  color:var(--red-br);letter-spacing:-.03em;
+}
+.bio-name{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:22px;
+  letter-spacing:-.03em;color:var(--cream);margin-bottom:4px;
+}
+.bio-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--red-br);text-transform:uppercase;margin-bottom:16px;}
+.bio-text{font-size:13px;font-weight:300;color:var(--ink-4);line-height:1.75;}
+.bio-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px;}
+.bio-tag{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.06em;
+  padding:3px 10px;border-radius:20px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  color:var(--ink-4);
+}
+
+/* FOOTER */
+footer{
+  background:var(--ink-deep);
+  border-top:1px solid rgba(255,255,255,.05);
+  padding:32px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-left{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-4);}
+.footer-right{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--ink-3);}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:0 20px;}
+  .hero{padding:100px 24px 60px;}
+  .kpi-inner{grid-template-columns:repeat(2,1fr);}
+  .kpi-item{border-right:none;border-bottom:1px solid rgba(255,255,255,.05);}
+  .pitch-grid,.contrast-grid{grid-template-columns:1fr;}
+  .section-dark,.section-deep,.section-light{padding:64px 24px;}
+  .flow{flex-direction:column;}
+  .flow-step+.flow-step{margin-left:0;margin-top:2px;}
+  .bio-card{grid-template-columns:1fr;}
+  footer{flex-direction:column;text-align:center;}
+  .lang-toggle{top:14px;right:12px;}
+  .nav-links{display:none;}
+}
+
+/* HIDDEN LANG */
+[data-lang]{transition:opacity .3s;}
+.lang-en [data-lang="pt"]{display:none;}
+.lang-pt [data-lang="en"]{display:none;}
+</style>
+</head>
+<body class="lang-en">
+
+<!-- LANG TOGGLE -->
+<div class="lang-toggle">
+  <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+  <button class="lang-btn" onclick="setLang('pt')" id="btn-pt">PT</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <a href="index.html" class="nav-back" title="Raul Sousa · Portfolio">←</a>
+    VaaS <span>·</span> Bradesco BaaS
+  </div>
+  <div class="nav-links">
+    <a href="#problem" data-lang="en">Problem</a>
+    <a href="#problem" data-lang="pt">Problema</a>
+    <a href="#solution" data-lang="en">Solution</a>
+    <a href="#solution" data-lang="pt">Solução</a>
+    <a href="#pitch" data-lang="en">Pitches</a>
+    <a href="#pitch" data-lang="pt">Pitches</a>
+    <a href="#qa" data-lang="en">Q&A</a>
+    <a href="#qa" data-lang="pt">Q&A</a>
+    <a href="#speaker" data-lang="en">Speaker</a>
+    <a href="#speaker" data-lang="pt">Apresentador</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="noise"></div>
+  <div class="glow glow-1"></div>
+  <div class="glow glow-2"></div>
+  <div class="hero-inner">
+    <div class="hero-tag" data-lang="en">⚡ Live — Production MVP · São Paulo · Nov 2026</div>
+    <div class="hero-tag" data-lang="pt">⚡ Ao Vivo — MVP em Produção · São Paulo · Nov 2026</div>
+
+    <h1 data-lang="en">The API that<br>digitizes <em>Brazil's</em><br>vehicle debt market.</h1>
+    <h1 data-lang="pt">A API que<br>digitaliza o mercado<br>de <em>débitos</em> veiculares.</h1>
+
+    <p class="hero-sub" data-lang="en">VaaS — Vehicle as a Service. Any company can offer IPVA, fines and DPVAT payments through a single API integration, backed by Bradesco — one of Brazil's largest banks.</p>
+    <p class="hero-sub" data-lang="pt">VaaS — Vehicle as a Service. Qualquer empresa pode oferecer pagamento de IPVA, multas e DPVAT via uma única integração de API, com o respaldo do Bradesco.</p>
+
+    <div class="hero-cta">
+      <a href="#pitch" class="btn-primary" data-lang="en">View Pitches</a>
+      <a href="#pitch" class="btn-primary" data-lang="pt">Ver Pitches</a>
+      <a href="#qa" class="btn-ghost" data-lang="en">Prepare Q&A</a>
+      <a href="#qa" class="btn-ghost" data-lang="pt">Preparar Q&A</a>
+    </div>
+  </div>
+</section>
+
+<!-- KPI STRIP -->
+<div class="kpi-strip">
+  <div class="noise"></div>
+  <div class="kpi-inner">
+    <div class="kpi-item">
+      <div class="kpi-num">R$12<small>bi</small></div>
+      <div class="kpi-label" data-lang="en">Annual vehicle debt market in Brazil</div>
+      <div class="kpi-label" data-lang="pt">Mercado anual de débitos veiculares no Brasil</div>
+      <div class="kpi-src">Denatran · SENATRAN 2025</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">80<small>%</small></div>
+      <div class="kpi-label" data-lang="en">Still offline — physical queues or fragmented portals</div>
+      <div class="kpi-label" data-lang="pt">Ainda offline — filas físicas ou portais fragmentados</div>
+      <div class="kpi-src">Internal analysis · Bradesco BaaS 2026</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">&lt;2<small>min</small></div>
+      <div class="kpi-label" data-lang="en">End-to-end payment via VaaS API</div>
+      <div class="kpi-label" data-lang="pt">Pagamento completo via API VaaS</div>
+      <div class="kpi-src">VaaS Sandbox benchmarks · 2026</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">75<small>M</small></div>
+      <div class="kpi-label" data-lang="en">Bradesco customers — trust at scale</div>
+      <div class="kpi-label" data-lang="pt">Clientes Bradesco — confiança em escala</div>
+      <div class="kpi-src">Bradesco Annual Report 2025</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section-dark" id="problem">
+  <div class="noise"></div>
+  <div class="section-inner">
+    <div class="eyebrow" data-lang="en">The Problem</div>
+    <div class="eyebrow" data-lang="pt">O Problema</div>
+    <h2 data-lang="en">A R$12 billion market still<br>running on paper and queues.</h2>
+    <h2 data-lang="pt">Um mercado de R$12 bilhões ainda<br>funcionando no papel e nas filas.</h2>
+    <p class="section-sub" data-lang="en">Paying IPVA, traffic fines and DPVAT in Brazil is a fragmented, time-consuming process — each state has its own portal, its own rules, its own chaos.</p>
+    <p class="section-sub" data-lang="pt">Pagar IPVA, multas e DPVAT no Brasil é um processo fragmentado e demorado — cada estado tem seu portal, suas regras, seu caos próprio.</p>
+
+    <div class="contrast-grid">
+      <div class="contrast-card contrast-before">
+        <div class="contrast-label" data-lang="en">⚠ Today — Without VaaS</div>
+        <div class="contrast-label" data-lang="pt">⚠ Hoje — Sem VaaS</div>
+        <div class="contrast-item"><div class="contrast-dot"></div><span data-lang="en">Average 3 days to complete a vehicle debt payment</span><span data-lang="pt">Média de 3 dias para quitar um débito veicular</span></div>
+        <div class="contrast-item"><div class="contrast-dot"></div><span data-lang="en">73% of payments require physical displacement or multi-step portal navigation</span><span data-lang="pt">73% dos pagamentos exigem deslocamento físico ou navegação em múltiplos portais</span></div>
+        <div class="contrast-item"><div class="contrast-dot"></div><span data-lang="en">Each Brazilian state operates a separate DETRAN system — no unified API</span><span data-lang="pt">Cada estado brasileiro opera um sistema DETRAN separado — sem API unificada</span></div>
+        <div class="contrast-item"><div class="contrast-dot"></div><span data-lang="en">34% abandonment rate in digital self-service flows due to friction</span><span data-lang="pt">34% de abandono em fluxos digitais de autoatendimento por atrito</span></div>
+        <div class="contrast-item"><div class="contrast-dot"></div><span data-lang="en">No embeddable solution for fintechs, retailers or mobility platforms</span><span data-lang="pt">Nenhuma solução embeddável para fintechs, varejistas ou plataformas de mobilidade</span></div>
+      </div>
+      <div class="contrast-card contrast-after">
+        <div class="contrast-label" data-lang="en">✓ With VaaS</div>
+        <div class="contrast-label" data-lang="pt">✓ Com VaaS</div>
+        <div class="contrast-item"><div class="contrast-dot"></div><span data-lang="en">Payment completed in under 2 minutes — end to end</span><span data-lang="pt">Pagamento concluído em menos de 2 minutos — do início ao fim</span></div>
+        <div class="contrast-item"><div class="contrast-dot"></div><span data-lang="en">100% digital — API-first, no portals, no physical presence required</span><span data-lang="pt">100% digital — API-first, sem portais, sem presença física</span></div>
+        <div class="contrast-item"><div class="contrast-dot"></div><span data-lang="en">Single API integration covering IPVA, fines, DPVAT — starting São Paulo</span><span data-lang="pt">Uma única integração de API cobrindo IPVA, multas e DPVAT — começando em SP</span></div>
+        <div class="contrast-item"><div class="contrast-dot"></div><span data-lang="en">Conversion rate up to 6x higher with sub-2-minute flows</span><span data-lang="pt">Taxa de conversão até 6x maior com fluxos abaixo de 2 minutos</span></div>
+        <div class="contrast-item"><div class="contrast-dot"></div><span data-lang="en">Plug-and-play for any partner — fintech, mobility, retail</span><span data-lang="pt">Plug-and-play para qualquer parceiro — fintech, mobilidade, varejo</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION FLOW -->
+<section class="section-deep" id="solution">
+  <div class="noise"></div>
+  <div class="section-inner">
+    <div class="eyebrow" data-lang="en">How it works</div>
+    <div class="eyebrow" data-lang="pt">Como funciona</div>
+    <h2 data-lang="en">One integration.<br>Every vehicle debt in Brazil.</h2>
+    <h2 data-lang="pt">Uma integração.<br>Todo débito veicular do Brasil.</h2>
+    <p class="section-sub" data-lang="en">Partners connect once via the VaaS API and can immediately offer vehicle debt payment inside their own product — white-label, fully regulated, backed by Bradesco.</p>
+    <p class="section-sub" data-lang="pt">Parceiros conectam uma vez via API VaaS e já podem oferecer pagamento de débitos veiculares dentro do próprio produto — white-label, totalmente regulado, respaldado pelo Bradesco.</p>
+
+    <div class="flow">
+      <div class="flow-step">
+        <div class="flow-num">01</div>
+        <div class="flow-title" data-lang="en">Query</div>
+        <div class="flow-title" data-lang="pt">Consulta</div>
+        <div class="flow-desc" data-lang="en">Partner sends plate or RENAVAM. VaaS queries DETRAN in real time and returns all pending debts.</div>
+        <div class="flow-desc" data-lang="pt">Parceiro envia placa ou RENAVAM. VaaS consulta o DETRAN em tempo real e retorna todos os débitos pendentes.</div>
+        <div class="flow-time" data-lang="en">~800ms</div>
+        <div class="flow-time" data-lang="pt">~800ms</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">02</div>
+        <div class="flow-title" data-lang="en">Select</div>
+        <div class="flow-title" data-lang="pt">Seleção</div>
+        <div class="flow-desc" data-lang="en">User selects which debts to pay — IPVA, fines, DPVAT. Partner controls the UX.</div>
+        <div class="flow-desc" data-lang="pt">Usuário seleciona quais débitos quitar — IPVA, multas, DPVAT. O parceiro controla a UX.</div>
+        <div class="flow-time" data-lang="en">User action</div>
+        <div class="flow-time" data-lang="pt">Ação do usuário</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">03</div>
+        <div class="flow-title" data-lang="en">Pay</div>
+        <div class="flow-title" data-lang="pt">Pagamento</div>
+        <div class="flow-desc" data-lang="en">Payment initiated via Bradesco infrastructure. Pix or boleto. Fully regulated and auditable.</div>
+        <div class="flow-desc" data-lang="pt">Pagamento iniciado via infraestrutura Bradesco. Pix ou boleto. Totalmente regulado e auditável.</div>
+        <div class="flow-time" data-lang="en">~3s processing</div>
+        <div class="flow-time" data-lang="pt">~3s processamento</div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">04</div>
+        <div class="flow-title" data-lang="en">Confirm</div>
+        <div class="flow-title" data-lang="pt">Confirmação</div>
+        <div class="flow-desc" data-lang="en">Webhook delivers real-time confirmation. Partner shows receipt. DETRAN clearance follows.</div>
+        <div class="flow-desc" data-lang="pt">Webhook entrega confirmação em tempo real. Parceiro exibe recibo. Baixa no DETRAN em seguida.</div>
+        <div class="flow-time" data-lang="en">Real-time webhook</div>
+        <div class="flow-time" data-lang="pt">Webhook em tempo real</div>
+      </div>
+    </div>
+
+    <div class="quote-block" style="margin-top:56px;">
+      <div class="quote-text" data-lang="en">"Like Stripe did for online payments globally — we're doing it for vehicle debts in Brazil. One API. Every state. Every debt type."</div>
+      <div class="quote-text" data-lang="pt">"Como o Stripe fez com pagamentos online globalmente — estamos fazendo com débitos veiculares no Brasil. Uma API. Todos os estados. Todos os tipos de débito."</div>
+      <div class="quote-attr">Raul Sousa · Head of Open Platform & BaaS · Bradesco</div>
+    </div>
+  </div>
+</section>
+
+<!-- PITCHES -->
+<section class="section-dark" id="pitch">
+  <div class="noise"></div>
+  <div class="section-inner">
+    <div class="eyebrow" data-lang="en">Pitch Arsenal</div>
+    <div class="eyebrow" data-lang="pt">Arsenal de Pitches</div>
+    <h2 data-lang="en">Ready for every moment<br>at the conference.</h2>
+    <h2 data-lang="pt">Pronto para cada momento<br>na conferência.</h2>
+    <p class="section-sub" data-lang="en">Four formats calibrated for different contexts — from elevator to stage. Click each card to expand the full script.</p>
+    <p class="section-sub" data-lang="pt">Quatro formatos calibrados para diferentes contextos — do elevador ao palco. Clique em cada card para expandir o script completo.</p>
+
+    <div class="pitch-grid" id="pitch-grid">
+
+      <!-- ELEVATOR EN -->
+      <div class="pitch-card" onclick="toggleCard(this)" data-lang="en">
+        <div class="pitch-card-header">
+          <div class="pitch-card-icon">⚡</div>
+          <div style="flex:1">
+            <div class="pitch-card-title">Elevator Pitch</div>
+            <div class="pitch-card-meta">English · 60 seconds · Networking</div>
+          </div>
+          <div class="pitch-arrow">▼</div>
+        </div>
+        <div class="pitch-body">
+          <div class="pitch-body-inner">
+            <div class="pitch-text">Bradesco is one of Brazil's largest private banks — <strong>75 years old, 75 million customers.</strong> But we're not just a bank anymore.
+
+We built an Open Platform that lets any company — fintechs, retailers, mobility platforms — embed financial services into their products through a single API connection.
+
+Our latest product is <strong>VaaS — Vehicle as a Service.</strong>
+
+Brazil has a R$12 billion vehicle debt market — IPVA taxes, traffic fines, DPVAT insurance. And 80% of it is still offline. People spend days navigating fragmented government portals just to pay a simple tax.
+
+<strong>VaaS changes that.</strong> Any partner — a mobility app, a car marketplace, an insurance platform — can offer vehicle debt payments in under 2 minutes, through a single API integration, backed by Bradesco's infrastructure and regulatory coverage.
+
+We're launching in São Paulo in November 2026, and expanding to 3 states within 12 months.
+
+<strong>I'd love to show you what this looks like in a demo.</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ELEVATOR PT -->
+      <div class="pitch-card" onclick="toggleCard(this)" data-lang="pt">
+        <div class="pitch-card-header">
+          <div class="pitch-card-icon">⚡</div>
+          <div style="flex:1">
+            <div class="pitch-card-title">Elevator Pitch</div>
+            <div class="pitch-card-meta">Português · 60 segundos · Networking</div>
+          </div>
+          <div class="pitch-arrow">▼</div>
+        </div>
+        <div class="pitch-body">
+          <div class="pitch-body-inner">
+            <div class="pitch-text">O Bradesco é um dos maiores bancos privados do Brasil — <strong>75 anos, 75 milhões de clientes.</strong> Mas não somos mais só um banco.
+
+Construímos uma plataforma aberta que permite que qualquer empresa — fintechs, varejistas, plataformas de mobilidade — incorpore serviços financeiros nos próprios produtos via uma única conexão de API.
+
+Nosso produto mais recente é o <strong>VaaS — Vehicle as a Service.</strong>
+
+O Brasil tem um mercado de R$12 bilhões em débitos veiculares — IPVA, multas de trânsito, DPVAT. E 80% ainda está offline. As pessoas gastam dias navegando em portais governamentais fragmentados para pagar um imposto simples.
+
+<strong>O VaaS muda isso.</strong> Qualquer parceiro — um app de mobilidade, um marketplace de carros, uma plataforma de seguros — pode oferecer pagamento de débitos veiculares em menos de 2 minutos, através de uma única integração de API, com a infraestrutura e cobertura regulatória do Bradesco.
+
+Estamos lançando em São Paulo em novembro de 2026 e expandindo para 3 estados em 12 meses.
+
+<strong>Adoraria te mostrar uma demo.</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 MIN EN -->
+      <div class="pitch-card" onclick="toggleCard(this)" data-lang="en">
+        <div class="pitch-card-header">
+          <div class="pitch-card-icon">🎯</div>
+          <div style="flex:1">
+            <div class="pitch-card-title">3-Minute Pitch</div>
+            <div class="pitch-card-meta">English · 3 minutes · Panel / Booth</div>
+          </div>
+          <div class="pitch-arrow">▼</div>
+        </div>
+        <div class="pitch-body">
+          <div class="pitch-body-inner">
+            <div class="pitch-text"><strong>— THE NUMBER THAT MATTERS —</strong>
+R$12 billion. That's how much Brazilian vehicle owners pay annually in IPVA taxes, traffic fines and DPVAT insurance. And 80% of those payments still happen offline — physical lines, government portals that crash, processes that take 3 days on average.
+
+<strong>— THE SHIFT HAPPENING NOW —</strong>
+Brazil's Open Finance regulation is now in Phase 4. Fintechs are moving into financial services that banks used to own. Every month without a digital vehicle payment solution is market share being handed to faster-moving competitors with lower acquisition costs.
+
+<strong>— WHAT WE BUILT —</strong>
+VaaS — Vehicle as a Service — is Bradesco BaaS's answer.
+
+It's a single API that any company can integrate once and immediately offer vehicle debt payments inside their own product. A mobility app. A car marketplace. An insurance platform. A bank branch app.
+
+The user experience: enter a license plate, see all pending debts in real time, select what to pay, confirm. Done in under 2 minutes. No redirects. No portals. No friction.
+
+<strong>— WHY BRADESCO —</strong>
+This isn't a startup with regulatory ambitions. This is Tier-1 Brazilian banking infrastructure, fully regulated, with 75 million customers and 75 years of institutional trust — delivered as an API.
+
+Partners get: compliance out of the box, Pix and boleto payment rails, real-time webhooks, and a developer portal built to Stripe-level standards.
+
+<strong>— TRACTION —</strong>
+Production MVP launching São Paulo — November 2026.
+3 states in 12 months. 10+ partners in pipeline.
+Projected ROI: 340% over 18 months.
+
+<strong>We're looking for technology partners, distribution partners, and global investors who want to be part of digitalizing Brazil's financial infrastructure.</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 MIN PT -->
+      <div class="pitch-card" onclick="toggleCard(this)" data-lang="pt">
+        <div class="pitch-card-header">
+          <div class="pitch-card-icon">🎯</div>
+          <div style="flex:1">
+            <div class="pitch-card-title">Pitch de 3 Minutos</div>
+            <div class="pitch-card-meta">Português · 3 minutos · Painel / Estande</div>
+          </div>
+          <div class="pitch-arrow">▼</div>
+        </div>
+        <div class="pitch-body">
+          <div class="pitch-body-inner">
+            <div class="pitch-text"><strong>— O NÚMERO QUE IMPORTA —</strong>
+R$12 bilhões. É quanto os proprietários de veículos brasileiros pagam anualmente em IPVA, multas de trânsito e DPVAT. E 80% desses pagamentos ainda acontecem offline — filas físicas, portais governamentais que caem, processos que levam 3 dias em média.
+
+<strong>— A VIRADA QUE ESTÁ ACONTECENDO —</strong>
+O Open Finance brasileiro está na Fase 4. Fintechs estão avançando em serviços financeiros que os bancos controlavam. Cada mês sem uma solução digital de pagamento veicular é market share sendo entregue a concorrentes mais ágeis com menor custo de aquisição.
+
+<strong>— O QUE CONSTRUÍMOS —</strong>
+VaaS — Vehicle as a Service — é a resposta do Bradesco BaaS.
+
+É uma única API que qualquer empresa integra uma vez e já pode oferecer pagamento de débitos veiculares dentro do próprio produto. Um app de mobilidade. Um marketplace de carros. Uma plataforma de seguros. Um app de agência bancária.
+
+A experiência do usuário: informa a placa, vê todos os débitos pendentes em tempo real, seleciona o que pagar, confirma. Pronto em menos de 2 minutos. Sem redirecionamentos. Sem portais. Sem atrito.
+
+<strong>— POR QUE BRADESCO —</strong>
+Não é uma startup com ambições regulatórias. É infraestrutura bancária Tier-1 brasileira, totalmente regulada, com 75 milhões de clientes e 75 anos de confiança institucional — entregue como API.
+
+Parceiros recebem: compliance from the box, rails de Pix e boleto, webhooks em tempo real e um developer portal construído em padrão Stripe.
+
+<strong>— TRAÇÃO —</strong>
+MVP em produção em São Paulo — novembro de 2026.
+3 estados em 12 meses. 10+ parceiros em pipeline.
+ROI projetado: 340% em 18 meses.
+
+<strong>Buscamos parceiros tecnológicos, parceiros de distribuição e investidores globais que queiram fazer parte da digitalização da infraestrutura financeira do Brasil.</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARTNER EN -->
+      <div class="pitch-card" onclick="toggleCard(this)" data-lang="en">
+        <div class="pitch-card-header">
+          <div class="pitch-card-icon">🤝</div>
+          <div style="flex:1">
+            <div class="pitch-card-title">Partner Pitch</div>
+            <div class="pitch-card-meta">English · 5 minutes · B2B / Integration Partner</div>
+          </div>
+          <div class="pitch-arrow">▼</div>
+        </div>
+        <div class="pitch-body">
+          <div class="pitch-body-inner">
+            <div class="pitch-text"><strong>— OPENING: THE BUSINESS CASE FOR YOUR PLATFORM —</strong>
+If your platform touches vehicle owners — whether you're a mobility app, a car marketplace, an auto insurance platform, or a fleet management tool — vehicle debt is a problem your users are solving somewhere else. We're here to bring that solution inside your product.
+
+<strong>— WHAT YOUR USERS GO THROUGH TODAY —</strong>
+Every year, Brazilian vehicle owners face the same ritual: check the DETRAN website (if it's up), navigate state-specific portals, print barcodes, go to a bank branch or lottery house, wait in line. Days pass. Some pay late and get fined more.
+
+Your platform probably sends them away to handle this. We can change that.
+
+<strong>— THE VaaS PROPOSITION FOR YOU —</strong>
+One API integration. Your users never leave your product.
+
+What you get:
+→ <strong>Instant DETRAN query</strong> — plate or RENAVAM, all pending debts returned in ~800ms
+→ <strong>Pix and boleto payment</strong> — fully processed through Bradesco infrastructure
+→ <strong>Real-time confirmation webhooks</strong> — build your own receipt experience
+→ <strong>Revenue share</strong> — monetize every transaction your users process
+→ <strong>Compliance included</strong> — LGPD, Open Finance, PCI — all ours to maintain
+
+<strong>— WHAT IT TAKES TO INTEGRATE —</strong>
+Sandbox access in 24 hours. Average integration time: 2 engineering days. Production go-live process: 2 weeks, fully supported.
+
+We built the developer experience to Stripe-level standards because we know that DX is what makes or breaks B2B API adoption.
+
+<strong>— THE NUMBERS —</strong>
+Partners in our pilot see 6x higher conversion on vehicle payment flows compared to redirect-based solutions. Every minute saved in the flow is 8 percentage points of drop-off recovered.
+
+<strong>Let's talk about what a pilot would look like for your platform.</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARTNER PT -->
+      <div class="pitch-card" onclick="toggleCard(this)" data-lang="pt">
+        <div class="pitch-card-header">
+          <div class="pitch-card-icon">🤝</div>
+          <div style="flex:1">
+            <div class="pitch-card-title">Pitch de Parceiro</div>
+            <div class="pitch-card-meta">Português · 5 minutos · B2B / Parceiro de Integração</div>
+          </div>
+          <div class="pitch-arrow">▼</div>
+        </div>
+        <div class="pitch-body">
+          <div class="pitch-body-inner">
+            <div class="pitch-text"><strong>— ABERTURA: O BUSINESS CASE PARA SUA PLATAFORMA —</strong>
+Se sua plataforma toca proprietários de veículos — seja um app de mobilidade, marketplace de carros, plataforma de seguros auto ou ferramenta de gestão de frotas — débito veicular é um problema que seus usuários estão resolvendo em outro lugar. Estamos aqui para trazer essa solução para dentro do seu produto.
+
+<strong>— O QUE SEUS USUÁRIOS VIVEM HOJE —</strong>
+Todo ano, os proprietários de veículos brasileiros enfrentam o mesmo ritual: verificar o site do DETRAN (se estiver no ar), navegar em portais por estado, imprimir código de barras, ir a uma agência bancária ou lotérica, esperar na fila. Dias se passam. Alguns pagam com atraso e levam multa extra.
+
+Sua plataforma provavelmente os manda embora para resolver isso. Podemos mudar isso.
+
+<strong>— A PROPOSTA VaaS PARA VOCÊ —</strong>
+Uma integração de API. Seus usuários nunca saem do seu produto.
+
+O que você recebe:
+→ <strong>Consulta DETRAN instantânea</strong> — placa ou RENAVAM, todos os débitos em ~800ms
+→ <strong>Pagamento via Pix e boleto</strong> — totalmente processado pela infraestrutura Bradesco
+→ <strong>Webhooks de confirmação em tempo real</strong> — crie sua própria experiência de recibo
+→ <strong>Revenue share</strong> — monetize cada transação que seus usuários processam
+→ <strong>Compliance incluso</strong> — LGPD, Open Finance, PCI — tudo por nossa conta
+
+<strong>— O QUE CUSTA INTEGRAR —</strong>
+Acesso ao Sandbox em 24 horas. Tempo médio de integração: 2 dias de engenharia. Go-live em produção: 2 semanas, totalmente suportado.
+
+Construímos a experiência de desenvolvedor em padrão Stripe porque sabemos que DX é o que define a adoção de API B2B.
+
+<strong>— OS NÚMEROS —</strong>
+Parceiros no nosso piloto têm conversão 6x maior em fluxos de pagamento veicular comparado a soluções com redirecionamento. Cada minuto economizado no fluxo recupera 8 pontos percentuais de abandono.
+
+<strong>Vamos conversar sobre como seria um piloto para a sua plataforma.</strong></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Q&A -->
+<section class="section-light" id="qa">
+  <div class="section-inner">
+    <div class="eyebrow eyebrow-light" data-lang="en">Q&A Preparation</div>
+    <div class="eyebrow eyebrow-light" data-lang="pt">Preparação de Q&A</div>
+    <h2 class="light" data-lang="en">Every hard question.<br>A confident answer.</h2>
+    <h2 class="light" data-lang="pt">Cada pergunta difícil.<br>Uma resposta confiante.</h2>
+    <p class="section-sub light" data-lang="en">These are the questions you will face at international tech conferences. Each answer uses the PREP technique — Point, Reason, Example, Point.</p>
+    <p class="section-sub light" data-lang="pt">Essas são as perguntas que você encontrará em feiras internacionais. Cada resposta usa a técnica PREP — Ponto, Razão, Exemplo, Ponto.</p>
+
+    <div class="qa-list">
+
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-q">
+          <div class="qa-q-text" data-lang="en">"Why would a bank build this? Banks are slow."</div>
+          <div class="qa-q-text" data-lang="pt">"Por que um banco construiria isso? Bancos são lentos."</div>
+          <span class="qa-badge badge-amber">Strategic</span>
+          <div class="qa-arrow">▼</div>
+        </div>
+        <div class="qa-a">
+          <div class="qa-a-inner" data-lang="en"><strong>Point:</strong> That's exactly the assumption we're here to challenge.
+
+<strong>Reason:</strong> Bradesco built a separate BaaS unit — with startup-style squad structure, dedicated engineering teams, and a mandate to move at fintech speed — precisely because we knew the old model wouldn't work for API-first products.
+
+<strong>Example:</strong> VaaS went from concept to production MVP in under 6 months. Two squads, Stefanini engineers, MCP-based architecture. Our developer portal is being built to Stripe-level standards — not because we were told to, but because we benchmarked it ourselves.
+
+<strong>Point:</strong> The bank's role here is trust and regulation — the two things fintechs spend years trying to earn. We bring those on day one. The speed comes from how we built the team around it.</div>
+          <div class="qa-a-inner" data-lang="pt"><strong>Ponto:</strong> É exatamente essa premissa que viemos desafiar.
+
+<strong>Razão:</strong> O Bradesco criou uma unidade de BaaS separada — com estrutura de squad no estilo startup, times de engenharia dedicados e mandato para se mover na velocidade de fintech — precisamente porque sabíamos que o modelo antigo não funcionaria para produtos API-first.
+
+<strong>Exemplo:</strong> O VaaS foi de conceito a MVP em produção em menos de 6 meses. Dois squads, engenheiros Stefanini, arquitetura baseada em MCP. Nosso developer portal está sendo construído em padrão Stripe — não porque alguém mandou, mas porque nós mesmos fizemos o benchmark.
+
+<strong>Ponto:</strong> O papel do banco aqui é confiança e regulação — as duas coisas que fintechs levam anos tentando conquistar. Nós trazemos isso no dia um. A velocidade vem de como montamos o time ao redor disso.</div>
+        </div>
+      </div>
+
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-q">
+          <div class="qa-q-text" data-lang="en">"What happens when the government opens the DETRAN APIs directly?"</div>
+          <div class="qa-q-text" data-lang="pt">"E quando o governo abrir as APIs do DETRAN diretamente?"</div>
+          <span class="qa-badge badge-blue">Risk</span>
+          <div class="qa-arrow">▼</div>
+        </div>
+        <div class="qa-a">
+          <div class="qa-a-inner" data-lang="en"><strong>Point:</strong> That scenario actually validates our market and strengthens our position.
+
+<strong>Reason:</strong> If the government opens DETRAN APIs, it creates raw data access — not a payment product. Someone still needs to handle the payment rails, the compliance layer, fraud prevention, user experience, and partner onboarding. That's exactly what VaaS does.
+
+<strong>Example:</strong> Look at Open Banking in Brazil. The Central Bank opened the data. But Nubank, Itaú, and dozens of fintechs still built products on top of it — because raw API access isn't a product.
+
+<strong>Point:</strong> We're building the infrastructure layer above the raw data. The more open the data becomes, the more valuable the integration and payment layer becomes.</div>
+          <div class="qa-a-inner" data-lang="pt"><strong>Ponto:</strong> Esse cenário na verdade valida nosso mercado e fortalece nossa posição.
+
+<strong>Razão:</strong> Se o governo abrir as APIs do DETRAN, isso cria acesso a dados brutos — não um produto de pagamento. Alguém ainda precisará lidar com os rails de pagamento, a camada de compliance, prevenção de fraudes, experiência do usuário e onboarding de parceiros. É exatamente isso que o VaaS faz.
+
+<strong>Exemplo:</strong> Olha o Open Banking no Brasil. O Banco Central abriu os dados. Mas Nubank, Itaú e dezenas de fintechs ainda construíram produtos em cima disso — porque acesso bruto a API não é produto.
+
+<strong>Ponto:</strong> Estamos construindo a camada de infraestrutura acima dos dados brutos. Quanto mais abertos os dados ficam, mais valiosa se torna a camada de integração e pagamento.</div>
+        </div>
+      </div>
+
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-q">
+          <div class="qa-q-text" data-lang="en">"How do you compete with fintechs that move faster?"</div>
+          <div class="qa-q-text" data-lang="pt">"Como você compete com fintechs que se movem mais rápido?"</div>
+          <span class="qa-badge badge-amber">Competitive</span>
+          <div class="qa-arrow">▼</div>
+        </div>
+        <div class="qa-a">
+          <div class="qa-a-inner" data-lang="en"><strong>Point:</strong> We don't compete with fintechs — we enable them.
+
+<strong>Reason:</strong> A fintech wanting to offer vehicle debt payments needs three things to operate legally in Brazil: a banking license or partnership, payment infrastructure, and regulatory compliance. Building all three takes years and significant capital. We offer all of it via an API.
+
+<strong>Example:</strong> The fintechs that are moving fastest in Brazil — the ones actually winning — are the ones that partner with regulated infrastructure rather than try to build it. Our BaaS model is designed for exactly this: we're the infrastructure layer they build on.
+
+<strong>Point:</strong> Fast-moving fintechs aren't our competition. They're our best potential partners.</div>
+          <div class="qa-a-inner" data-lang="pt"><strong>Ponto:</strong> Não competimos com fintechs — as habilitamos.
+
+<strong>Razão:</strong> Uma fintech que quer oferecer pagamento de débitos veiculares precisa de três coisas para operar legalmente no Brasil: licença bancária ou parceria, infraestrutura de pagamento e conformidade regulatória. Construir tudo isso leva anos e capital significativo. Nós oferecemos tudo via API.
+
+<strong>Exemplo:</strong> As fintechs que se movem mais rápido no Brasil — as que realmente estão ganhando — são as que fazem parceria com infraestrutura regulada em vez de tentar construí-la. Nosso modelo BaaS é desenhado exatamente para isso: somos a camada de infraestrutura sobre a qual elas constroem.
+
+<strong>Ponto:</strong> Fintechs ágeis não são nossa concorrência. São nossos melhores parceiros potenciais.</div>
+        </div>
+      </div>
+
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-q">
+          <div class="qa-q-text" data-lang="en">"São Paulo only? That's a very limited scope."</div>
+          <div class="qa-q-text" data-lang="pt">"Só São Paulo? Isso é um escopo muito limitado."</div>
+          <span class="qa-badge badge-blue">Scale</span>
+          <div class="qa-arrow">▼</div>
+        </div>
+        <div class="qa-a">
+          <div class="qa-a-inner" data-lang="en"><strong>Point:</strong> São Paulo isn't a limitation — it's a deliberate choice that de-risks everything.
+
+<strong>Reason:</strong> SP alone represents 32% of Brazil's entire vehicle fleet — over 30 million vehicles. Starting there gives us the largest single market in Latin America for this product, with one DETRAN integration to maintain, one regulatory relationship to manage, and a clean feedback loop for the first 90 days.
+
+<strong>Example:</strong> Stripe started in the US, then Ireland, then expanded globally. Nubank launched in Brazil only for 6 years before expanding. Density before breadth is how API companies build defensible network effects.
+
+<strong>Point:</strong> We launch SP in November, add RJ and MG in Q1 2027, and cover 60% of Brazil's vehicle fleet within 12 months. The constraint is intentional — it's how we ship quality and learn fast.</div>
+          <div class="qa-a-inner" data-lang="pt"><strong>Ponto:</strong> São Paulo não é uma limitação — é uma escolha deliberada que reduz o risco de tudo.
+
+<strong>Razão:</strong> Só SP representa 32% de toda a frota veicular do Brasil — mais de 30 milhões de veículos. Começar lá nos dá o maior mercado individual da América Latina para este produto, com uma integração DETRAN para manter, uma relação regulatória para gerenciar e um loop de feedback limpo para os primeiros 90 dias.
+
+<strong>Exemplo:</strong> O Stripe começou nos EUA, depois Irlanda, depois expandiu globalmente. O Nubank lançou só no Brasil por 6 anos antes de expandir. Densidade antes de amplitude é como empresas de API constroem efeitos de rede defensáveis.
+
+<strong>Ponto:</strong> Lançamos SP em novembro, adicionamos RJ e MG no Q1 2027 e cobrimos 60% da frota veicular do Brasil em 12 meses. A restrição é intencional — é como entregamos qualidade e aprendemos rápido.</div>
+        </div>
+      </div>
+
+      <div class="qa-item" onclick="toggleQA(this)">
+        <div class="qa-q">
+          <div class="qa-q-text" data-lang="en">"What's your defensibility once others copy the API?"</div>
+          <div class="qa-q-text" data-lang="pt">"Qual é o seu diferencial defensável quando outros copiarem a API?"</div>
+          <span class="qa-badge badge-green">Moat</span>
+          <div class="qa-arrow">▼</div>
+        </div>
+        <div class="qa-a">
+          <div class="qa-a-inner" data-lang="en"><strong>Point:</strong> The moat isn't the API — it's what the API is built on.
+
+<strong>Reason:</strong> Anyone can build an API. Not anyone can build it with Bradesco's regulatory standing, payment infrastructure already connected to the Brazilian financial system, and institutional relationships with state DETRANs that took years to establish.
+
+<strong>Example:</strong> Visa and Mastercard have had "competitors" for decades. The moat wasn't the card — it was the network, the trust, and the regulatory history. Our equivalent: 75 years of banking trust, Bacen compliance, and payment rails that fintechs spend 3 years trying to get access to.
+
+<strong>Point:</strong> By the time a competitor replicates the integration and compliance stack, we'll have the partner network, the transaction history, and the brand recognition in developer communities that create switching costs.</div>
+          <div class="qa-a-inner" data-lang="pt"><strong>Ponto:</strong> O diferencial defensável não é a API — é o que a API é construída em cima.
+
+<strong>Razão:</strong> Qualquer um pode construir uma API. Nem todos podem construí-la com a posição regulatória do Bradesco, infraestrutura de pagamento já conectada ao sistema financeiro brasileiro e relacionamentos institucionais com DETRANs estaduais que levaram anos para estabelecer.
+
+<strong>Exemplo:</strong> Visa e Mastercard têm "concorrentes" há décadas. O diferencial não era o cartão — era a rede, a confiança e o histórico regulatório. Nosso equivalente: 75 anos de confiança bancária, conformidade com o Bacen e rails de pagamento que fintechs passam 3 anos tentando acessar.
+
+<strong>Ponto:</strong> Quando um concorrente replicar a stack de integração e compliance, já teremos a rede de parceiros, o histórico de transações e o reconhecimento de marca em comunidades de desenvolvedores que criam custos de troca.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SPEAKER BIO -->
+<section class="section-dark" id="speaker">
+  <div class="noise"></div>
+  <div class="section-inner">
+    <div class="eyebrow" data-lang="en">Speaker Profile</div>
+    <div class="eyebrow" data-lang="pt">Perfil do Apresentador</div>
+    <h2 data-lang="en">The person behind the pitch.</h2>
+    <h2 data-lang="pt">A pessoa por trás do pitch.</h2>
+
+    <div class="bio-card">
+      <div class="bio-avatar">RS</div>
+      <div>
+        <div class="bio-name">Raul Sousa</div>
+        <div class="bio-title" data-lang="en">Senior Manager · Head of Open Platform & BaaS · Banco Bradesco</div>
+        <div class="bio-title" data-lang="pt">Senior Manager · Head de Open Platform & BaaS · Banco Bradesco</div>
+        <div class="bio-text" data-lang="en">Raul Sousa leads Bradesco's API ecosystem strategy — spanning Open Finance, Banking-as-a-Service, developer experience, and AI-first product development. With a career built across Accenture, Itaú, Nuvemshop, Nuclea, and Fiserv, he brings both incumbent banking depth and digital-native product thinking.
+
+He is currently building VaaS — Vehicle as a Service — a platform that enables any company to offer vehicle debt payments through a single API integration, targeting Brazil's R$12 billion vehicular debt market, with production launch set for November 2026.
+
+Raul speaks at the intersection of financial infrastructure, developer experience, and applied AI — making the case that Brazil's financial system is undergoing its most significant architectural shift since the Real Plan.</div>
+        <div class="bio-text" data-lang="pt">Raul Sousa lidera a estratégia de ecossistema de APIs do Bradesco — abrangendo Open Finance, Banking-as-a-Service, experiência do desenvolvedor e desenvolvimento de produtos AI-first. Com uma carreira construída na Accenture, Itaú, Nuvemshop, Nuclea e Fiserv, ele traz profundidade bancária de incumbente e raciocínio de produto nativo digital.
+
+Atualmente, ele está construindo o VaaS — Vehicle as a Service — uma plataforma que permite que qualquer empresa ofereça pagamentos de débitos veiculares através de uma única integração de API, mirando o mercado de R$12 bilhões em débitos veiculares do Brasil, com lançamento em produção em novembro de 2026.
+
+Raul fala na interseção entre infraestrutura financeira, experiência do desenvolvedor e IA aplicada — sustentando que o sistema financeiro brasileiro vive sua mudança arquitetural mais significativa desde o Plano Real.</div>
+        <div class="bio-tags">
+          <span class="bio-tag">Open Finance Brasil</span>
+          <span class="bio-tag">Banking-as-a-Service</span>
+          <span class="bio-tag">API Strategy</span>
+          <span class="bio-tag">AI-First Products</span>
+          <span class="bio-tag">Developer Experience</span>
+          <span class="bio-tag">MCP Architecture</span>
+          <span class="bio-tag">Fintech Infrastructure</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">VaaS · Vehicle as a Service · Bradesco BaaS · Open Platform</div>
+  <div class="footer-right">Confidential · For conference use only · November 2026</div>
+</footer>
+
+<script>
+function setLang(lang){
+  document.body.className='lang-'+lang;
+  document.getElementById('btn-en').classList.toggle('active',lang==='en');
+  document.getElementById('btn-pt').classList.toggle('active',lang==='pt');
+}
+function toggleCard(el){
+  el.classList.toggle('open');
+}
+function toggleQA(el){
+  const wasOpen=el.classList.contains('open');
+  document.querySelectorAll('.qa-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen)el.classList.add('open');
+}
+
+// IntersectionObserver for KPI animation
+const kpiNums=document.querySelectorAll('.kpi-num');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){e.target.style.opacity=1;e.target.style.transform='translateY(0)';}
+  });
+},{threshold:.3});
+kpiNums.forEach(n=>{
+  n.style.opacity=0;n.style.transform='translateY(12px)';
+  n.style.transition='opacity .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1)';
+  obs.observe(n);
+});
+</script>
+</body>
+</html>
