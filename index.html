@@ -25,6 +25,7 @@
   --gold:   #D4A017;
   --teal:   #1EADAA;
   --violet: #8B5CF6;
+  --amber:  #E0A95F;
 }
 
 html { scroll-behavior: smooth; }
@@ -370,6 +371,12 @@ main {
   border: 1px solid rgba(212,160,23,0.2);
 }
 
+.wc-pitch .work-card-tag {
+  background: rgba(224,169,95,0.07);
+  color: var(--amber);
+  border: 1px solid rgba(224,169,95,0.2);
+}
+
 .work-card-arrow {
   font-size: 14px;
   color: var(--muted);
@@ -435,6 +442,9 @@ main {
 }
 .work-card.wc-bench2 {
   border-bottom: 2px solid var(--gold);
+}
+.work-card.wc-pitch {
+  border-bottom: 2px solid var(--amber);
 }
 
 /* Principles strip */
@@ -633,7 +643,34 @@ main {
       </div>
     </a>
 
-    <!-- CARD 2 — Developer Portal Benchmark -->
+    <!-- CARD 2 — VaaS International Pitch -->
+    <a class="work-card wc-pitch" href="vaas-pitch-internacional.html">
+      <div class="work-card-top">
+        <div class="work-card-tag t-en">Product Narrative · International Pitch</div>
+        <div class="work-card-tag t-pt">Narrativa de Produto · Pitch Internacional</div>
+        <div class="work-card-arrow">→</div>
+      </div>
+      <div class="work-card-body">
+        <div class="work-card-title t-en">VaaS — Vehicle as a Service</div>
+        <div class="work-card-title t-pt">VaaS — Vehicle as a Service</div>
+        <div class="work-card-sub t-en">
+          The pitch arsenal for Brazil's R$12 billion vehicle debt market, built for international stages. A single API — IPVA, traffic fines, DPVAT — that any fintech, marketplace or mobility platform can embed, backed by Bradesco's regulatory and payment infrastructure. Four calibrated pitch formats, from elevator to partner meeting, plus PREP-structured answers to the five hardest questions, in English and Portuguese.
+        </div>
+        <div class="work-card-sub t-pt">
+          O arsenal de pitches para o mercado de R$12 bilhões em débitos veiculares do Brasil, construído para palcos internacionais. Uma única API — IPVA, multas, DPVAT — que qualquer fintech, marketplace ou plataforma de mobilidade pode embarcar, com a infraestrutura regulatória e de pagamento do Bradesco. Quatro formatos de pitch calibrados, do elevador à reunião com parceiro, mais respostas em estrutura PREP para as cinco perguntas mais difíceis, em inglês e português.
+        </div>
+        <div class="work-card-chips">
+          <span class="wchip">VaaS</span>
+          <span class="wchip">R$12Bi Market</span>
+          <span class="wchip">API-First</span>
+          <span class="wchip">4 Pitch Formats</span>
+          <span class="wchip">Q&amp;A · PREP</span>
+          <span class="wchip">EN · PT</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- CARD 3 — Developer Portal Benchmark -->
     <a class="work-card wc-doc" href="https://ramasousa.github.io/benchmark-devportal/" target="_blank">
       <div class="work-card-top">
         <div class="work-card-tag t-en">Strategic Analysis · Developer Experience</div>
@@ -659,7 +696,7 @@ main {
       </div>
     </a>
 
-    <!-- CARD 3 — API Gateway Benchmark -->
+    <!-- CARD 4 — API Gateway Benchmark -->
     <a class="work-card wc-bench2" href="https://ramasousa.github.io/benchmark-gateway-api/" target="_blank">
       <div class="work-card-top">
         <div class="work-card-tag t-en">Strategic Analysis · Platform Infrastructure</div>
@@ -685,7 +722,7 @@ main {
       </div>
     </a>
 
-    <!-- CARD 4 — Developer Portal gRPC (execution) -->
+    <!-- CARD 5 — Developer Portal gRPC (execution) -->
     <a class="work-card wc-exec" href="https://ramasousa.github.io/dev-portal-grpc" target="_blank">
       <div class="work-card-top">
         <div class="work-card-tag t-en">Execution · Developer Platform</div>
